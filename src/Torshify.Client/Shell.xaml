@@ -2,10 +2,51 @@
     x:Class="Torshify.Client.Shell"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
+    xmlns:Infrastructure="clr-namespace:Torshify.Client.Infrastructure;assembly=Torshify.Client.Infrastructure"
+    xmlns:infra="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
     Title="torshify"
-    Height="350"
-    Width="525">
+    Height="600"
+    Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <ItemsControl
+            prism:RegionManager.RegionName="{x:Static Infrastructure:RegionNames.BackgroundRegion}"
+            Grid.RowSpan="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <infra:LayeredPanel
+                        IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <ItemsControl
+            prism:RegionManager.RegionName="{x:Static Infrastructure:RegionNames.BackgroundOverlayRegion}"
+            Grid.RowSpan="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <infra:LayeredPanel
+                        IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <ContentControl
+            prism:RegionManager.RegionName="{x:Static Infrastructure:RegionNames.MainRegion}"
+            Grid.Row="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
+
+        <ContentControl
+            prism:RegionManager.RegionName="{x:Static Infrastructure:RegionNames.BottomRegion}"
+            Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
     </Grid>
 </Window>

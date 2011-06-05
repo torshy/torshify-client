@@ -111,6 +111,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Torshify.Client.Infrastructure\Torshify.Client.Infrastructure.csproj">
+      <Project>{7134446D-B55C-4328-80E8-C72D05A7E4BC}</Project>
+      <Name>Torshify.Client.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
