@@ -1,12 +1,15 @@
+using System;
 using System.Windows;
 using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.Modularity;
-using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
+
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Modules.Core;
 
 namespace Torshify.Client
 {
@@ -45,6 +48,13 @@ namespace Torshify.Client
         {
             base.InitializeModules();
             InitializeStartables();
+        }
+
+        protected override void ConfigureModuleCatalog()
+        {
+            Type coreModule = typeof (CoreModule);
+            ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
+                                                   coreModule.AssemblyQualifiedName));
         }
 
         #endregion Protected Methods
