@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -54,6 +57,12 @@
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
+    <Compile Include="Events\ApplicationInactivityEvent.cs" />
+    <Compile Include="Events\SystemInactivityEvent.cs" />
+    <Compile Include="IdleTimeDetector.cs" />
+    <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Interfaces\IInitializable.cs" />
+    <Compile Include="Interfaces\IStartable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

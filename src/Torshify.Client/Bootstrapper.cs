@@ -1,7 +1,12 @@
 using System.Windows;
-
+using System.Windows.Threading;
+using Microsoft.Practices.Prism.Modularity;
+using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
+using Torshify.Client.Infrastructure;
+using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client
 {
@@ -18,10 +23,11 @@ namespace Torshify.Client
 
         #region Protected Methods
 
-        protected override void InitializeShell()
+        protected override void ConfigureContainer()
         {
-            Application.Current.MainWindow = (Window)Shell;
-            Application.Current.MainWindow.Show();
+            Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
+            Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
+            base.ConfigureContainer();
         }
 
         protected override DependencyObject CreateShell()
@@ -29,6 +35,32 @@ namespace Torshify.Client
             return ServiceLocator.Current.GetInstance<Shell>();
         }
 
+        protected override void InitializeShell()
+        {
+            Application.Current.MainWindow = (Window)Shell;
+            Application.Current.MainWindow.Show();
+        }
+
+        protected override void InitializeModules()
+        {
+            base.InitializeModules();
+            InitializeStartables();
+        }
+
         #endregion Protected Methods
+
+        #region Private Methods
+
+        private void InitializeStartables()
+        {
+            var startables = Container.ResolveAll<IStartable>();
+
+            foreach (var startable in startables)
+            {
+                startable.Start();
+            }
+        }
+
+        #endregion Private Methods
     }
 }
