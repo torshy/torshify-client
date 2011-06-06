@@ -4,11 +4,59 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
+    xmlns:local="clr-namespace:Torshify.Client.Modules.Core"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid
         Background="Green">
-    
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="Auto"
+                MinWidth="175" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal">
+            <Button
+                Width="50"
+                Content="Back"
+                Command="{Binding GoBackCommand}" />
+            <Button
+                Width="50"
+                Content="Forward"
+                Command="{Binding GoForwardCommand}" />
+            <TextBox
+                Name="_searchInputField"
+                Width="150"
+                Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Width="50"
+                Content="Search"
+                Command="{Binding SearchCommand}"
+                CommandParameter="{Binding Text, ElementName=_searchInputField}" />
+        </StackPanel>
+
+        <ContentControl
+            Grid.Column="0"
+            Grid.Row="1"
+            prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.LeftMusicRegion}"
+            Margin="0,4,4,0" />
+
+        <ContentControl
+            Grid.Column="1"
+            Grid.Row="1"
+            prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.MainMusicRegion}"
+            Margin="0,4,4,0" />
     </Grid>
 </UserControl>

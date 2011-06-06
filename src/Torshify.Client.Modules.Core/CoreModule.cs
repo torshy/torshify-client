@@ -6,6 +6,7 @@ using Microsoft.Practices.Unity;
 
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Modules.Core.Views;
+using Torshify.Client.Modules.Core.Views.Playlists;
 
 namespace Torshify.Client.Modules.Core
 {
@@ -33,8 +34,10 @@ namespace Torshify.Client.Modules.Core
         public void Initialize()
         {
             _container.RegisterType<MainView>("MainView");
+            _container.RegisterType<PlaylistsView>(MusicRegionViewNames.PlaylistView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(PlaylistsView));
 
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));
         }
