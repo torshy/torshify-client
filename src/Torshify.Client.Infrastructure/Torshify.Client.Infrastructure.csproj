@@ -52,6 +52,25 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
+    <Compile Include="Commands\AutomaticCommand.cs" />
+    <Compile Include="Commands\AutomaticCompositeCommand.cs" />
+    <Compile Include="Commands\CanExecuteChangedCore.cs" />
+    <Compile Include="Commands\CompositeCommand.cs" />
+    <Compile Include="Commands\INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
+    <Compile Include="Commands\INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
+    <Compile Include="Commands\INotifyPropertyChanged\NotifyPropertyChangedCore.cs" />
+    <Compile Include="Commands\INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
+    <Compile Include="Commands\ManualCommand%28of T%29.cs" />
+    <Compile Include="Commands\ManualCommand.cs" />
+    <Compile Include="Commands\MultiCommand.cs" />
+    <Compile Include="Commands\ProjectedCollection.cs" />
+    <Compile Include="Commands\SafeGCHandle.cs" />
+    <Compile Include="Commands\SimplePropertyPath.cs" />
+    <Compile Include="Commands\StaticCommand%28of T%29.cs" />
+    <Compile Include="Commands\StaticCommand.cs" />
+    <Compile Include="Commands\WeakCollection.cs" />
+    <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
@@ -63,6 +82,7 @@
     <Compile Include="InactivityNotificator.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\IStartable.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
