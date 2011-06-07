@@ -7,6 +7,6 @@ namespace Torshify.Client.Mocks
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public IEnumerable<IPlaylistTrack> Tracks { get; private set; }
+        public IEnumerable<IPlaylistTrack> Tracks { get; set; }
     }
 }

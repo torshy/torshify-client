@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Data;
 using Microsoft.Practices.Prism.Regions;
@@ -19,6 +20,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
             _regionManager = regionManager;
 
             Playlists = CollectionViewSource.GetDefaultView(_playlistProvider.Playlists);
+            Playlists.CurrentChanged += OnCurrentPlaylistChanged;
         }
 
         public ICollectionView Playlists
@@ -43,5 +45,16 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
         }
 
         #endregion Public Methods
+
+        private void OnCurrentPlaylistChanged(object sender, EventArgs e)
+        {
+            var playlist = Playlists.CurrentItem as IPlaylist;
+
+            if (playlist != null)
+            {
+                var uri = new Uri(MusicRegionViewNames.PlaylistView, UriKind.Relative);
+                _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, playlist);
+            }
+        }
     }
 }
