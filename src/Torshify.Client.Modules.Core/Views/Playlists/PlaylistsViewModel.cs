@@ -1,16 +1,24 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Data;
+
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Playlists
 {
     public class PlaylistsViewModel : NotificationObject, INavigationAware
     {
+        #region Fields
+
         private readonly IPlaylistProvider _playlistProvider;
         private readonly IRegionManager _regionManager;
+
+        #endregion Fields
+
+        #region Constructors
 
         public PlaylistsViewModel(
             IPlaylistProvider playlistProvider,
@@ -23,11 +31,17 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
             Playlists.CurrentChanged += OnCurrentPlaylistChanged;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public ICollectionView Playlists
         {
-            get; 
+            get;
             private set;
         }
+
+        #endregion Properties
 
         #region Public Methods
 
@@ -46,6 +60,8 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
 
         #endregion Public Methods
 
+        #region Private Methods
+
         private void OnCurrentPlaylistChanged(object sender, EventArgs e)
         {
             var playlist = Playlists.CurrentItem as IPlaylist;
@@ -56,5 +72,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
                 _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, playlist);
             }
         }
+
+        #endregion Private Methods
     }
 }

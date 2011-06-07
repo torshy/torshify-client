@@ -3,8 +3,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Playlist
@@ -14,6 +17,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         #region Fields
 
         private ICollectionView _tracks;
+        private IPlaylist _playlist;
 
         #endregion Fields
 
@@ -21,7 +25,10 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         public ICollectionView Tracks
         {
-            get { return _tracks; }
+            get
+            {
+                return _tracks;
+            }
             private set
             {
                 _tracks = value;
@@ -31,8 +38,15 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         public IPlaylist Playlist
         {
-            get; 
-            set;
+            get
+            {
+                return _playlist;
+            }
+            set
+            {
+                _playlist = value;
+                RaisePropertyChanged("Playlist");
+            }
         }
 
         #endregion Properties
@@ -72,6 +86,18 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            if (Playlist != null && Tracks != null)
+            {
+                var selectedTrack = (ITrack)Tracks.CurrentItem;
+
+                if (selectedTrack != null)
+                {
+                    UriQuery query = new UriQuery();
+                    query.Add("PlaylistSelectedTrackID", selectedTrack.ID.ToString());
+
+                    navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(MusicRegionViewNames.PlaylistView + query, UriKind.Relative);
+                }
+            }
         }
 
         #endregion Public Methods
