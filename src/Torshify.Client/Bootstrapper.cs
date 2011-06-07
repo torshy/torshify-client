@@ -9,6 +9,7 @@ using Microsoft.Practices.Unity;
 
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Mocks;
 using Torshify.Client.Modules.Core;
 
 namespace Torshify.Client
@@ -30,6 +31,8 @@ namespace Torshify.Client
         {
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
+            Container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager(),
+                                                                        new InjectionMethod("Initialize"));
             base.ConfigureContainer();
         }
 

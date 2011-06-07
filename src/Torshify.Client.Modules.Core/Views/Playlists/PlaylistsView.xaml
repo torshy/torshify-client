@@ -9,6 +9,8 @@
     d:DesignWidth="300">
     <Grid
         Background="Red">
-
+        <ListBox
+            ItemsSource="{Binding Playlists}"
+            DisplayMemberPath="Name" />
     </Grid>
 </UserControl>

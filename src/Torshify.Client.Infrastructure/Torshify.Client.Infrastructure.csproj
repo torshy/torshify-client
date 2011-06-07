@@ -81,6 +81,7 @@
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
+    <Compile Include="Interfaces\IPlaylistProvider.cs" />
     <Compile Include="Interfaces\IStartable.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Modules.Core", "src\Torshify.Client.Modules.Core\Torshify.Client.Modules.Core.csproj", "{09AE80A9-E096-4D81-9086-A14C9898B34D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Mocks", "src\Torshify.Client.Mocks\Torshify.Client.Mocks.csproj", "{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{09AE80A9-E096-4D81-9086-A14C9898B34D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{09AE80A9-E096-4D81-9086-A14C9898B34D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{09AE80A9-E096-4D81-9086-A14C9898B34D}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
