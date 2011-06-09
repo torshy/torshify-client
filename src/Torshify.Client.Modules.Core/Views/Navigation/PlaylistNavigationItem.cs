@@ -8,11 +8,13 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
     {
         private readonly IPlaylist _playlist;
         private readonly IRegionManager _regionManager;
+        private Uri _uri;
 
         public PlaylistNavigationItem(IPlaylist playlist, IRegionManager regionManager)
         {
             _playlist = playlist;
             _regionManager = regionManager;
+            _uri = new Uri(MusicRegionViewNames.PlaylistView, UriKind.Relative);
         }
 
         public IPlaylist Playlist
@@ -22,8 +24,19 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         public void NavigateTo()
         {
-            var uri = new Uri(MusicRegionViewNames.PlaylistView, UriKind.Relative);
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, _playlist);
+            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, _uri, _playlist);
+        }
+
+        public bool IsMe(IRegionNavigationJournalEntry entry)
+        {
+            var parts = entry.Uri.OriginalString.Split('?');
+
+            if (parts[0] == _uri.OriginalString && entry.Tag == Playlist)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

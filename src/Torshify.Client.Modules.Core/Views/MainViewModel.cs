@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -20,32 +21,33 @@ namespace Torshify.Client.Modules.Core.Views
         public MainViewModel(IRegionManager regionManager)
         {
             RegionManager = regionManager;
-            SearchCommand = new AutomaticCommand<string>(ExecuteSearchCommand, CanExecuteSearchCommand);
-            GoBackCommand = new AutomaticCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand);
-            GoForwardCommand = new AutomaticCommand(ExecuteGoForwardCommand, CanExecuteGoForwardCommand);
-            
-            CoreCommands.NavigateBackCommand.RegisterCommand(GoBackCommand);
-            CoreCommands.NavigateForwardCommand.RegisterCommand(GoForwardCommand);
-            CoreCommands.SearchCommand.RegisterCommand(SearchCommand);
+
+            CoreCommands.NavigateBackCommand.RegisterCommand(new AutomaticCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand));
+            CoreCommands.NavigateForwardCommand.RegisterCommand(new AutomaticCommand(ExecuteGoForwardCommand, CanExecuteGoForwardCommand));
+            CoreCommands.SearchCommand.RegisterCommand(new AutomaticCommand<string>(ExecuteSearchCommand, CanExecuteSearchCommand));
+
+            SearchCommand = CoreCommands.SearchCommand;
+            GoBackCommand = CoreCommands.NavigateBackCommand;
+            GoForwardCommand = CoreCommands.NavigateForwardCommand;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public AutomaticCommand GoForwardCommand
+        public ICommand GoForwardCommand
         {
             get;
             private set;
         }
 
-        public AutomaticCommand GoBackCommand
+        public ICommand GoBackCommand
         {
             get;
             private set;
         }
 
-        public AutomaticCommand<string> SearchCommand
+        public ICommand SearchCommand
         {
             get;
             private set;

@@ -11,13 +11,21 @@
     <UserControl.Resources>
         <DataTemplate
             DataType="{x:Type Navigation:PlaylistNavigationItem}">
-            <TextBlock
-                Text="{Binding Playlist.Name}" />
+            <Button
+                Command="{Binding DataContext.NavigateToItemCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                CommandParameter="{Binding}">
+                <TextBlock
+                    Text="{Binding Playlist.Name}" />
+            </Button>
         </DataTemplate>
         <DataTemplate
             DataType="{x:Type Navigation:PlayQueueNavigationItem}">
-            <TextBlock
-                Text="Play Queue" />
+            <Button
+                Command="{Binding DataContext.NavigateToItemCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                CommandParameter="{Binding}">
+                <TextBlock
+                    Text="Play Queue" />
+            </Button>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
