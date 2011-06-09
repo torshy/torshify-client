@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -21,6 +23,10 @@ namespace Torshify.Client.Modules.Core.Views
             SearchCommand = new AutomaticCommand<string>(ExecuteSearchCommand, CanExecuteSearchCommand);
             GoBackCommand = new AutomaticCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand);
             GoForwardCommand = new AutomaticCommand(ExecuteGoForwardCommand, CanExecuteGoForwardCommand);
+            
+            CoreCommands.NavigateBackCommand.RegisterCommand(GoBackCommand);
+            CoreCommands.NavigateForwardCommand.RegisterCommand(GoForwardCommand);
+            CoreCommands.SearchCommand.RegisterCommand(SearchCommand);
         }
 
         #endregion Constructors
@@ -74,8 +80,15 @@ namespace Torshify.Client.Modules.Core.Views
         }
 
         #endregion Properties
-
+        
         #region Public Methods
+
+        public void Search(string text)
+        {
+            UriQuery query = new UriQuery();
+            query.Add("Query", text);
+            MusicViewRegion.RequestNavigate(new Uri(MusicRegionViewNames.SearchView + query, UriKind.Relative));
+        }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -125,7 +138,7 @@ namespace Torshify.Client.Modules.Core.Views
 
         private void ExecuteSearchCommand(string text)
         {
-            //Search(text);
+            Search(text);
         }
 
         #endregion Private Methods

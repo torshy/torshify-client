@@ -1,12 +1,12 @@
 ﻿using System.Windows.Controls;
 
-namespace Torshify.Client.Modules.Core.Views.Playlists
+namespace Torshify.Client.Modules.Core.Views.Navigation
 {
-    public partial class PlaylistsView : UserControl
+    public partial class NavigationView : UserControl
     {
         #region Constructors
 
-        public PlaylistsView(PlaylistsViewModel viewModel)
+        public NavigationView(NavigationViewModel viewModel)
         {
             InitializeComponent();
             Model = viewModel;
@@ -16,9 +16,9 @@ namespace Torshify.Client.Modules.Core.Views.Playlists
 
         #region Properties
 
-        public PlaylistsViewModel Model
+        public NavigationViewModel Model
         {
-            get { return DataContext as PlaylistsViewModel; }
+            get { return DataContext as NavigationViewModel; }
             set { DataContext = value; }
         }
 

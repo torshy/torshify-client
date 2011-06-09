@@ -13,6 +13,7 @@ namespace Torshify.Client.Mocks
 
         private IList<Playlist> _playlists;
         private Random _random;
+
         #endregion Fields
 
         #region Constructors

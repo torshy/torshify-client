@@ -8,8 +8,10 @@ using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core.Views;
+using Torshify.Client.Modules.Core.Views.Navigation;
 using Torshify.Client.Modules.Core.Views.Playlist;
 using Torshify.Client.Modules.Core.Views.Playlists;
+using Torshify.Client.Modules.Core.Views.PlayQueue;
 
 namespace Torshify.Client.Modules.Core
 {
@@ -43,10 +45,12 @@ namespace Torshify.Client.Modules.Core
         {
             _container.RegisterType<MainView>("MainView");
             _container.RegisterType<PlaylistView>(MusicRegionViewNames.PlaylistView);
+            _container.RegisterType<PlayQueueView>(MusicRegionViewNames.PlayQueueView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
-            _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(PlaylistsView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(NavigationView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlaylistView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlayQueueView));
 
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));
 
