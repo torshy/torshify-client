@@ -82,10 +82,6 @@
     <Compile Include="Views\Navigation\PlaylistNavigationItem.cs" />
     <Compile Include="Views\Navigation\PlayQueueNavigationItem.cs" />
     <Compile Include="Views\Navigation\RadioNavigationItem.cs" />
-    <Compile Include="Views\Playlists\PlaylistsView.xaml.cs">
-      <DependentUpon>PlaylistsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Playlists\PlaylistsViewModel.cs" />
     <Compile Include="Views\Playlist\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
@@ -110,10 +106,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Navigation\NavigationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Playlists\PlaylistsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,7 +10,6 @@ using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core.Views;
 using Torshify.Client.Modules.Core.Views.Navigation;
 using Torshify.Client.Modules.Core.Views.Playlist;
-using Torshify.Client.Modules.Core.Views.Playlists;
 using Torshify.Client.Modules.Core.Views.PlayQueue;
 
 namespace Torshify.Client.Modules.Core

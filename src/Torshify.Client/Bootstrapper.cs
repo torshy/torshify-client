@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.Composition.Hosting;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -50,6 +51,7 @@ namespace Torshify.Client
 
         protected override void InitializeModules()
         {
+            InitializeMef();
             base.InitializeModules();
             InitializeStartables();
         }
@@ -64,6 +66,14 @@ namespace Torshify.Client
         #endregion Protected Methods
 
         #region Private Methods
+
+        private void InitializeMef()
+        {
+            AggregateCatalog aggregateCatalog = new AggregateCatalog();
+            aggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.*.dll"));
+            CompositionContainer container = new CompositionContainer(aggregateCatalog);
+            Container.RegisterInstance(container);
+        }
 
         private void InitializeStartables()
         {
