@@ -53,6 +53,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreCommands.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="CoreRegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

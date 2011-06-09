@@ -33,6 +33,7 @@ namespace Torshify.Client
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
             Container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager(),
                                                                         new InjectionMethod("Initialize"));
+            Container.RegisterType<IPlayer, Player>(new ContainerControlledLifetimeManager());
             base.ConfigureContainer();
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using FizzWare.NBuilder;
@@ -11,7 +12,7 @@ namespace Torshify.Client.Mocks
         #region Fields
 
         private IList<Playlist> _playlists;
-
+        private Random _random;
         #endregion Fields
 
         #region Constructors
@@ -19,6 +20,7 @@ namespace Torshify.Client.Mocks
         public PlaylistProvider()
         {
             _playlists = new List<Playlist>();
+            _random = new Random();
         }
 
         #endregion Constructors
@@ -37,7 +39,7 @@ namespace Torshify.Client.Mocks
         public void Initialize()
         {
             _playlists = Builder<Playlist>
-                .CreateListOfSize(15)
+                .CreateListOfSize(20)
                 .WhereAll()
                 .Has(p=>p.Tracks = GetTracks())
                 .Build();
@@ -50,7 +52,7 @@ namespace Torshify.Client.Mocks
         private IEnumerable<IPlaylistTrack> GetTracks()
         {
             return Builder<PlaylistTrack>
-                .CreateListOfSize(35)
+                .CreateListOfSize(_random.Next(6,35))
                 .Build();
         }
 

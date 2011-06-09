@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Player.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="PlaylistProvider.cs" />
     <Compile Include="PlaylistTrack.cs" />

@@ -81,8 +81,12 @@
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
+    <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Interfaces\IPlaylist.cs" />
     <Compile Include="Interfaces\IPlaylistProvider.cs" />
+    <Compile Include="Interfaces\IPlaylistTrack.cs" />
     <Compile Include="Interfaces\IStartable.cs" />
+    <Compile Include="Interfaces\ITrack.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
