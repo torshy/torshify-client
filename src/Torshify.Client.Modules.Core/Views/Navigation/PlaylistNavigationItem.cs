@@ -1,14 +1,23 @@
 ﻿using System;
+
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {
     public class PlaylistNavigationItem : INavigationItem
     {
+        #region Fields
+
         private readonly IPlaylist _playlist;
         private readonly IRegionManager _regionManager;
+
         private Uri _uri;
+
+        #endregion Fields
+
+        #region Constructors
 
         public PlaylistNavigationItem(IPlaylist playlist, IRegionManager regionManager)
         {
@@ -17,10 +26,18 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
             _uri = new Uri(MusicRegionViewNames.PlaylistView, UriKind.Relative);
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public IPlaylist Playlist
         {
             get { return _playlist; }
         }
+
+        #endregion Properties
+
+        #region Public Methods
 
         public void NavigateTo()
         {
@@ -38,5 +55,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
             return false;
         }
+
+        #endregion Public Methods
     }
 }

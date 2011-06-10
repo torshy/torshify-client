@@ -1,19 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 
+using Torshify.Client.Spotify;
+
 namespace Torshify.Client
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        #region Constructors
+
+        public App()
+        {
+            SpotifyModule.InitializeLibspotify();
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        protected Bootstrapper Bootstrapper
+        {
+            get;
+            private set;
+        }
+
+        #endregion Properties
+
+        #region Protected Methods
+
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
@@ -23,8 +39,6 @@ namespace Torshify.Client
             Bootstrapper = new Bootstrapper();
             Bootstrapper.Run();
         }
-
-        protected Bootstrapper Bootstrapper { get; set; }
 
         protected override void OnExit(ExitEventArgs e)
         {
@@ -37,6 +51,10 @@ namespace Torshify.Client
             base.OnExit(e);
         }
 
+        #endregion Protected Methods
+
+        #region Private Methods
+
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             File.WriteAllText("CrashOnDispatcher.log", e.Exception.ToString());
@@ -47,5 +65,7 @@ namespace Torshify.Client
             Exception ex = (Exception)e.ExceptionObject;
             File.WriteAllText("Crash.log", ex.ToString());
         }
+
+        #endregion Private Methods
     }
 }

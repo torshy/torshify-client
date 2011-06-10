@@ -5,11 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0E35EC5D-5363-4BE2-80CE-56A9861AC7FB}</ProjectGuid>
+    <ProjectGuid>{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Torshify.Client.Mocks</RootNamespace>
-    <AssemblyName>Torshify.Client.Mocks</AssemblyName>
+    <RootNamespace>Torshify.Client.Spotify</RootNamespace>
+    <AssemblyName>Torshify.Client.Spotify</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,41 +37,59 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Torshify.Client.Mocks.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>bin\Debug\Torshify.Client.Spotify.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FizzWare.NBuilder">
-      <HintPath>..\..\lib\NBuilder\FizzWare.NBuilder.dll</HintPath>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Torshify">
+      <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player.cs" />
-    <Compile Include="Playlist.cs" />
-    <Compile Include="PlaylistProvider.cs" />
-    <Compile Include="PlaylistTrack.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Track.cs" />
+    <Compile Include="Services\Playlist.cs" />
+    <Compile Include="Services\PlaylistProvider.cs" />
+    <Compile Include="Services\PlaylistTrack.cs" />
+    <Compile Include="Services\Track.cs" />
+    <Compile Include="SpotifyModule.cs" />
+    <Compile Include="Views\Login\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Torshify.Client.Infrastructure\Torshify.Client.Infrastructure.csproj">
       <Project>{7134446D-B55C-4328-80E8-C72D05A7E4BC}</Project>
       <Name>Torshify.Client.Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Login\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

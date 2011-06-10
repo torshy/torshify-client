@@ -48,6 +48,24 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
                 _navigationItems.Add(new PlaylistNavigationItem(playlist, _regionManager));
             }
 
+            playlistProvider.PlaylistAdded += (s, e) =>
+            {
+                _navigationItems.Add(new PlaylistNavigationItem(e.Playlist, _regionManager));
+            };
+
+            playlistProvider.PlaylistRemoved += (s, e) =>
+            {
+                _navigationItems.FirstOrDefault(nav =>
+                {
+                    if (nav is PlaylistNavigationItem)
+                    {
+                        return ((PlaylistNavigationItem)nav).Playlist == e.Playlist;
+                    }
+
+                    return false;
+                });
+            };
+
             NavigationItems = CollectionViewSource.GetDefaultView(_navigationItems);
             NavigateToItemCommand = new AutomaticCommand<INavigationItem>(ExecuteNavigateToItem, CanExecuteNavigateToItem);
         }

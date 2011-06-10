@@ -12,6 +12,7 @@ using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Mocks;
 using Torshify.Client.Modules.Core;
+using Torshify.Client.Spotify;
 
 namespace Torshify.Client
 {
@@ -32,8 +33,12 @@ namespace Torshify.Client
         {
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
+
+#if MockEnabled
             Container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager(),
                                                                         new InjectionMethod("Initialize"));
+#endif
+
             Container.RegisterType<IPlayer, Player>(new ContainerControlledLifetimeManager());
             base.ConfigureContainer();
         }
@@ -58,9 +63,20 @@ namespace Torshify.Client
 
         protected override void ConfigureModuleCatalog()
         {
+            
+#if !MockEnabled
+            Type spotifyModule = typeof(SpotifyModule);
+            ModuleCatalog.AddModule(new ModuleInfo(spotifyModule.Name,
+                                                   spotifyModule.AssemblyQualifiedName));
+            Type coreModule = typeof(CoreModule);
+            ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
+                                                   coreModule.AssemblyQualifiedName,
+                                                   spotifyModule.Name));
+#else
             Type coreModule = typeof (CoreModule);
             ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
                                                    coreModule.AssemblyQualifiedName));
+#endif
         }
 
         #endregion Protected Methods

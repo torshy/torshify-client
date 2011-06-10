@@ -31,6 +31,7 @@
     <Grid>
         <ListBox
             ItemsSource="{Binding NavigationItems}"
-            IsSynchronizedWithCurrentItem="True" />
+            IsSynchronizedWithCurrentItem="True"
+            HorizontalContentAlignment="Stretch"/>
     </Grid>
 </UserControl>

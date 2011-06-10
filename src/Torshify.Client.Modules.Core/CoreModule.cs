@@ -9,6 +9,7 @@ using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core.Views;
 using Torshify.Client.Modules.Core.Views.Navigation;
+using Torshify.Client.Modules.Core.Views.NowPlaying;
 using Torshify.Client.Modules.Core.Views.Playlist;
 using Torshify.Client.Modules.Core.Views.PlayQueue;
 
@@ -45,13 +46,19 @@ namespace Torshify.Client.Modules.Core
             _container.RegisterType<MainView>("MainView");
             _container.RegisterType<PlaylistView>(MusicRegionViewNames.PlaylistView);
             _container.RegisterType<PlayQueueView>(MusicRegionViewNames.PlayQueueView);
+            _container.RegisterType<NowPlayingView>(MusicRegionViewNames.NowPlayingView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
+            _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(NavigationView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlaylistView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlayQueueView));
 
+#if MockEnabled
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));
+#else
+            _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("LoginView", UriKind.Relative));
+#endif    
 
             CoreCommands
                 .PlayTrackCommand

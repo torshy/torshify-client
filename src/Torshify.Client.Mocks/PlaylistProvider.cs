@@ -26,6 +26,14 @@ namespace Torshify.Client.Mocks
 
         #endregion Constructors
 
+        #region Events
+
+        public event EventHandler<PlaylistEventArgs> PlaylistAdded;
+
+        public event EventHandler<PlaylistEventArgs> PlaylistRemoved;
+
+        #endregion Events
+
         #region Properties
 
         public IEnumerable<IPlaylist> Playlists
