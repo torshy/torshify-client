@@ -6,7 +6,7 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
 
-namespace Torshify.Client.Infrastructure.Services
+namespace Torshify.Client.Infrastructure.Models
 {
     public class CommandBar : NotificationObject, ICommandBar
     {

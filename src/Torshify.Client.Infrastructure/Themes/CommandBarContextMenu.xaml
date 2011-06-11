@@ -4,7 +4,7 @@
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls"
     xmlns:Services="clr-namespace:Torshify.Client.Infrastructure.Services"
     xmlns:Interfaces="clr-namespace:Torshify.Client.Infrastructure.Interfaces"
-    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters">
+    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters" xmlns:Models="clr-namespace:Torshify.Client.Infrastructure.Models">
 
     <Converters:StringEmptyToVisibilityConverter
         x:Key="StringEmptyToVisibilityConverter" />
@@ -84,13 +84,13 @@
         TargetType="{x:Type Controls:CommandBarContextMenu}">
         <Style.Resources>
             <DataTemplate
-                DataType="{x:Type Services:CommandBar+SeparatorCommandModel}">
+                DataType="{x:Type Models:CommandBar+SeparatorCommandModel}">
                 <Separator
                     Style="{StaticResource SeparatorStyleKey}" />
             </DataTemplate>
 
             <HierarchicalDataTemplate
-                DataType="{x:Type Services:CommandBar+SubmenuCommandModel}"
+                DataType="{x:Type Models:CommandBar+SubmenuCommandModel}"
                 ItemsSource="{Binding ChildMenuItems}">
                 <ContentControl
                     Content="{Binding Content}"
@@ -98,7 +98,7 @@
             </HierarchicalDataTemplate>
 
             <DataTemplate
-                DataType="{x:Type Interfaces:CommandModel}">
+                DataType="{x:Type Models:CommandModel}">
                 <ContentControl
                     Content="{Binding Content}"
                     ContentTemplate="{Binding ContentTemplate}" />

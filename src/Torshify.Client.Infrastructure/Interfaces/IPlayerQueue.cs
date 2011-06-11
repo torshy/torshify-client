@@ -13,6 +13,8 @@ namespace Torshify.Client.Infrastructure.Interfaces
 
         event EventHandler ShuffleChanged;
 
+        event EventHandler Changed;
+
         #endregion Events
 
         #region Properties
@@ -42,6 +44,16 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get; set;
         }
 
+        IEnumerable<ITrack> All
+        {
+            get;
+        }
+
+        IEnumerable<ITrack> Queued
+        {
+            get;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -55,6 +67,8 @@ namespace Torshify.Client.Infrastructure.Interfaces
         bool Previous();
 
         void Set(IEnumerable<ITrack> tracks);
+
+        bool IsQueued(ITrack track);
 
         #endregion Methods
     }

@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Torshify.Client.Infrastructure.Interfaces;
 
-namespace Torshify.Client.Infrastructure.Services
+namespace Torshify.Client.Infrastructure.Models
 {
     public class PlayerQueue : IPlayerQueue
     {
@@ -37,6 +37,8 @@ namespace Torshify.Client.Infrastructure.Services
 
         public event EventHandler ShuffleChanged;
 
+        public event EventHandler Changed;
+
         #endregion Events
 
         #region Properties
@@ -66,7 +68,10 @@ namespace Torshify.Client.Infrastructure.Services
         {
             get
             {
-                yield return Current;
+                if (Current != null)
+                {
+                    yield return Current;
+                }
 
                 foreach (var track in _queue.ToArray())
                 {
@@ -77,6 +82,14 @@ namespace Torshify.Client.Infrastructure.Services
                 {
                     yield return track;
                 }
+            }
+        }
+
+        public IEnumerable<ITrack> Queued
+        {
+            get
+            {
+                return _queue.ToArray();
             }
         }
 
@@ -148,6 +161,11 @@ namespace Torshify.Client.Infrastructure.Services
 
         #region Public Methods
 
+        public bool IsQueued(ITrack track)
+        {
+            return _queue.Contains(track);
+        }
+
         public void Set(IEnumerable<ITrack> tracks)
         {
             _playlist = new List<ITrack>(tracks);
@@ -155,6 +173,8 @@ namespace Torshify.Client.Infrastructure.Services
             Update();
 
             Current = _playlist[_playlistIndicies[0]];
+
+            OnChanged();
         }
 
         public void Enqueue(ITrack track)
@@ -163,6 +183,8 @@ namespace Torshify.Client.Infrastructure.Services
             {
                 _queue.Enqueue(track);
             }
+
+            OnChanged();
         }
 
         public void Enqueue(IEnumerable<ITrack> tracks)
@@ -174,6 +196,8 @@ namespace Torshify.Client.Infrastructure.Services
                     _queue.Enqueue(track);
                 }
             }
+
+            OnChanged();
         }
 
         public bool Next()
@@ -261,6 +285,15 @@ namespace Torshify.Client.Infrastructure.Services
             }
         }
 
+        protected virtual void OnChanged()
+        {
+            var handler = Changed;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
         #endregion Protected Methods
 
         #region Private Static Methods

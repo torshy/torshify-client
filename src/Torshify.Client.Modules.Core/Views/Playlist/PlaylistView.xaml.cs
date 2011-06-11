@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.Events;
 using Torshify.Client.Infrastructure.Controls;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Infrastructure.Services;
 
 namespace Torshify.Client.Modules.Core.Views.Playlist

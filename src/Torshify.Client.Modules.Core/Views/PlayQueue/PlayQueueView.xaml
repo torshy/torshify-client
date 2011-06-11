@@ -9,6 +9,28 @@
     d:DesignWidth="300">
     <Grid
         Background="Maroon">
-
+        <Grid>
+            <DataGrid
+                ItemsSource="{Binding Tracks}"
+                IsReadOnly="True"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="Track"
+                        Binding="{Binding Name}" />
+                    <DataGridTextColumn
+                        Header="Artist"
+                        Binding="{Binding Album.Artist.Name}" />
+                    <DataGridTextColumn
+                        Header="Time"
+                        Binding="{Binding Duration}" />
+                    <DataGridTextColumn
+                        Header="Album"
+                        Binding="{Binding Album.Name}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

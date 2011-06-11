@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-
 using Microsoft.Practices.Prism.ViewModel;
 
-namespace Torshify.Client.Infrastructure.Interfaces
+namespace Torshify.Client.Infrastructure.Models
 {
     public class CommandModel : NotificationObject
     {
