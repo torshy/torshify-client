@@ -1,6 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Practices.Prism.ViewModel;
+
+using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
+
+using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
 
@@ -12,7 +17,6 @@ namespace Torshify.Client.Spotify.Services
 
         private int _id;
         private int _index;
-        private string _name;
 
         #endregion Fields
 
@@ -27,6 +31,26 @@ namespace Torshify.Client.Spotify.Services
 
         #region Properties
 
+        public ITorshifyAlbum Album
+        {
+            get; set;
+        }
+
+        public IEnumerable<ITorshifyArtist> Artists
+        {
+            get; set;
+        }
+
+        public int Disc
+        {
+            get; set;
+        }
+
+        public TimeSpan Duration
+        {
+            get; set;
+        }
+
         public int ID
         {
             get { return _id; }
@@ -39,10 +63,24 @@ namespace Torshify.Client.Spotify.Services
             set { _index = value; }
         }
 
+        public bool IsAvailable
+        {
+            get; private set;
+        }
+
+        public bool IsStarred
+        {
+            get; set;
+        }
+
         public string Name
         {
             get { return InternalTrack.Name; }
-            set { _name = value; }
+        }
+
+        public int Popularity
+        {
+            get; private set;
         }
 
         protected ITrack InternalTrack

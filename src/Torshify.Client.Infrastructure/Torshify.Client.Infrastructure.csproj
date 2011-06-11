@@ -100,6 +100,8 @@
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Interfaces\IAlbum.cs" />
+    <Compile Include="Interfaces\IArtist.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Interfaces\IPlaylist.cs" />
