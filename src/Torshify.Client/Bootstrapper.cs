@@ -13,6 +13,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Mocks;
 using Torshify.Client.Modules.Core;
 using Torshify.Client.Spotify;
+using Torshify.Client.Unity;
 
 namespace Torshify.Client
 {
@@ -31,6 +32,7 @@ namespace Torshify.Client
 
         protected override void ConfigureContainer()
         {
+            Container.InstallCoreExtensions();
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
 
