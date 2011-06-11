@@ -2,6 +2,6 @@
 {
     public interface IPlaylistTrack : ITrack
     {
-        
+        IPlaylist Playlist { get; }
     }
 }

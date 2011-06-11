@@ -73,6 +73,7 @@
     <Compile Include="CoreCommands.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="CoreRegionNames.cs" />
+    <Compile Include="PlayerCommandsHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -131,7 +131,7 @@ namespace Torshify.Client.Spotify.Services
         {
             if (_dispatcher.CheckAccess())
             {
-                _tracks.Add(new PlaylistTrack(track));
+                _tracks.Add(new PlaylistTrack(this, track));
             }
             else
             {

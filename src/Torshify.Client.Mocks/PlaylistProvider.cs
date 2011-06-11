@@ -130,7 +130,7 @@ namespace Torshify.Client.Mocks
                 .CreateListOfSize(_random.Next(10,25))
                 .WhereAll()
                 .Has(p => p.Name = _playlistNames[_random.Next(0, _playlistNames.Length - 1)])
-                .Has(p => p.Tracks = GetTracks())
+                .Has(p => p.Tracks = GetTracks(p))
                 .Build();
         }
 
@@ -138,11 +138,12 @@ namespace Torshify.Client.Mocks
 
         #region Private Methods
 
-        private IEnumerable<IPlaylistTrack> GetTracks()
+        private IEnumerable<IPlaylistTrack> GetTracks(IPlaylist parentPlaylist)
         {
             return Builder<PlaylistTrack>
                 .CreateListOfSize(_random.Next(6, 35))
                 .WhereAll()
+                .Has(t => t.Playlist = parentPlaylist)
                 .Has(t => t.Name = _trackNames[_random.Next(0, _trackNames.Length - 1)])
                 .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
                 .Has(t => t.Album = GetAlbum())
@@ -174,7 +175,7 @@ namespace Torshify.Client.Mocks
                 .With(a => a.Year = _random.Next(1990, 2011))
                 .With(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
                 .With(a => a.Artist = GetArtist())
-                .Build());
+                .Build();
         }
 
         #endregion Private Methods

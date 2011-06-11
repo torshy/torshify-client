@@ -5,7 +5,6 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
 
 using Torshify.Client.Infrastructure;
-using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core.Views;
 using Torshify.Client.Modules.Core.Views.Navigation;
@@ -59,40 +58,9 @@ namespace Torshify.Client.Modules.Core
 #else
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("LoginView", UriKind.Relative));
 #endif    
-
-            CoreCommands
-                .PlayTrackCommand
-                .RegisterCommand(new AutomaticCommand<ITrack>(ExecutePlayTrack, CanExecutePlayTrack));
-
-            CoreCommands
-                .QueueTrackCommand
-                .RegisterCommand(new AutomaticCommand<ITrack>(ExecuteQueueTrack, CanExecuteQueueTrack));
+            _container.Resolve<PlayerCommandsHandler>().Initialize();
         }
 
         #endregion Public Methods
-
-        #region Private Methods
-
-        private bool CanExecuteQueueTrack(ITrack track)
-        {
-            return true;
-        }
-
-        private void ExecuteQueueTrack(ITrack track)
-        {
-            _player.Enqueue(track);
-        }
-
-        private bool CanExecutePlayTrack(ITrack track)
-        {
-            return true;
-        }
-
-        private void ExecutePlayTrack(ITrack track)
-        {
-            _player.Play(track);
-        }
-
-        #endregion Private Methods
     }
 }
