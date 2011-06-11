@@ -17,20 +17,31 @@ namespace Torshify.Client.Spotify.Services
 
         private readonly Dispatcher _dispatcher;
 
-        private string _name;
-        private string _description;
         private ObservableCollection<PlaylistTrack> _tracks;
-
+        private bool _isLoaded;
         #endregion Fields
 
         #region Constructors
 
         public Playlist(IPlaylist playlist, Dispatcher dispatcher)
         {
-            InternalPlaylist = playlist;
-
             _dispatcher = dispatcher;
             _tracks = new ObservableCollection<PlaylistTrack>();
+
+            InternalPlaylist = playlist;
+            InternalPlaylist.DescriptionChanged += OnDescriptionChanged;
+            InternalPlaylist.MetadataUpdated += OnMetadataChanged;
+            InternalPlaylist.Renamed += OnRenamed;
+            InternalPlaylist.StateChanged += OnStateChanged;
+            InternalPlaylist.TracksAdded += OnTracksAdded;
+            InternalPlaylist.TracksRemoved += OnTracksRemoved;
+
+            _isLoaded = InternalPlaylist.IsLoaded;
+
+            if (_isLoaded)
+            {
+                FetchTracks();
+            }
         }
 
         #endregion Constructors
@@ -39,7 +50,8 @@ namespace Torshify.Client.Spotify.Services
 
         public IPlaylist InternalPlaylist
         {
-            get; private set;
+            get;
+            private set;
         }
 
         public string Name
@@ -58,11 +70,7 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                return _description;
-            }
-            set
-            {
-                _description = value;
+                return InternalPlaylist.Description;
             }
         }
 
@@ -75,5 +83,62 @@ namespace Torshify.Client.Spotify.Services
         }
 
         #endregion Properties
+
+        #region Private Methods
+
+        private void FetchTracks()
+        {
+            for (int i = 0; i < InternalPlaylist.Tracks.Count; i++)
+            {
+                var track = InternalPlaylist.Tracks[i];
+                Add(track);
+            }
+        }
+
+        private void OnTracksRemoved(object sender, TracksRemovedEventArgs e)
+        {
+        }
+
+        private void OnTracksAdded(object sender, TracksAddedEventArgs e)
+        {
+        }
+
+        private void OnStateChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded && InternalPlaylist.IsLoaded)
+            {
+                _isLoaded = true;
+                FetchTracks();
+            }
+        }
+
+        private void OnRenamed(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("Name");
+        }
+
+        private void OnMetadataChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("Name", "Description");
+        }
+
+        private void OnDescriptionChanged(object sender, DescriptionEventArgs e)
+        {
+            RaisePropertyChanged("Description");
+        }
+        
+        private void Add(IPlaylistTrack track)
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                _tracks.Add(new PlaylistTrack(track));
+            }
+            else
+            {
+                _dispatcher.BeginInvoke((Action<IPlaylistTrack>) Add, track);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

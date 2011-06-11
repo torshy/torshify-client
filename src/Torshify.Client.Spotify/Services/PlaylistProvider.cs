@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Threading;
-
-using Microsoft.Practices.ObjectBuilder2;
 
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -44,22 +41,6 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        private void InitializePlaylistContainer()
-        {
-            _session.PlaylistContainer.PlaylistAdded += OnPlaylistContainerPlaylistAdded;
-            _session.PlaylistContainer.PlaylistRemoved += OnPlaylistContainerPlaylistRemoved;
-            _session.PlaylistContainer.PlaylistMoved += OnPlaylistContainerPlaylistMoved;
-
-            if (_session.PlaylistContainer.IsLoaded)
-            {
-                FetchPlaylists();
-            }
-            else
-            {
-                _session.PlaylistContainer.Loaded += OnPlaylistContainerLoaded;
-            }
-        }
-
         #endregion Constructors
 
         #region Events
@@ -84,14 +65,28 @@ namespace Torshify.Client.Spotify.Services
 
         #region Private Methods
 
+        private void InitializePlaylistContainer()
+        {
+            _session.PlaylistContainer.PlaylistAdded += OnPlaylistContainerPlaylistAdded;
+            _session.PlaylistContainer.PlaylistRemoved += OnPlaylistContainerPlaylistRemoved;
+            _session.PlaylistContainer.PlaylistMoved += OnPlaylistContainerPlaylistMoved;
+
+            if (_session.PlaylistContainer.IsLoaded)
+            {
+                FetchPlaylists();
+            }
+            else
+            {
+                _session.PlaylistContainer.Loaded += OnPlaylistContainerLoaded;
+            }
+        }
+
         private void OnPlaylistContainerPlaylistMoved(object sender, PlaylistMovedEventArgs e)
         {
-
         }
 
         private void OnPlaylistContainerPlaylistRemoved(object sender, PlaylistEventArgs e)
         {
-
         }
 
         private void OnPlaylistContainerPlaylistAdded(object sender, PlaylistEventArgs e)
@@ -128,7 +123,6 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-
         private void OnPlaylistAdded(Infrastructure.Interfaces.PlaylistEventArgs e)
         {
             var handler = PlaylistAdded;
@@ -138,6 +132,7 @@ namespace Torshify.Client.Spotify.Services
                 handler(this, e);
             }
         }
+
         #endregion Private Methods
     }
 }
