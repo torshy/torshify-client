@@ -4,5 +4,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/BusyIndicator.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/CommandBarContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

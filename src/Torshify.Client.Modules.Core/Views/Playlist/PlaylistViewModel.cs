@@ -5,9 +5,11 @@ using System.Linq;
 using System.Windows.Data;
 
 using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Playlist
@@ -20,6 +22,15 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         private IPlaylist _playlist;
 
         #endregion Fields
+
+        #region Constructors
+
+        public PlaylistViewModel(IEventAggregator eventAggregator)
+        {
+            eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent);
+        }
+
+        #endregion Constructors
 
         #region Properties
 
@@ -101,5 +112,19 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         }
 
         #endregion Public Methods
+
+        #region Private Methods
+
+        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
+        {
+            model.CommandBar.AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track);
+            model.CommandBar.AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+            model.CommandBar.AddSeparator("Hello");
+            model.CommandBar.AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track);
+            model.CommandBar.AddSeparator();
+            model.CommandBar.AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        #endregion Private Methods
     }
 }

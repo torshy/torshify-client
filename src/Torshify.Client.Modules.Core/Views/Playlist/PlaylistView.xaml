@@ -13,7 +13,8 @@
             IsReadOnly="True"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
-            AutoGenerateColumns="False">
+            AutoGenerateColumns="False"
+            ContextMenuOpening="DataGridContextMenuOpening">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Track"

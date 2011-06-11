@@ -88,18 +88,24 @@
     <Compile Include="Commands\WeakCollection.cs" />
     <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Controls\BusyIndicator.cs" />
+    <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
+    <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
+    <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
+    <Compile Include="Events\TrackCommandBarEvent.cs" />
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Interfaces\CommandModel.cs" />
     <Compile Include="Interfaces\IAlbum.cs" />
     <Compile Include="Interfaces\IArtist.cs" />
+    <Compile Include="Interfaces\ICommandBar.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Interfaces\IPlayerQueue.cs" />
@@ -123,6 +129,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RegionNames.cs" />
+    <Compile Include="Services\CommandBar.cs" />
     <Compile Include="Services\PlayerQueue.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -141,6 +148,10 @@
     <Page Include="Themes\BusyIndicator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\CommandBarContextMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
