@@ -118,12 +118,8 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
             model.CommandBar
-                    .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
-                    .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track)
-                    .AddSeparator("Hello")
-                    .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
-                    .AddSeparator()
-                    .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
         }
 
         #endregion Private Methods

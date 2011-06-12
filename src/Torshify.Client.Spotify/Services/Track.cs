@@ -83,7 +83,7 @@ namespace Torshify.Client.Spotify.Services
             get; private set;
         }
 
-        protected ITrack InternalTrack
+        public ITrack InternalTrack
         {
             get; private set;
         }

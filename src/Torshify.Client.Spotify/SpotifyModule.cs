@@ -68,6 +68,7 @@ namespace Torshify.Client.Spotify
         {
             _container.RegisterInstance(Session);
             _container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IPlayer, Player>(new ContainerControlledLifetimeManager());
             _container.RegisterType<LoginView>("LoginView");
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
         }

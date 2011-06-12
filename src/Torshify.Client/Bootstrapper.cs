@@ -35,13 +35,6 @@ namespace Torshify.Client
             Container.InstallCoreExtensions();
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
-
-#if MockEnabled
-            Container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager(),
-                                                                        new InjectionMethod("Initialize"));
-#endif
-
-            Container.RegisterType<IPlayer, Player>(new ContainerControlledLifetimeManager());
             base.ConfigureContainer();
         }
 
@@ -75,9 +68,14 @@ namespace Torshify.Client
                                                    coreModule.AssemblyQualifiedName,
                                                    spotifyModule.Name));
 #else
+            Type mockModule = typeof(MockModule);
+            ModuleCatalog.AddModule(new ModuleInfo(mockModule.Name,
+                                                   mockModule.AssemblyQualifiedName));
+
             Type coreModule = typeof (CoreModule);
             ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
-                                                   coreModule.AssemblyQualifiedName));
+                                                   coreModule.AssemblyQualifiedName,
+                                                   mockModule.Name));
 #endif
         }
 

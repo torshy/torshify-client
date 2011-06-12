@@ -18,6 +18,7 @@ namespace Torshify.Client.Mocks
         public Player()
         {
             _playerQueue = new PlayerQueue();
+            _playerQueue.CurrentChanged += OnCurrentChanged;
         }
 
         #endregion Constructors
@@ -62,5 +63,13 @@ namespace Torshify.Client.Mocks
         }
 
         #endregion Public Methods
+
+        #region Private Methods
+
+        private void OnCurrentChanged(object sender, EventArgs e)
+        {
+        }
+
+        #endregion Private Methods
     }
 }
