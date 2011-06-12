@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Microsoft.Practices.Prism.ViewModel;
 
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
@@ -15,8 +15,8 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
-        private int _id;
-        private int _index;
+        private Lazy<Album> _album;
+        private Lazy<IEnumerable<Artist>> _artists;
 
         #endregion Fields
 
@@ -25,6 +25,9 @@ namespace Torshify.Client.Spotify.Services
         protected Track(ITrack track)
         {
             InternalTrack = track;
+
+            _album = new Lazy<Album>(() => new Album(InternalTrack.Album));
+            _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist)));
         }
 
         #endregion Constructors
@@ -33,44 +36,50 @@ namespace Torshify.Client.Spotify.Services
 
         public ITorshifyAlbum Album
         {
-            get; set;
+            get { return _album.Value; }
         }
 
         public IEnumerable<ITorshifyArtist> Artists
         {
-            get; set;
+            get { return _artists.Value; }
         }
 
         public int Disc
         {
-            get; set;
+            get { return InternalTrack.Disc; }
         }
 
         public TimeSpan Duration
         {
-            get; set;
+            get { return InternalTrack.Duration; }
         }
 
         public int ID
         {
-            get { return _id; }
-            set { _id = value; }
+            get { return InternalTrack.GetHashCode(); }
         }
 
         public int Index
         {
-            get { return _index; }
-            set { _index = value; }
+            get { return InternalTrack.Index; }
         }
 
         public bool IsAvailable
         {
-            get; private set;
+            get { return InternalTrack.IsAvailable; }
         }
 
         public bool IsStarred
         {
-            get; set;
+            get { return InternalTrack.IsStarred; }
+            set
+            {
+                if (InternalTrack.IsStarred != value)
+                {
+                    InternalTrack.IsStarred = value;
+                    RaisePropertyChanged("IsStarred");
+                }
+            }
         }
 
         public string Name
@@ -80,12 +89,13 @@ namespace Torshify.Client.Spotify.Services
 
         public int Popularity
         {
-            get; private set;
+            get { return InternalTrack.Popularity; }
         }
 
         public ITrack InternalTrack
         {
-            get; private set;
+            get;
+            private set;
         }
 
         #endregion Properties
