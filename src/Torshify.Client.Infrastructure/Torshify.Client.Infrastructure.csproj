@@ -102,6 +102,7 @@
     <Compile Include="Events\TrackCommandBarEvent.cs" />
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Models\PlayerQueueItem.cs" />
     <Compile Include="Models\CommandModel.cs" />
     <Compile Include="Interfaces\IAlbum.cs" />
     <Compile Include="Interfaces\IArtist.cs" />

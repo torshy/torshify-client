@@ -113,6 +113,11 @@ namespace Torshify.Client.Infrastructure.Models
         {
             get
             {
+                if (_playlistIndicies == null)
+                {
+                    return false;
+                }
+
                 if (_playlistTrackIndex == -1)
                 {
                     return false;
@@ -141,6 +146,11 @@ namespace Torshify.Client.Infrastructure.Models
         {
             get
             {
+                if (_playlistIndicies == null)
+                {
+                    return false;
+                }
+
                 if (_playlistTrackIndex == -1)
                 {
                     return false;

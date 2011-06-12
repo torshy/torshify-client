@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,11 +36,81 @@ namespace Torshify.Client.Modules.Core
             CoreCommands
                 .QueueTrackCommand
                 .RegisterCommand(new AutomaticCommand<ITrack>(ExecuteQueueTrack, CanExecuteQueueTrack));
+
+            CoreCommands.Player
+                .PlayCommand
+                .RegisterCommand(new AutomaticCommand(ExecutePlay, CanExecutePlay));
+
+            CoreCommands.Player
+                .PauseCommand
+                .RegisterCommand(new AutomaticCommand(ExecutePause, CanExecutePause));
+
+            CoreCommands.Player
+                .NextCommand
+                .RegisterCommand(new AutomaticCommand(ExecuteNext, CanExecuteNext));
+
+            CoreCommands.Player
+                .PreviousCommand
+                .RegisterCommand(new AutomaticCommand(ExecutePrevious, CanExecutePrevious));
+            
+            CoreCommands.Player
+                .SeekCommand
+                .RegisterCommand(new AutomaticCommand<TimeSpan>(ExecuteSeek, CanExecuteSeek));
         }
 
         #endregion Public Methods
 
         #region Private Methods
+
+        private bool CanExecuteSeek(TimeSpan timeSpan)
+        {
+            return true;
+        }
+
+        private void ExecuteSeek(TimeSpan timeSpan)
+        {
+            _player.Seek(timeSpan);
+        }
+
+        private bool CanExecutePrevious()
+        {
+            return _player.Playlist.CanGoPrevious;
+        }
+
+        private void ExecutePrevious()
+        {
+            _player.Playlist.Previous();
+        }
+
+        private bool CanExecuteNext()
+        {
+            return _player.Playlist.CanGoNext;
+        }
+
+        private void ExecuteNext()
+        {
+            _player.Playlist.Next();
+        }
+
+        private bool CanExecutePause()
+        {
+            return _player.IsPlaying;
+        }
+
+        private void ExecutePause()
+        {
+            _player.Pause();
+        }
+
+        private bool CanExecutePlay()
+        {
+            return !_player.IsPlaying;
+        }
+
+        private void ExecutePlay()
+        {
+            _player.Play();
+        }
 
         private bool CanExecuteQueueTrack(ITrack track)
         {

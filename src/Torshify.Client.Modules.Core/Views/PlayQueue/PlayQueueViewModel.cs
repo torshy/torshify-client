@@ -5,6 +5,7 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Modules.Core.Views.PlayQueue
 {
