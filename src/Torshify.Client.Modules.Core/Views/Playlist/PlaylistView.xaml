@@ -14,20 +14,26 @@
             CanUserAddRows="False"
             CanUserDeleteRows="False"
             AutoGenerateColumns="False"
-            ContextMenuOpening="DataGridContextMenuOpening">
+            ContextMenuOpening="DataGridContextMenuOpening"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Track"
-                    Binding="{Binding Name}" />
+                    Binding="{Binding Name}"
+                    Width="200" />
                 <DataGridTextColumn
                     Header="Artist"
-                    Binding="{Binding Album.Artist.Name}" />
+                    Binding="{Binding Album.Artist.Name}"
+                    Width="175" />
                 <DataGridTextColumn
                     Header="Time"
-                    Binding="{Binding Duration}" />
+                    Binding="{Binding Duration}"
+                    Width="75" />                
                 <DataGridTextColumn
                     Header="Album"
-                    Binding="{Binding Album.Name}" />
+                    Binding="{Binding Album.Name}"
+                    Width="175" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

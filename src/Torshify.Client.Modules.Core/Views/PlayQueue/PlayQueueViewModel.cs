@@ -33,7 +33,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         {
             get
             {
-                return _player.Playlist.All;
+                return _player.Playlist.Left;
             }
         }
 
@@ -60,7 +60,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
 
         private void OnPlaylistChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged("Tracks");
+            //RaisePropertyChanged("Tracks");
         }
 
         #endregion Private Methods
