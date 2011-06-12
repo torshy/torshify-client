@@ -9,7 +9,7 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UniformGrid
-        Rows="1"
+        Rows="2"
         Columns="4">
         <Button
             Content="Previous"
@@ -23,5 +23,16 @@
         <Button
             Content="Next"
             Command="{x:Static Core:CoreCommands+Player.NextCommand}" />
+        <Label
+            Content="{Binding Player.DurationPlayed}" />
+        <Button
+            Content="Now Playing"
+            Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}" />
+        <Button
+            Content="Shuffle"
+            Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}" />
+        <Button
+            Content="Repeat"
+            Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}" />
     </UniformGrid>
 </UserControl>

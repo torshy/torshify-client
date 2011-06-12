@@ -17,6 +17,11 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
+        TimeSpan DurationPlayed
+        {
+            get;
+        }
+
         IPlayerQueue Playlist
         {
             get;

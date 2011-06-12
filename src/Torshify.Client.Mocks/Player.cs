@@ -37,6 +37,14 @@ namespace Torshify.Client.Mocks
             private set;
         }
 
+        public TimeSpan DurationPlayed
+        {
+            get
+            {
+                return TimeSpan.Zero;
+            }
+        }
+
         public IPlayerQueue Playlist
         {
             get { return _playerQueue; }
