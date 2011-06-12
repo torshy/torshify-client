@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls"
-    xmlns:Services="clr-namespace:Torshify.Client.Infrastructure.Services"
-    xmlns:Interfaces="clr-namespace:Torshify.Client.Infrastructure.Interfaces"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls" xmlns:Interfaces="clr-namespace:Torshify.Client.Infrastructure.Interfaces"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters" xmlns:Models="clr-namespace:Torshify.Client.Infrastructure.Models">
 
     <Converters:StringEmptyToVisibilityConverter

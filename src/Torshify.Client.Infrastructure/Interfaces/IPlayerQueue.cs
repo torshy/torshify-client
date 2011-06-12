@@ -29,7 +29,7 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        ITrack Current
+        PlayerQueueItem Current
         {
             get;
         }
@@ -44,12 +44,12 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get; set;
         }
 
-        IEnumerable<ITrack> All
+        IEnumerable<PlayerQueueItem> All
         {
             get;
         }
 
-        IEnumerable<ITrack> Queued
+        IEnumerable<PlayerQueueItem> Queued
         {
             get;
         }
@@ -71,5 +71,17 @@ namespace Torshify.Client.Infrastructure.Interfaces
         bool IsQueued(ITrack track);
 
         #endregion Methods
+    }
+
+    public class PlayerQueueItem
+    {
+        public PlayerQueueItem(bool isQueued, ITrack track)
+        {
+            IsQueued = isQueued;
+            Track = track;
+        }
+
+        public bool IsQueued { get; private set; }
+        public ITrack Track { get; private set; }
     }
 }

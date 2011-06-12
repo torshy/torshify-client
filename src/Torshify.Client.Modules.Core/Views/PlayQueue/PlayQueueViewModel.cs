@@ -28,7 +28,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
 
         #region Properties
 
-        public IEnumerable<ITrack> Tracks
+        public IEnumerable<PlayerQueueItem> Tracks
         {
             get
             {

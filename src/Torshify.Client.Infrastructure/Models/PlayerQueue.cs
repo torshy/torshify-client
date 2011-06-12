@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Torshify.Client.Infrastructure.Interfaces;
+using System.Linq;
 
 namespace Torshify.Client.Infrastructure.Models
 {
@@ -8,12 +9,12 @@ namespace Torshify.Client.Infrastructure.Models
     {
         #region Fields
 
-        private Queue<ITrack> _queue;
-        private List<ITrack> _playlist;
+        private Queue<PlayerQueueItem> _queue;
+        private List<PlayerQueueItem> _playlist;
         private int[] _playlistIndicies;
         private int _playlistTrackIndex;
         private object _queueLock = new object();
-        private ITrack _currentTrack;
+        private PlayerQueueItem _currentTrack;
         private bool _shuffle;
         private bool _repeat;
 
@@ -23,8 +24,8 @@ namespace Torshify.Client.Infrastructure.Models
 
         public PlayerQueue()
         {
-            _queue = new Queue<ITrack>();
-            _playlist = new List<ITrack>();
+            _queue = new Queue<PlayerQueueItem>();
+            _playlist = new List<PlayerQueueItem>();
         }
 
         #endregion Constructors
@@ -64,7 +65,7 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
-        public IEnumerable<ITrack> All
+        public IEnumerable<PlayerQueueItem> All
         {
             get
             {
@@ -75,17 +76,19 @@ namespace Torshify.Client.Infrastructure.Models
 
                 foreach (var track in _queue.ToArray())
                 {
-                    yield return track;
+                    if (track != Current)
+                        yield return track;
                 }
 
                 foreach (var track in _playlist.ToArray())
                 {
-                    yield return track;
+                    if (track != Current)
+                        yield return track;
                 }
             }
         }
 
-        public IEnumerable<ITrack> Queued
+        public IEnumerable<PlayerQueueItem> Queued
         {
             get
             {
@@ -93,7 +96,7 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
-        public ITrack Current
+        public PlayerQueueItem Current
         {
             get
             {
@@ -115,7 +118,7 @@ namespace Torshify.Client.Infrastructure.Models
                     return false;
                 }
 
-                if (_queue.Count > 0 )
+                if (_queue.Count > 0)
                 {
                     return true;
                 }
@@ -163,13 +166,18 @@ namespace Torshify.Client.Infrastructure.Models
 
         public bool IsQueued(ITrack track)
         {
-            return _queue.Contains(track);
+            return _queue.Any(i => i.Track.ID == track.ID);
         }
 
         public void Set(IEnumerable<ITrack> tracks)
         {
-            _playlist = new List<ITrack>(tracks);
-            
+            _playlist = new List<PlayerQueueItem>();
+
+            foreach (var track in tracks)
+            {
+                _playlist.Add(new PlayerQueueItem(false, track));
+            }
+
             Update();
 
             Current = _playlist[_playlistIndicies[0]];
@@ -181,7 +189,7 @@ namespace Torshify.Client.Infrastructure.Models
         {
             lock (_queueLock)
             {
-                _queue.Enqueue(track);
+                _queue.Enqueue(new PlayerQueueItem(true, track));
             }
 
             OnChanged();
@@ -193,7 +201,7 @@ namespace Torshify.Client.Infrastructure.Models
             {
                 foreach (var track in tracks)
                 {
-                    _queue.Enqueue(track);
+                    _queue.Enqueue(new PlayerQueueItem(true, track));
                 }
             }
 

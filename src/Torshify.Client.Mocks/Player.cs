@@ -1,7 +1,7 @@
 using System;
 
 using Torshify.Client.Infrastructure.Interfaces;
-using Torshify.Client.Infrastructure.Services;
+using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Mocks
 {
