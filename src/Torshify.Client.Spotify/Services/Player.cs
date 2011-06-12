@@ -10,7 +10,7 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly ISession _session;
-
+        private BassPlayer _bass;
         private bool _isPlaying;
         private IPlayerQueue _playlist;
         private Error? _lastLoadStatus;
@@ -23,6 +23,7 @@ namespace Torshify.Client.Spotify.Services
 
         public Player(ISession session)
         {
+            _bass = new BassPlayer();
             _session = session;
             _session.MusicDeliver += OnMusicDeliver;
             _playlist = new PlayerQueue();
@@ -152,6 +153,16 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnMusicDeliver(object sender, MusicDeliveryEventArgs e)
         {
+            if (e.Samples.Length > 0)
+            {
+                e.ConsumedFrames = _bass.EnqueueSamples(e.Channels, e.Rate, e.Samples, e.Frames);
+                IsPlaying = true;
+            }
+            else
+            {
+                e.ConsumedFrames = 0;
+                IsPlaying = false;
+            }
         }
 
         #endregion Private Methods
