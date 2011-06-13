@@ -90,6 +90,7 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainViewModel.cs" />
+    <Compile Include="Views\Navigation\DefaultNavigationItemProvider.cs" />
     <Compile Include="Views\Navigation\NavigationView.xaml.cs">
       <DependentUpon>NavigationView.xaml</DependentUpon>
     </Compile>

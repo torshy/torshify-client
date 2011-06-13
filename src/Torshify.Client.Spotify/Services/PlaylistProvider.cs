@@ -35,9 +35,12 @@ namespace Torshify.Client.Spotify.Services
             }
             else
             {
-                _session.LoginComplete += delegate
+                _session.LoginComplete += (s,e)=>
                                               {
-                                                  InitializePlaylistContainer();
+                                                  if (e.Status == Error.OK)
+                                                  {
+                                                      InitializePlaylistContainer();
+                                                  }
                                               };
             }
         }

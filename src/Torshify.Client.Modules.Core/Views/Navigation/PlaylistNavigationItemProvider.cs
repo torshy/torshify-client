@@ -13,6 +13,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {
     [Export(typeof(INavigationItemProvider))]
+    [ExportMetadata("Order", 10)]
     public class PlaylistNavigationItemProvider : INavigationItemProvider
     {
         #region Fields

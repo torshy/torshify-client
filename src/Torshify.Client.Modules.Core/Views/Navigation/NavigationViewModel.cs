@@ -11,6 +11,7 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
+using System.Linq;
 
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {
@@ -22,7 +23,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         private IRegion _mainRegion;
         [ImportMany]
-        private IEnumerable<INavigationItemProvider> _itemProviders;
+        private IEnumerable<Lazy<INavigationItemProvider, IDictionary<string,object>>> _itemProviders;
         private ICollectionView _navigationItemsIcv;
 
         #endregion Fields
@@ -97,10 +98,11 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
         {
             _navigationItems.Clear();
 
-            foreach (var itemProvider in _itemProviders)
+            var r = _itemProviders.OrderBy(kp => kp.Metadata["Order"]);
+            foreach (var kp in r)
             {
                 CollectionContainer collectionContainer = new CollectionContainer();
-                collectionContainer.Collection = itemProvider.Items;
+                collectionContainer.Collection = kp.Value.Items;
                 _navigationItems.Add(collectionContainer);
             }
 
