@@ -11,6 +11,8 @@ namespace Torshify.Client.Infrastructure.Interfaces
 
         event EventHandler<PlaylistEventArgs> PlaylistRemoved;
 
+        event EventHandler<PlaylistMovedEventArgs> PlaylistMoved;
+
         #endregion Events
 
         #region Properties
@@ -27,9 +29,10 @@ namespace Torshify.Client.Infrastructure.Interfaces
     {
         #region Constructors
 
-        public PlaylistEventArgs(IPlaylist playlist)
+        public PlaylistEventArgs(IPlaylist playlist, int position)
         {
             Playlist = playlist;
+            Position = position;
         }
 
         #endregion Constructors
@@ -37,6 +40,45 @@ namespace Torshify.Client.Infrastructure.Interfaces
         #region Properties
 
         public IPlaylist Playlist
+        {
+            get; private set;
+        }
+
+        public int Position
+        {
+            get; private set;
+        }
+
+        #endregion Properties
+    }
+
+    public class PlaylistMovedEventArgs : EventArgs
+    {
+        #region Constructors
+
+        public PlaylistMovedEventArgs(IPlaylist playlist, int oldIndex, int newIndex)
+        {
+            Playlist = playlist;
+            OldIndex = oldIndex;
+            NewIndex = newIndex;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public IPlaylist Playlist
+        {
+            get;
+            private set;
+        }
+
+        public int OldIndex
+        {
+            get; private set;
+        }
+
+        public int NewIndex
         {
             get; private set;
         }

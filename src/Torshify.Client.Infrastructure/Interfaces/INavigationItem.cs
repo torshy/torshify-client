@@ -1,6 +1,6 @@
 using Microsoft.Practices.Prism.Regions;
 
-namespace Torshify.Client.Modules.Core.Views.Navigation
+namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface INavigationItem
     {

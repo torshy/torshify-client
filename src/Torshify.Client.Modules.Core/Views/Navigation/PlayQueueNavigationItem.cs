@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Practices.Prism.Regions;
+using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {

@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using Torshify.Client.Infrastructure.Interfaces;
 
 using ITorshifyPlaylist = Torshify.Client.Infrastructure.Interfaces.IPlaylist;
+using System.Linq;
 
 namespace Torshify.Client.Spotify.Services
 {
@@ -49,6 +50,8 @@ namespace Torshify.Client.Spotify.Services
 
         public event EventHandler<Infrastructure.Interfaces.PlaylistEventArgs> PlaylistRemoved;
 
+        public event EventHandler<Infrastructure.Interfaces.PlaylistMovedEventArgs> PlaylistMoved;
+
         #endregion Events
 
         #region Properties
@@ -83,10 +86,22 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnPlaylistContainerPlaylistMoved(object sender, PlaylistMovedEventArgs e)
         {
+            ITorshifyPlaylist p = _playlists.FirstOrDefault(i => i.InternalPlaylist == e.Playlist);
+
+            if (p != null)
+            {
+                OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
+            }
         }
 
         private void OnPlaylistContainerPlaylistRemoved(object sender, PlaylistEventArgs e)
         {
+            ITorshifyPlaylist p = _playlists.FirstOrDefault(i => i.InternalPlaylist == e.Playlist);
+
+            if (p != null)
+            {
+                OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
+            }
         }
 
         private void OnPlaylistContainerPlaylistAdded(object sender, PlaylistEventArgs e)
@@ -115,7 +130,7 @@ namespace Torshify.Client.Spotify.Services
             {
                 var item = new Playlist(playlist, _dispatcher);
                 _playlists.Insert(position, item);
-                OnPlaylistAdded(new Infrastructure.Interfaces.PlaylistEventArgs(item));
+                OnPlaylistAdded(new Infrastructure.Interfaces.PlaylistEventArgs(item, position));
             }
             else
             {
@@ -126,6 +141,26 @@ namespace Torshify.Client.Spotify.Services
         private void OnPlaylistAdded(Infrastructure.Interfaces.PlaylistEventArgs e)
         {
             var handler = PlaylistAdded;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void OnPlaylistRemoved(Infrastructure.Interfaces.PlaylistEventArgs e)
+        {
+            var handler = PlaylistRemoved;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void OnPlaylistMoved(Infrastructure.Interfaces.PlaylistMovedEventArgs e)
+        {
+            var handler = PlaylistMoved;
 
             if (handler != null)
             {

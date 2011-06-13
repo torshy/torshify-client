@@ -1,3 +1,5 @@
+using System;
+using System.Windows.Media.Imaging;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Mocks
@@ -24,6 +26,12 @@ namespace Torshify.Client.Mocks
         public int Year
         {
             get; set;
+        }
+
+        public BitmapSource Cover
+        {
+            get; 
+            set;
         }
 
         #endregion Properties

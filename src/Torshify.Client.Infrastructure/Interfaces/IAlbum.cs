@@ -1,4 +1,6 @@
-﻿namespace Torshify.Client.Infrastructure.Interfaces
+﻿using System.Windows.Media.Imaging;
+
+namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface IAlbum
     {
@@ -20,6 +22,11 @@
         }
 
         int Year
+        {
+            get;
+        }
+
+        BitmapSource Cover
         {
             get;
         }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Windows.Data;
 
 using Microsoft.Practices.Prism.Regions;
@@ -12,62 +14,43 @@ using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {
-    public class NavigationViewModel : NotificationObject, INavigationAware
+    public class NavigationViewModel : NotificationObject, INavigationAware, IPartImportsSatisfiedNotification
     {
         #region Fields
 
-        private readonly IRegionManager _regionManager;
-        private readonly ObservableCollection<INavigationItem> _navigationItems;
+        private readonly CompositeCollection _navigationItems;
 
         private IRegion _mainRegion;
+        [ImportMany]
+        private IEnumerable<INavigationItemProvider> _itemProviders;
+        private ICollectionView _navigationItemsIcv;
 
         #endregion Fields
 
         #region Constructors
 
-        public NavigationViewModel(IRegionManager regionManager, IPlaylistProvider playlistProvider)
+        public NavigationViewModel(IRegionManager regionManager, CompositionContainer mefContainer)
         {
-            _regionManager = regionManager;
             _mainRegion = regionManager.Regions[CoreRegionNames.MainMusicRegion];
             _mainRegion.NavigationService.Navigated += (s, e) =>
                                                            {
                                                                var navEntry = e.NavigationContext.NavigationService.Journal.CurrentEntry;
-                                                               var navItem = _navigationItems.FirstOrDefault(n => n.IsMe(navEntry));
 
-                                                               if (navItem != null && NavigationItems.CurrentItem != navItem)
+                                                               foreach (CollectionContainer collectionContainer in _navigationItems)
                                                                {
-                                                                   NavigationItems.MoveCurrentTo(navItem);
+                                                                   foreach (INavigationItem item in collectionContainer.Collection)
+                                                                   {
+                                                                       if (item.IsMe(navEntry) && NavigationItems.CurrentItem != item)
+                                                                       {
+                                                                           NavigationItems.MoveCurrentTo(item);
+                                                                           break;
+                                                                       }
+                                                                   }
                                                                }
                                                            };
-
-            _navigationItems = new ObservableCollection<INavigationItem>();
-            _navigationItems.Add(new PlayQueueNavigationItem(_regionManager));
-
-            foreach (var playlist in playlistProvider.Playlists)
-            {
-                _navigationItems.Add(new PlaylistNavigationItem(playlist, _regionManager));
-            }
-
-            playlistProvider.PlaylistAdded += (s, e) =>
-            {
-                _navigationItems.Add(new PlaylistNavigationItem(e.Playlist, _regionManager));
-            };
-
-            playlistProvider.PlaylistRemoved += (s, e) =>
-            {
-                _navigationItems.FirstOrDefault(nav =>
-                {
-                    if (nav is PlaylistNavigationItem)
-                    {
-                        return ((PlaylistNavigationItem)nav).Playlist == e.Playlist;
-                    }
-
-                    return false;
-                });
-            };
-
-            NavigationItems = CollectionViewSource.GetDefaultView(_navigationItems);
+            _navigationItems = new CompositeCollection();
             NavigateToItemCommand = new AutomaticCommand<INavigationItem>(ExecuteNavigateToItem, CanExecuteNavigateToItem);
+            mefContainer.SatisfyImportsOnce(this);
         }
 
         #endregion Constructors
@@ -76,8 +59,15 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         public ICollectionView NavigationItems
         {
-            get;
-            private set;
+            get
+            {
+                return _navigationItemsIcv;
+            }
+            private set
+            {
+                _navigationItemsIcv = value;
+                RaisePropertyChanged("NavigationItems");
+            }
         }
 
         public AutomaticCommand<INavigationItem> NavigateToItemCommand
@@ -101,6 +91,20 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+        }
+
+        public void OnImportsSatisfied()
+        {
+            _navigationItems.Clear();
+
+            foreach (var itemProvider in _itemProviders)
+            {
+                CollectionContainer collectionContainer = new CollectionContainer();
+                collectionContainer.Collection = itemProvider.Items;
+                _navigationItems.Add(collectionContainer);
+            }
+
+            NavigationItems = CollectionViewSource.GetDefaultView(_navigationItems);
         }
 
         #endregion Public Methods

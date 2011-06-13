@@ -114,10 +114,18 @@ namespace Torshify.Client.Spotify.Services
 
         public void Play()
         {
-            if (!_lastLoadStatus.HasValue && Playlist.Current != null)
+            if (!_lastLoadStatus.HasValue)
             {
-                var track = Playlist.Current.Track as Track;
-                _lastLoadStatus = track.InternalTrack.Load();
+                if (_playlist.Current == null)
+                {
+                    _playlist.Next();
+                }
+
+                if (_playlist.Current != null)
+                {
+                    var track = (Track)Playlist.Current.Track;
+                    _lastLoadStatus = track.InternalTrack.Load();
+                }
             }
 
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)

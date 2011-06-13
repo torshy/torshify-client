@@ -56,6 +56,7 @@
     <Reference Include="Microsoft.Practices.Prism.Interactivity">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -89,12 +90,12 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainViewModel.cs" />
-    <Compile Include="Views\Navigation\INavigationItem.cs" />
     <Compile Include="Views\Navigation\NavigationView.xaml.cs">
       <DependentUpon>NavigationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\NavigationViewModel.cs" />
     <Compile Include="Views\Navigation\PlaylistNavigationItem.cs" />
+    <Compile Include="Views\Navigation\PlaylistNavigationItemProvider.cs" />
     <Compile Include="Views\Navigation\PlayQueueNavigationItem.cs" />
     <Compile Include="Views\Navigation\RadioNavigationItem.cs" />
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">

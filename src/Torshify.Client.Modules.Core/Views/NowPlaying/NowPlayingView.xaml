@@ -14,5 +14,19 @@
             Command="{Binding NavigateBackCommand}"
             HorizontalAlignment="Left"
             VerticalAlignment="Top" />
+
+        <Image
+            Width="300"
+            Height="300"
+            Source="{Binding CurrentTrack.Album.Cover}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center" />
+
+        <ListBox
+            ItemsSource="{Binding Playlist}"
+            DisplayMemberPath="Track.Name"
+            HorizontalAlignment="Right"
+            Width="250" />
+
     </Grid>
 </UserControl>

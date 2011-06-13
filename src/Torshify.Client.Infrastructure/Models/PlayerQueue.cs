@@ -214,7 +214,14 @@ namespace Torshify.Client.Infrastructure.Models
             {
                 var item = new PlayerQueueItem(true, track);
                 _queue.Enqueue(item);
-                _left.Insert(_queue.Count + 1, item);
+                if (_playlist.Count > 0)
+                {
+                    _left.Insert(_queue.Count + 1, item);
+                }
+                else
+                {
+                    _left.Add(item);
+                }
             }
 
             OnChanged();
@@ -228,7 +235,14 @@ namespace Torshify.Client.Infrastructure.Models
                 {
                     var item = new PlayerQueueItem(true, track);
                     _queue.Enqueue(item);
-                    _left.Insert(_queue.Count + 1, item);
+                    if (_playlist.Count > 0)
+                    {
+                        _left.Insert(_queue.Count + 1, item);
+                    }
+                    else
+                    {
+                        _left.Add(item);
+                    }
                 }
             }
 
