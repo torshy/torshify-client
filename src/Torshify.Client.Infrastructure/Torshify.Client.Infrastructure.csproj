@@ -91,6 +91,7 @@
     <Compile Include="Controls\SizeTemplateControl.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
+    <Compile Include="Converters\TimeSpanToTextConverter.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
@@ -158,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\darkwoodhw0.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

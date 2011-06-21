@@ -4,9 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:TimeSpanToTextConverter
+            x:Key="TimeSpanToTextConverter" />
+    </UserControl.Resources>
     <Grid>
         <DataGrid
             ItemsSource="{Binding Tracks}"
@@ -17,6 +22,9 @@
             ContextMenuOpening="DataGridContextMenuOpening"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.ContextMenu>
+                <ContextMenu />
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Track"
@@ -26,10 +34,27 @@
                     Header="Artist"
                     Binding="{Binding Album.Artist.Name}"
                     Width="175" />
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Time"
-                    Binding="{Binding Duration}"
-                    Width="75" />                
+                    Width="75"
+                    SortMemberPath="{Binding Duration}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style
+                            TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                            <Setter
+                                Property="HorizontalContentAlignment"
+                                Value="Right" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding Duration, Converter={StaticResource TimeSpanToTextConverter}}"
+                                TextAlignment="Right" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Header="Album"
                     Binding="{Binding Album.Name}"

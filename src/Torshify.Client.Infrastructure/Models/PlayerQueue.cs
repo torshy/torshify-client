@@ -129,16 +129,10 @@ namespace Torshify.Client.Infrastructure.Models
                     return true;
                 }
 
-                if (_playlistIndicies == null)
+                if (_playlistIndicies == null || _playlistTrackIndex == -1)
                 {
                     return false;
                 }
-
-                if (_playlistTrackIndex == -1)
-                {
-                    return false;
-                }
-
 
                 if (_playlistTrackIndex < (_playlistIndicies.Length - 1))
                 {
@@ -158,12 +152,7 @@ namespace Torshify.Client.Infrastructure.Models
         {
             get
             {
-                if (_playlistIndicies == null)
-                {
-                    return false;
-                }
-
-                if (_playlistTrackIndex == -1)
+                if (_playlistIndicies == null || _playlistTrackIndex == -1)
                 {
                     return false;
                 }
