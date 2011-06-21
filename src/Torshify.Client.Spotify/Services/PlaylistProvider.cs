@@ -45,9 +45,9 @@ namespace Torshify.Client.Spotify.Services
 
         #region Events
 
-        public event EventHandler<Infrastructure.Interfaces.PlaylistEventArgs> PlaylistAdded;
+        public event EventHandler<Infrastructure.Interfaces.PlaylistEventArgs> PlaylistAdded = delegate { };
 
-        public event EventHandler<Infrastructure.Interfaces.PlaylistEventArgs> PlaylistRemoved;
+        public event EventHandler<Infrastructure.Interfaces.PlaylistEventArgs> PlaylistRemoved = delegate { };
 
         #endregion Events
 
