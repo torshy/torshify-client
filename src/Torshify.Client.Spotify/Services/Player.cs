@@ -1,21 +1,26 @@
 using System;
+using System.Timers;
+
+using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Spotify.Services
 {
-    public class Player : IPlayer
+    public class Player : NotificationObject, IPlayer
     {
         #region Fields
 
         private readonly ISession _session;
+
         private BassPlayer _bass;
         private bool _isPlaying;
         private IPlayerQueue _playlist;
         private Error? _lastLoadStatus;
         private DateTime _trackPaused;
         private DateTime _trackStarted;
+        private Timer _timer;
 
         #endregion Fields
 
@@ -24,10 +29,18 @@ namespace Torshify.Client.Spotify.Services
         public Player(ISession session)
         {
             _bass = new BassPlayer();
+
             _session = session;
-            _session.MusicDeliver += OnMusicDeliver;
+            _session.MusicDeliver += OnSessionMusicDeliver;
+            _session.PlayTokenLost += OnSessionPlayerTokenLost;
+            _session.StopPlayback += OnSessionStopPlayback;
+            _session.StartPlayback += OnSessionStartPlayback;
+            
             _playlist = new PlayerQueue();
             _playlist.CurrentChanged += OnCurrentChanged;
+
+            _timer = new Timer(100);
+            _timer.Elapsed += OnTimerElapsed;
         }
 
         #endregion Constructors
@@ -51,8 +64,28 @@ namespace Torshify.Client.Spotify.Services
                 if (_isPlaying != value)
                 {
                     _isPlaying = value;
+
+                    if (_isPlaying)
+                    {
+                        _timer.Start();
+                    }
+                    else
+                    {
+                        _timer.Stop();
+                    }
+
                     OnIsPlayingChanged();
                 }
+            }
+        }
+
+        public TimeSpan DurationPlayed
+        {
+            get
+            {
+                return _isPlaying
+                       ? DateTime.Now.Subtract(_trackStarted)
+                       : _trackPaused.Subtract(_trackStarted);
             }
         }
 
@@ -81,10 +114,18 @@ namespace Torshify.Client.Spotify.Services
 
         public void Play()
         {
-            if (!_lastLoadStatus.HasValue && Playlist.Current != null)
+            if (!_lastLoadStatus.HasValue)
             {
-                var track = Playlist.Current.Track as Track;
-                _lastLoadStatus = track.InternalTrack.Load();
+                if (_playlist.Current == null)
+                {
+                    _playlist.Next();
+                }
+
+                if (_playlist.Current != null)
+                {
+                    var track = (Track)Playlist.Current.Track;
+                    _lastLoadStatus = track.InternalTrack.Load();
+                }
             }
 
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)
@@ -136,6 +177,26 @@ namespace Torshify.Client.Spotify.Services
 
         #region Private Methods
 
+        private void OnSessionStartPlayback(object sender, SessionEventArgs e)
+        {
+            Console.WriteLine("Start playback");
+        }
+
+        private void OnSessionStopPlayback(object sender, SessionEventArgs e)
+        {
+            Console.WriteLine("Stop playback");
+        }
+
+        private void OnSessionPlayerTokenLost(object sender, SessionEventArgs e)
+        {
+            IsPlaying = false;
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            RaisePropertyChanged("DurationPlayed");
+        }
+
         private void OnCurrentChanged(object sender, EventArgs e)
         {
             var track = Playlist.Current.Track as Track;
@@ -148,10 +209,12 @@ namespace Torshify.Client.Spotify.Services
                 {
                     track.InternalTrack.Play();
                 }
+
+                _trackStarted = DateTime.Now;
             }
         }
 
-        private void OnMusicDeliver(object sender, MusicDeliveryEventArgs e)
+        private void OnSessionMusicDeliver(object sender, MusicDeliveryEventArgs e)
         {
             if (e.Samples.Length > 0)
             {

@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Runtime.Caching;
+using System.Windows.Media.Imaging;
 
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -55,6 +58,73 @@ namespace Torshify.Client.Spotify.Services
             get { return InternalAlbum.Year; }
         }
 
+        public BitmapSource Cover
+        {
+            get
+            {
+                string coverId = InternalAlbum.CoverId;
+
+                var source = MemoryCache.Default.Get(coverId) as BitmapSource;
+
+                if (source == null)
+                {
+                    if (!string.IsNullOrEmpty(coverId))
+                    {
+                        IImage image = InternalAlbum.Session.GetImage(coverId);
+
+                        if (!image.IsLoaded)
+                        {
+                            image.Loaded += OnCoverImageLoaded;
+                        }
+                        else
+                        {
+                            InitializeCover(image);
+                        }
+                    }
+                }
+
+                return source;
+            }
+        }
+
         #endregion Properties
+
+        #region Private Methods
+
+        private void OnCoverImageLoaded(object sender, EventArgs e)
+        {
+            IImage image = (IImage)sender;
+            image.Loaded -= OnCoverImageLoaded;
+
+            InitializeCover(image);
+        }
+
+        private void InitializeCover(IImage image)
+        {
+            if (image.Error == Error.OK && image.Data.Length > 0)
+            {
+                try
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = new MemoryStream(image.Data);
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze();
+
+                    MemoryCache.Default.Add(
+                        image.ImageId,
+                        bitmapImage,
+                        new CacheItemPolicy { SlidingExpiration = TimeSpan.FromMinutes(1) });
+
+                    RaisePropertyChanged("Cover");
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                }
+            }
+        }
+
+        #endregion Private Methods
     }
 }

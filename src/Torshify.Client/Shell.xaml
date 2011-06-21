@@ -7,8 +7,21 @@
     xmlns:infra="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
     Title="torshify"
     Height="600"
-    Width="800">
+    Width="950"
+    TextElement.FontFamily="Segoe UI"
+    TextElement.FontSize="14">
     <Grid>
+        <Grid.Background>
+            <RadialGradientBrush
+                GradientOrigin="0.5,0">
+                <GradientStop
+                    Color="#FF373236"
+                    Offset="0" />
+                <GradientStop
+                    Color="Black"
+                    Offset="1" />
+            </RadialGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition

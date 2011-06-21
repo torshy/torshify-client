@@ -56,20 +56,17 @@
     <Reference Include="Microsoft.Practices.Prism.Interactivity">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Unity\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
+<<<<<<< HEAD
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\lib\Unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+=======
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+>>>>>>> 54f42af7efac19cd9571f8175b7b11a1b56d889c
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -148,8 +145,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Player\PlayerView.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Playlist\PlaylistView.xaml">
       <SubType>Designer</SubType>

@@ -53,20 +53,21 @@
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
+<<<<<<< HEAD
+    <Reference Include="Microsoft.Practices.Unity" >
       <HintPath>..\..\lib\Unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+=======
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+>>>>>>> 54f42af7efac19cd9571f8175b7b11a1b56d889c
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Torshify">
       <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
     </Reference>

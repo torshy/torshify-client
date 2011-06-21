@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {
@@ -49,6 +50,11 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
+        IEnumerable<PlayerQueueItem> Left
+        {
+            get;
+        }
+
         IEnumerable<PlayerQueueItem> Queued
         {
             get;
@@ -71,17 +77,5 @@ namespace Torshify.Client.Infrastructure.Interfaces
         bool IsQueued(ITrack track);
 
         #endregion Methods
-    }
-
-    public class PlayerQueueItem
-    {
-        public PlayerQueueItem(bool isQueued, ITrack track)
-        {
-            IsQueued = isQueued;
-            Track = track;
-        }
-
-        public bool IsQueued { get; private set; }
-        public ITrack Track { get; private set; }
     }
 }

@@ -107,9 +107,11 @@ namespace Torshify.Client.Mocks
 
         #region Events
 
-        public event EventHandler<PlaylistEventArgs> PlaylistAdded;
+        public event EventHandler<PlaylistEventArgs> PlaylistAdded = delegate { };
 
-        public event EventHandler<PlaylistEventArgs> PlaylistRemoved;
+        public event EventHandler<PlaylistEventArgs> PlaylistRemoved = delegate { };
+
+        public event EventHandler<PlaylistMovedEventArgs> PlaylistMoved = delegate { };
 
         #endregion Events
 
