@@ -1,13 +1,23 @@
 using System;
+using System.Windows;
+
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Navigation
 {
     public class PlayQueueNavigationItem : INavigationItem
     {
+        #region Fields
+
         private readonly IRegionManager _regionManager;
+
         private Uri _uri;
+
+        #endregion Fields
+
+        #region Constructors
 
         public PlayQueueNavigationItem(IRegionManager regionManager)
         {
@@ -15,14 +25,32 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
             _uri = new Uri(MusicRegionViewNames.PlayQueueView, UriKind.Relative);
         }
 
-        public void NavigateTo()
+        #endregion Constructors
+
+        #region Properties
+
+        public DataTemplate DataTemplate
         {
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, _uri);
+            get
+            {
+                return NavigationItemTemplates.Instance[GetType()] as DataTemplate;
+            }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public bool IsMe(IRegionNavigationJournalEntry entry)
         {
             return entry.Uri == _uri;
         }
+
+        public void NavigateTo()
+        {
+            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, _uri);
+        }
+
+        #endregion Methods
     }
 }

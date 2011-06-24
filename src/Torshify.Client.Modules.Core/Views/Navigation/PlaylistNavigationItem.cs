@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 using Microsoft.Practices.Prism.Regions;
 
@@ -30,6 +31,14 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         #region Properties
 
+        public DataTemplate DataTemplate
+        {
+            get
+            {
+                return NavigationItemTemplates.Instance[GetType()] as DataTemplate;
+            }
+        }
+
         public IPlaylist Playlist
         {
             get { return _playlist; }
@@ -37,12 +46,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         #endregion Properties
 
-        #region Public Methods
-
-        public void NavigateTo()
-        {
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, _uri, _playlist);
-        }
+        #region Methods
 
         public bool IsMe(IRegionNavigationJournalEntry entry)
         {
@@ -56,6 +60,11 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
             return false;
         }
 
-        #endregion Public Methods
+        public void NavigateTo()
+        {
+            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, _uri, _playlist);
+        }
+
+        #endregion Methods
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using Microsoft.Practices.Prism.Regions;
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -16,6 +17,11 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
         public void NavigateTo()
         {
 
+        }
+
+        public DataTemplate DataTemplate
+        {
+            get { return null; }
         }
 
         public bool IsMe(IRegionNavigationJournalEntry entry)

@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    x:Class="Torshify.Client.Modules.Core.Views.Navigation.NavigationItemTemplates"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Navigation="clr-namespace:Torshify.Client.Modules.Core.Views.Navigation">
+
+    <DataTemplate
+        x:Key="{x:Type Navigation:PlaylistNavigationItem}">
+        <TextBlock
+            Foreground="{DynamicResource ControlTextBrush}"
+            Text="{Binding Playlist.Name}" />
+    </DataTemplate>
+
+    <DataTemplate
+        x:Key="{x:Type Navigation:PlayQueueNavigationItem}">
+        <TextBlock
+            Foreground="{DynamicResource ControlTextBrush}"
+            Text="Play Queue" />
+    </DataTemplate>
+
+</ResourceDictionary>

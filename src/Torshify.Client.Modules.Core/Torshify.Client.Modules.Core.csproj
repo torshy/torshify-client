@@ -100,6 +100,9 @@
     </Compile>
     <Compile Include="Views\MainViewModel.cs" />
     <Compile Include="Views\Navigation\DefaultNavigationItemProvider.cs" />
+    <Compile Include="Views\Navigation\NavigationItemTemplates.xaml.cs">
+      <DependentUpon>NavigationItemTemplates.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Navigation\NavigationView.xaml.cs">
       <DependentUpon>NavigationView.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Navigation\NavigationItemTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
