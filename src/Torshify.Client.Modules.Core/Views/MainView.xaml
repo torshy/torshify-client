@@ -5,7 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
-    xmlns:local="clr-namespace:Torshify.Client.Modules.Core" xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" mc:Ignorable="d"
+    xmlns:local="clr-namespace:Torshify.Client.Modules.Core"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
@@ -20,7 +22,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="Auto"
-                MinWidth="175" />
+                MinWidth="75" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -53,6 +55,13 @@
             Grid.Row="1"
             prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.LeftMusicRegion}"
             Margin="0,4,4,0" />
+
+        <GridSplitter
+            Grid.Column="0"
+            Grid.Row="1" 
+            HorizontalAlignment="Right"
+            Background="Transparent"
+            Width="10"/>
 
         <ContentControl
             Grid.Column="1"

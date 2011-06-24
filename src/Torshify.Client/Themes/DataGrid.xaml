@@ -11,7 +11,7 @@
             Property="Foreground"
             Value="White" />
     </Style>
-    
+
     <Style
         TargetType="{x:Type DataGridRow}">
         <Style.Triggers>
@@ -31,7 +31,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style
         TargetType="{x:Type DataGrid}">
         <Setter
@@ -39,7 +39,10 @@
             Value="{x:Null}" />
         <Setter
             Property="Foreground"
-            Value="White" />
+            Value="{DynamicResource ControlTextBrush}" />
+        <Setter
+            Property="BorderThickness"
+            Value="0" />
         <Setter
             Property="GridLinesVisibility"
             Value="None" />
@@ -52,6 +55,6 @@
         <Setter
             Property="AlternationCount"
             Value="2" />
-    </Style>    
-    
+    </Style>
+
 </ResourceDictionary>

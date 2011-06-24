@@ -8,14 +8,16 @@
         x:Key="{x:Type Navigation:PlaylistNavigationItem}">
         <TextBlock
             Foreground="{DynamicResource ControlTextBrush}"
-            Text="{Binding Playlist.Name}" />
+            Text="{Binding Playlist.Name}"
+            TextTrimming="CharacterEllipsis" />
     </DataTemplate>
 
     <DataTemplate
         x:Key="{x:Type Navigation:PlayQueueNavigationItem}">
         <TextBlock
             Foreground="{DynamicResource ControlTextBrush}"
-            Text="Play Queue" />
+            Text="Play Queue"
+            TextTrimming="CharacterEllipsis" />
     </DataTemplate>
 
 </ResourceDictionary>
