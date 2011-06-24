@@ -9,6 +9,15 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
+        
+        <Image
+            Margin="8"
+            Width="75"
+            Height="75"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Resources/Images/spotify-core-logo-96x96.png" />
+        
         <StackPanel
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -42,6 +51,7 @@
                     HorizontalAlignment="Right" />
             </DockPanel>
         </StackPanel>
+
         <local:BusyIndicator
             IsBusy="{Binding IsLoggingIn}"
             BusyContent="Logging in, please wait.." />
