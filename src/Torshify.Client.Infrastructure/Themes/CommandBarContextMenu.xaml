@@ -62,8 +62,8 @@
                                 Content="{Binding Content}"
                                 TextBlock.Foreground="Black"
                                 Visibility="{Binding Content,
-													 RelativeSource={RelativeSource Mode=Self},
-													 Converter={StaticResource StringEmptyToVisibilityConverter}}"
+                                                     RelativeSource={RelativeSource Mode=Self},
+                                                     Converter={StaticResource StringEmptyToVisibilityConverter}}"
                                 RecognizesAccessKey="True"
                                 Margin="4,0,4,0" />
                             <Border

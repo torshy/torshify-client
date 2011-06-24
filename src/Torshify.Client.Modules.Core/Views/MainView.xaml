@@ -5,8 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
-    xmlns:local="clr-namespace:Torshify.Client.Modules.Core"
-    mc:Ignorable="d"
+    xmlns:local="clr-namespace:Torshify.Client.Modules.Core" xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
@@ -37,9 +36,10 @@
                 Width="50"
                 Content="Forward"
                 Command="{Binding GoForwardCommand}" />
-            <TextBox
+            <Controls:WatermarkTextBox
                 Name="_searchInputField"
                 Width="150"
+                Watermark="Search"
                 Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 Width="50"

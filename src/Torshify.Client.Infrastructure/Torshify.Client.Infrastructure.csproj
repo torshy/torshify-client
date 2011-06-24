@@ -86,9 +86,11 @@
     <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
+    <Compile Include="Controls\PasswordBoxMonitor.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
+    <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\TimeSpanToTextConverter.cs" />
@@ -155,6 +157,10 @@
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\WatermarkTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

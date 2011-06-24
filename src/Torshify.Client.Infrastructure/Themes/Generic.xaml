@@ -6,5 +6,7 @@
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/BusyIndicator.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/CommandBarContextMenu.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/WatermarkTextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

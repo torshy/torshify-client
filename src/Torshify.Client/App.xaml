@@ -9,7 +9,68 @@
                     Source="pack://application:,,,/Torshify.Client;component/Themes/DataGrid.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/ListBox.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Client;component/Themes/PasswordBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush
+                x:Key="ControlTextBrush"
+                Color="White" />
+
+            <LinearGradientBrush
+                x:Key="TextBox_Border"
+                EndPoint="0,20"
+                MappingMode="Absolute"
+                StartPoint="0,0">
+                <GradientStop
+                    Color="#ABADB3"
+                    Offset="0.05" />
+                <GradientStop
+                    Color="#E2E3EA"
+                    Offset="0.07" />
+                <GradientStop
+                    Color="#E3E9EF"
+                    Offset="1" />
+            </LinearGradientBrush>
+
+            <LinearGradientBrush
+                x:Key="TextBox_MouseOver"
+                EndPoint="0,1"
+                StartPoint="0,0">
+                <GradientStop
+                    Color="#5794BF"
+                    Offset="0.05" />
+                <GradientStop
+                    Color="#B7D5EA"
+                    Offset="0.07" />
+                <GradientStop
+                    Color="#C7E2F1"
+                    Offset="1" />
+            </LinearGradientBrush>
+
+            <LinearGradientBrush
+                x:Key="TextBox_Focused"
+                EndPoint="0,1"
+                StartPoint="0,0">
+                <GradientStop
+                    Color="#3D7BAD"
+                    Offset="0.05" />
+                <GradientStop
+                    Color="#A4C9E3"
+                    Offset="0.07" />
+                <GradientStop
+                    Color="#B7D9ED"
+                    Offset="1" />
+            </LinearGradientBrush>
+
+            <SolidColorBrush
+                x:Key="TextBox_DisabledBorder"
+                Color="#ADB2B5" />
+            
+            <SolidColorBrush
+                x:Key="TextBox_DisabledBackground"
+                Color="#F4F4F4" />
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

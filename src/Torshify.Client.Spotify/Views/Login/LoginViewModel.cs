@@ -38,6 +38,14 @@ namespace Torshify.Client.Spotify.Views.Login
 
         #region Properties
 
+        public Uri ForgotPasswordUrl
+        {
+            get
+            {
+                return new Uri("https://www.spotify.com/no/password-reset/?utm_source=spotify&utm_medium=login_box&utm_campaign=forgot_password", UriKind.Absolute);
+            }
+        }
+
         public string UserName
         {
             get

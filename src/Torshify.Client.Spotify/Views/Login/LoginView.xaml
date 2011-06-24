@@ -11,31 +11,39 @@
     <Grid>
         <StackPanel
             HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-            <StackPanel
-                Orientation="Horizontal">
-                <TextBlock
-                    Text="Username:" />
-                <TextBox
-                    Width="150"
-                    Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <StackPanel
-                Orientation="Horizontal">
-                <TextBlock
-                    Text="Password:" />
-                <PasswordBox
-                    x:FieldModifier="private"
-                    Name="_passwordBox"
-                    Width="150" />
-            </StackPanel>
-            <Button
-                Content="Login"
-                Command="{Binding LoginCommand}"
-                CommandParameter="{Binding ElementName=_passwordBox}" />
+            VerticalAlignment="Center"
+            Width="250">
+            <local:WatermarkTextBox
+                Watermark="Username"
+                Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                Margin="0,0,0,4" />
+            <PasswordBox
+                x:FieldModifier="private"
+                Name="_passwordBox"
+                Margin="0,0,0,4" />
+            <TextBlock
+                Foreground="{DynamicResource ControlTextBrush}">
+                <Hyperlink
+                    NavigateUri="{Binding ForgotPasswordUrl}"
+                    RequestNavigate="OnForgotPasswordLinkClicked">
+                    Forgot your password?
+                </Hyperlink>
+            </TextBlock>
+            <DockPanel
+                LastChildFill="True">
+                <CheckBox
+                    Foreground="{DynamicResource ControlTextBrush}"
+                    DockPanel.Dock="Left"
+                    Content="Remember me" />
+                <Button
+                    Content="Sign in"
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=_passwordBox}"
+                    HorizontalAlignment="Right" />
+            </DockPanel>
         </StackPanel>
-        <local:BusyIndicator 
+        <local:BusyIndicator
             IsBusy="{Binding IsLoggingIn}"
-            BusyContent="Logging in, please wait.."/>
+            BusyContent="Logging in, please wait.." />
     </Grid>
 </UserControl>

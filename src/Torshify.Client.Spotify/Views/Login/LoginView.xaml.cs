@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Torshify.Client.Spotify.Views.Login
 {
@@ -23,5 +26,14 @@ namespace Torshify.Client.Spotify.Views.Login
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void OnForgotPasswordLinkClicked(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Model.ForgotPasswordUrl.OriginalString);
+        }
+
+        #endregion Methods
     }
 }
