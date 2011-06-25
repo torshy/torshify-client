@@ -87,6 +87,7 @@
     <Compile Include="Controls\DoubleUtilities.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
     <Compile Include="Controls\PasswordBoxMonitor.cs" />
+    <Compile Include="Controls\SearchTextBox.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
@@ -155,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\SearchTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

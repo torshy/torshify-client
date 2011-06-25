@@ -10,6 +10,93 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+
+        <Style
+            x:Key="NavigationButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter
+                Property="Background"
+                Value="Transparent" />
+            <Setter
+                Property="BorderBrush"
+                Value="#FFCCCCCC" />
+            <Setter
+                Property="BorderThickness"
+                Value="1" />
+            <Setter
+                Property="Foreground"
+                Value="{DynamicResource ControlTextBrush}" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="{x:Type Button}">
+                        <Grid
+                            Background="{TemplateBinding Background}"
+                            Height="20"
+                            Width="20">
+                            <Ellipse
+                                Name="Circle"
+                                Stroke="{TemplateBinding BorderBrush}"
+                                StrokeThickness="1.5">
+                            </Ellipse>
+                            <ContentPresenter
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Margin="1" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger
+                                Property="IsPressed"
+                                Value="True">
+                                <Setter
+                                    TargetName="Circle"
+                                    Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect
+                                            Color="White"
+                                            Direction="0"
+                                            ShadowDepth="0"
+                                            BlurRadius="5" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter
+                                    Property="BorderBrush"
+                                    Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger
+                    Property="IsMouseOver"
+                    Value="True">
+                    <Setter
+                        Property="BorderBrush"
+                        Value="White" />
+                </Trigger>
+                <Trigger
+                    Property="IsPressed"
+                    Value="True">
+                    <Setter
+                        Property="BorderBrush"
+                        Value="White" />
+                </Trigger>
+                <Trigger
+                    Property="IsEnabled"
+                    Value="False">
+                    <Setter
+                        Property="BorderBrush"
+                        Value="#FF999999" />
+                    <Setter
+                        Property="Foreground"
+                        Value="#FF999999" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
@@ -31,23 +118,48 @@
             Grid.ColumnSpan="2"
             Orientation="Horizontal">
             <Button
-                Width="50"
-                Content="Back"
-                Command="{Binding GoBackCommand}" />
+                Style="{StaticResource NavigationButtonStyle}"
+                Command="{Binding GoBackCommand}"
+                Margin="0,0,2,0">
+                <Path
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
+                    Fill="#FFF4F4F5"
+                    Margin="0"
+                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                    StrokeThickness="2"
+                    StrokeStartLineCap="Round" />
+            </Button>
             <Button
-                Width="50"
-                Content="Forward"
-                Command="{Binding GoForwardCommand}" />
-            <Controls:WatermarkTextBox
+                Style="{StaticResource NavigationButtonStyle}"
+                Command="{Binding GoForwardCommand}"
+                Margin="0,0,8,0">
+                <Path
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
+                    Fill="#FFF4F4F5"
+                    Margin="0"
+                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                    StrokeThickness="2"
+                    RenderTransformOrigin="0.5,0.5"
+                    StrokeStartLineCap="Round"
+                    StrokeEndLineCap="Square">
+                    <Path.RenderTransform>
+                        <ScaleTransform
+                            ScaleX="-1" />
+                    </Path.RenderTransform>
+                </Path>
+            </Button>
+            <Controls:SearchTextBox
                 Name="_searchInputField"
                 Width="150"
                 Watermark="Search"
-                Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}" />
-            <Button
-                Width="50"
-                Content="Search"
-                Command="{Binding SearchCommand}"
-                CommandParameter="{Binding Text, ElementName=_searchInputField}" />
+                Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding Text, ElementName=_searchInputField}"
+                Margin="0,0,2,0" />
         </StackPanel>
 
         <ContentControl
@@ -58,10 +170,10 @@
 
         <GridSplitter
             Grid.Column="0"
-            Grid.Row="1" 
+            Grid.Row="1"
             HorizontalAlignment="Right"
             Background="Transparent"
-            Width="10"/>
+            Width="10" />
 
         <ContentControl
             Grid.Column="1"

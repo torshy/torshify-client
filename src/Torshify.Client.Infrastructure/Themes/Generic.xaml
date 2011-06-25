@@ -8,5 +8,7 @@
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/CommandBarContextMenu.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/WatermarkTextBox.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/SearchTextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
