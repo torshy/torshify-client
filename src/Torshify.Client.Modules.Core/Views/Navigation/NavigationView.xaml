@@ -59,7 +59,6 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </UserControl.Resources>
-    
     <ListBox
         Margin="4,0,4,0"
         Grid.IsSharedSizeScope="True"
@@ -70,5 +69,4 @@
         IsSynchronizedWithCurrentItem="True"
         HorizontalContentAlignment="Stretch"
         AlternationCount="0" />
-    
 </UserControl>

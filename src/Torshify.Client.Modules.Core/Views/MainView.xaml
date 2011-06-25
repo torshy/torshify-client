@@ -21,8 +21,8 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition
-                Width="Auto"
-                MinWidth="75" />
+                Width="175"
+                MinWidth="100" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
