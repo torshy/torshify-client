@@ -51,6 +51,12 @@
                                 Property="IsPressed"
                                 Value="True">
                                 <Setter
+                                    Property="BorderBrush"
+                                    Value="White" />
+                                <Setter
+                                    Property="BorderThickness"
+                                    Value="4" />
+                                <Setter
                                     TargetName="Circle"
                                     Property="Effect">
                                     <Setter.Value>
@@ -61,9 +67,6 @@
                                             BlurRadius="5" />
                                     </Setter.Value>
                                 </Setter>
-                                <Setter
-                                    Property="BorderBrush"
-                                    Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

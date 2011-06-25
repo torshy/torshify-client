@@ -14,12 +14,14 @@ namespace Torshify.Client.Spotify.Views.Login
     {
         #region Fields
 
-        private readonly ISession _session;
-        private readonly IRegionManager _regionManager;
         private readonly Dispatcher _dispatcher;
+        private readonly IRegionManager _regionManager;
+        private readonly ISession _session;
 
-        private string _userName;
+        private bool _hasLoginError;
         private bool _isLoggingIn;
+        private string _loginError;
+        private string _userName;
 
         #endregion Fields
 
@@ -46,16 +48,13 @@ namespace Torshify.Client.Spotify.Views.Login
             }
         }
 
-        public string UserName
+        public bool HasLoginError
         {
-            get
-            {
-                return _userName;
-            }
+            get { return _hasLoginError; }
             set
             {
-                _userName = value;
-                RaisePropertyChanged("UserName");
+                _hasLoginError = value;
+                RaisePropertyChanged("HasLoginError");
             }
         }
 
@@ -72,24 +71,43 @@ namespace Torshify.Client.Spotify.Views.Login
             }
         }
 
+        public bool KeepAlive
+        {
+            get { return false; }
+        }
+
         public AutomaticCommand<PasswordBox> LoginCommand
         {
             get;
             private set;
         }
 
-        public bool KeepAlive
+        public string LoginError
         {
-            get { return false; }
+            get { return _loginError; }
+            set
+            {
+                _loginError = value;
+                RaisePropertyChanged("LoginError");
+            }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                return _userName;
+            }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged("UserName");
+            }
         }
 
         #endregion Properties
 
-        #region Public Methods
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-        }
+        #region Methods
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
@@ -100,22 +118,36 @@ namespace Torshify.Client.Spotify.Views.Login
         {
         }
 
-        #endregion Public Methods
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+        }
 
-        #region Private Methods
+        private bool CanExecuteLogin(PasswordBox pbox)
+        {
+            return !string.IsNullOrEmpty(UserName) && pbox.SecurePassword.Length > 0;
+        }
+
+        private void ExecuteLogin(PasswordBox pbox)
+        {
+            IsLoggingIn = true;
+            _session.Login(UserName, pbox.Password);
+        }
 
         private void OnLoginComplete(object sender, SessionEventArgs e)
         {
             IsLoggingIn = false;
 
-            _session.LoginComplete -= OnLoginComplete;
-
             if (e.Status != Error.OK)
             {
                 // TODO : Display error to user
+                HasLoginError = true;
+                LoginError = e.Status.GetMessage();
             }
             else
             {
+                HasLoginError = false;
+                LoginError = string.Empty;
+
                 if (!_session.PlaylistContainer.IsLoaded)
                 {
                     _session.PlaylistContainer.Loaded += OnPlaylistContainerLoaded;
@@ -133,17 +165,6 @@ namespace Torshify.Client.Spotify.Views.Login
             _dispatcher.BeginInvoke(new Action(() => _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative))));
         }
 
-        private bool CanExecuteLogin(PasswordBox pbox)
-        {
-            return !string.IsNullOrEmpty(UserName) && pbox.SecurePassword.Length > 0;
-        }
-
-        private void ExecuteLogin(PasswordBox pbox)
-        {
-            IsLoggingIn = true;
-            _session.Login(UserName, pbox.Password);
-        }
-
-        #endregion Private Methods
+        #endregion Methods
     }
 }

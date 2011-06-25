@@ -8,6 +8,10 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Image
             Margin="8"
@@ -20,6 +24,20 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Width="250">
+            <Border
+                Visibility="{Binding HasLoginError, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Background="#CCFFFFFF"
+                BorderBrush="White"
+                BorderThickness="1"
+                CornerRadius="4"
+                MinHeight="40"
+                Margin="0,0,0,16">
+                <TextBlock
+                    Foreground="Black"
+                    Text="{Binding LoginError}"
+                    TextWrapping="Wrap" 
+                    VerticalAlignment="Center"/>
+            </Border>
             <local:WatermarkTextBox
                 Watermark="Username"
                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
