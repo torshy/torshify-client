@@ -82,6 +82,7 @@
     <Compile Include="Commands\StaticCommand.cs" />
     <Compile Include="Commands\WeakCollection.cs" />
     <Compile Include="Commands\WeakReference.cs" />
+    <Compile Include="Controls\BorderlessWindow.cs" />
     <Compile Include="Controls\BusyIndicator.cs" />
     <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
@@ -91,7 +92,35 @@
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
+    <Compile Include="Controls\Standard\ComGuids.cs" />
+    <Compile Include="Controls\Standard\CornerRadiusAnimation.cs" />
+    <Compile Include="Controls\Standard\CornerRadiusAnimationBase.cs" />
+    <Compile Include="Controls\Standard\Debug.cs" />
+    <Compile Include="Controls\Standard\DoubleUtil.cs" />
+    <Compile Include="Controls\Standard\DpiHelper.cs" />
+    <Compile Include="Controls\Standard\Enumerable2.cs" />
+    <Compile Include="Controls\Standard\ErrorCodes.cs" />
+    <Compile Include="Controls\Standard\FileWalker.cs" />
+    <Compile Include="Controls\Standard\GlassHelper.cs" />
+    <Compile Include="Controls\Standard\MergeableCollection.cs" />
+    <Compile Include="Controls\Standard\MessageWindow.cs" />
+    <Compile Include="Controls\Standard\MshtmlProvider.cs" />
+    <Compile Include="Controls\Standard\NativeMethods.cs" />
+    <Compile Include="Controls\Standard\NotifyingList.cs" />
+    <Compile Include="Controls\Standard\ShellProvider.cs" />
+    <Compile Include="Controls\Standard\SmallString.cs" />
+    <Compile Include="Controls\Standard\SmallUri.cs" />
+    <Compile Include="Controls\Standard\SplashScreen.cs" />
+    <Compile Include="Controls\Standard\StreamHelper.cs" />
+    <Compile Include="Controls\Standard\Utilities.cs" />
+    <Compile Include="Controls\Standard\Verify.cs" />
+    <Compile Include="Controls\Standard\WicProvider.cs" />
+    <Compile Include="Controls\Standard\WindowExtensions.cs" />
+    <Compile Include="Controls\SystemCommands.cs" />
+    <Compile Include="Controls\SystemParameters2.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
+    <Compile Include="Controls\WindowChrome.cs" />
+    <Compile Include="Controls\WindowChromeWorker.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\TimeSpanToTextConverter.cs" />
@@ -147,6 +176,10 @@
     <Resource Include="Resources\Images\spotify-core-logo-96x96.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\BorderlessWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\BusyIndicator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

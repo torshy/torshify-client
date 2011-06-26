@@ -44,7 +44,7 @@ namespace Torshify.Client.Spotify.Views.Login
         {
             get
             {
-                return new Uri("https://www.spotify.com/no/password-reset/?utm_source=spotify&utm_medium=login_box&utm_campaign=forgot_password", UriKind.Absolute);
+                return new Uri("https://www.spotify.com/password-reset/?utm_source=spotify&utm_medium=login_box&utm_campaign=forgot_password", UriKind.Absolute);
             }
         }
 

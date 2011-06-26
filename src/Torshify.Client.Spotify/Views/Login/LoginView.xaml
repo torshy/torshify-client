@@ -48,7 +48,8 @@
                 Margin="0,0,0,4" />
             <TextBlock
                 FontSize="10"
-                Foreground="{DynamicResource ControlTextBrush}">
+                Foreground="{DynamicResource ControlTextBrush}"
+                ToolTip="{Binding ForgotPasswordUrl}">
                 <Hyperlink
                     NavigateUri="{Binding ForgotPasswordUrl}"
                     RequestNavigate="OnForgotPasswordLinkClicked">

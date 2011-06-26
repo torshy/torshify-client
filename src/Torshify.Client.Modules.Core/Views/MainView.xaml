@@ -121,6 +121,7 @@
             Grid.ColumnSpan="2"
             Orientation="Horizontal">
             <Button
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
                 Style="{StaticResource NavigationButtonStyle}"
                 Command="{Binding GoBackCommand}"
                 Margin="0,0,2,0">
@@ -135,6 +136,7 @@
                     StrokeStartLineCap="Round" />
             </Button>
             <Button
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
                 Style="{StaticResource NavigationButtonStyle}"
                 Command="{Binding GoForwardCommand}"
                 Margin="0,0,8,0">
@@ -156,6 +158,7 @@
                 </Path>
             </Button>
             <Controls:SearchTextBox
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
                 Name="_searchInputField"
                 Width="150"
                 Watermark="Search"
