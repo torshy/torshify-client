@@ -105,26 +105,19 @@
                                 VerticalAlignment="Top"
                                 Margin="0,4,4,0">
                                 <Button
-                                    Name="MinimizeButton"
+                                    Name="PART_MinimizeButton"
                                     Style="{StaticResource Window_TitleBarButtonStyle}"
                                     Content="0"
                                     Controls:WindowChrome.IsHitTestVisibleInChrome="True">
                                 </Button>
                                 <Button
-                                    Name="MaximizeButton"
+                                    Name="PART_MaximizeButton"
                                     Style="{StaticResource Window_TitleBarButtonStyle}"
                                     Content="1"
                                     Controls:WindowChrome.IsHitTestVisibleInChrome="True">
                                 </Button>
                                 <Button
-                                    Name="RestoreButton"
-                                    Style="{StaticResource Window_TitleBarButtonStyle}"
-                                    Content="2"
-                                    Controls:WindowChrome.IsHitTestVisibleInChrome="True"
-                                    Visibility="Collapsed">
-                                </Button>
-                                <Button
-                                    Name="CloseButton"
+                                    Name="PART_CloseButton"
                                     Style="{StaticResource Window_TitleBarButtonStyle}"
                                     Content="r"
                                     Controls:WindowChrome.IsHitTestVisibleInChrome="True">
@@ -144,13 +137,9 @@
                                 Property="BorderThickness"
                                 Value="0" />
                             <Setter
-                                Property="Visibility"
-                                Value="Collapsed"
-                                TargetName="MaximizeButton" />
-                            <Setter
-                                Property="Visibility"
-                                Value="Visible"
-                                TargetName="RestoreButton" />
+                                Property="Content"
+                                Value="2"
+                                TargetName="PART_MaximizeButton" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
