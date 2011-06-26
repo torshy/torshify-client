@@ -249,6 +249,11 @@ namespace Torshify.Client.Infrastructure.Models
                 return true;
             }
 
+            if (_playlistIndicies == null)
+            {
+                return false;
+            }
+
             if (_playlistTrackIndex < (_playlistIndicies.Length - 1))
             {
                 _playlistTrackIndex++;
@@ -270,6 +275,11 @@ namespace Torshify.Client.Infrastructure.Models
 
         public bool Previous()
         {
+            if (_playlistIndicies == null)
+            {
+                return false;
+            }
+
             if (_playlistTrackIndex > 0)
             {
                 _playlistTrackIndex--;
