@@ -24,6 +24,41 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Width="250">
+            <TextBlock
+                FontSize="40"
+                Text="torshify"
+                Margin="-40,0,0,-10">
+                <TextBlock.Foreground>
+                    <LinearGradientBrush
+                                StartPoint="0,0"
+                                EndPoint="0,1">
+                    <GradientStop
+                                    Color="Orange"
+                                    Offset="0" />
+                    <GradientStop
+                                    Color="OrangeRed"
+                                    Offset="1" />
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock
+                Opacity="0.5"
+                FontSize="15"
+                Text="please sign in"
+                Margin="-20,0,0,8">
+                <TextBlock.Foreground>
+                    <LinearGradientBrush
+                        StartPoint="0,0"
+                        EndPoint="0,1">
+                    <GradientStop
+                            Color="Orange"
+                            Offset="0" />
+                    <GradientStop
+                            Color="OrangeRed"
+                            Offset="1" />
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
             <Border
                 Visibility="{Binding HasLoginError, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Background="#CCFFFFFF"
@@ -35,9 +70,10 @@
                 <TextBlock
                     Foreground="Black"
                     Text="{Binding LoginError}"
-                    TextWrapping="Wrap" 
-                    VerticalAlignment="Center"/>
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Center" />
             </Border>
+
             <local:WatermarkTextBox
                 Watermark="Username"
                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
