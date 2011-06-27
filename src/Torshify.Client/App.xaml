@@ -6,6 +6,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Client;component/Themes/Button.xaml" />
+                <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/CheckBox.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/Hyperlink.xaml" />

@@ -107,6 +107,10 @@
       <DependentUpon>Shell.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\CheckBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

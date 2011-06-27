@@ -14,6 +14,45 @@
         <Style
             x:Key="NoAlternationColorListBoxItem"
             TargetType="{x:Type ListBoxItem}">
+            <Style.Resources>
+                <LinearGradientBrush
+                    x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                    StartPoint="0,0"
+                    EndPoint="0,1">
+                    <GradientStop
+                        Color="Orange"
+                        Offset="0" />
+                    <GradientStop
+                        Color="OrangeRed"
+                        Offset="1" />
+                </LinearGradientBrush>
+                <LinearGradientBrush
+                    x:Key="{x:Static SystemColors.ControlBrushKey}"
+                    StartPoint="0,0"
+                    EndPoint="0,1">
+                    <GradientStop
+                        Color="Lavender"
+                        Offset="0" />
+                    <GradientStop
+                        Color="LavenderBlush"
+                        Offset="1" />
+                </LinearGradientBrush>
+            </Style.Resources>
+            <Setter
+                Property="Background"
+                Value="Transparent" />
+            <Style.Triggers>
+                <Trigger
+                    Property="IsSelected"
+                    Value="True">
+                    <Setter
+                        Property="Foreground"
+                        Value="Black" />
+                    <Setter
+                        Property="FontWeight"
+                        Value="Medium" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style
