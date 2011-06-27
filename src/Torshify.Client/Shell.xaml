@@ -10,18 +10,23 @@
     Width="950"
     TextElement.FontFamily="Segoe UI"
     TextElement.FontSize="14">
-    <Grid>
+    <Grid
+        RenderTransformOrigin="0.498,0.5">
         <Grid.Background>
             <RadialGradientBrush
-                GradientOrigin="0.5,0">
+                GradientOrigin="0.331,0.492">
                 <GradientStop
                     Color="#FF373236"
                     Offset="0" />
                 <GradientStop
                     Color="Black"
-                    Offset="0.457" />
-                <GradientStop Color="Black" Offset="0.948"/>
-                <GradientStop Color="#FF0C0C0C" Offset="0.72"/>
+                    Offset="0.918" />
+                <GradientStop
+                    Color="Black"
+                    Offset="0.991" />
+                <GradientStop
+                    Color="#FF2B2525"
+                    Offset="0.442" />
             </RadialGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
@@ -29,6 +34,43 @@
             <RowDefinition
                 Height="Auto" />
         </Grid.RowDefinitions>
+        <Rectangle
+            Stroke="Black">
+            <Rectangle.Fill>
+                <RadialGradientBrush
+                    GradientOrigin="0.72,0.417"
+                    RadiusY="0.611"
+                    RadiusX="0.496"
+                    Center="0.572,0.297">
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform
+                                CenterY="0.297"
+                                CenterX="0.572"
+                                ScaleY="1"
+                                ScaleX="1" />
+                            <SkewTransform
+                                AngleY="0"
+                                AngleX="0"
+                                CenterY="0.297"
+                                CenterX="0.572" />
+                            <RotateTransform
+                                Angle="213.336"
+                                CenterY="0.297"
+                                CenterX="0.572" />
+                            <TranslateTransform
+                                X="-0.001"
+                                Y="0.001" />
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop
+                        Color="#4C838383" />
+                    <GradientStop
+                        Color="#33565656"
+                        Offset="0.431" />
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
 
         <ItemsControl
             prism:RegionManager.RegionName="{x:Static Infrastructure:RegionNames.BackgroundRegion}"
