@@ -4,30 +4,111 @@
     <Style
         TargetType="{x:Type DataGridColumnHeader}">
         <Setter
-            Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush
-                    EndPoint="0.5,1"
-                    StartPoint="0.5,0">
-                    <GradientStop
-                        Color="#FF414141"
-                        Offset="0.397" />
-                    <GradientStop
-                        Color="#FF4D4D4D"
-                        Offset="1" />
-                    <GradientStop
-                        Color="#FF747474"
-                        Offset="0" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+            Property="Background"
+            Value="#88800080" />
         <Setter
             Property="Foreground"
             Value="White" />
+        <Style.Triggers>
+            <Trigger
+                Property="SortDirection"
+                Value="{x:Null}">
+                <Setter
+                    Property="Background"
+                    Value="Green" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="Transparent" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition
+                        Property="IsMouseOver"
+                        Value="True" />
+                    <Condition
+                        Property="SortDirection"
+                        Value="{x:Null}" />
+                </MultiTrigger.Conditions>
+                <Setter
+                    Property="Background"
+                    Value="Silver" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="Blue" />
+            </MultiTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition
+                        Property="IsMouseOver"
+                        Value="true" />
+                    <Condition
+                        Property="SortDirection"
+                        Value="{x:Null}" />
+                </MultiTrigger.Conditions>
+                <Setter
+                    Property="Background"
+                    Value="Red" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="Orange" />
+            </MultiTrigger>
+            <Trigger
+                Property="SortDirection"
+                Value="Ascending">
+                <Setter
+                    Property="Background"
+                    Value="OrangeRed" />
+            </Trigger>
+            <Trigger
+                Property="SortDirection"
+                Value="Descending">
+                <Setter
+                    Property="Background"
+                    Value="Blue" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        TargetType="{x:Type DataGridCell}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type DataGridCell}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger
+                Property="IsSelected"
+                Value="True">
+                <Setter
+                    Property="Foreground"
+                    Value="Black" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
         TargetType="{x:Type DataGridRow}">
+        <Style.Resources>
+            <SolidColorBrush
+                x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                Color="Orange" />
+            <SolidColorBrush
+                x:Key="{x:Static SystemColors.ControlBrushKey}"
+                Color="Lavender" />
+        </Style.Resources>
         <Style.Triggers>
             <Trigger
                 Property="ItemsControl.AlternationIndex"
