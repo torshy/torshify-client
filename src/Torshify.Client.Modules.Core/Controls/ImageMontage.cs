@@ -26,7 +26,7 @@ namespace Torshify.Client.Modules.Core.Controls
         #endregion Public Properties
 
         #region Public Methods
-        
+
         public void Initialize(ImageSource imageSource)
         {
             if (_imageRectangle != null)
@@ -55,8 +55,8 @@ namespace Torshify.Client.Modules.Core.Controls
 
                 _imageRectangle.Effect = new ColorToneShaderEffect
                                              {
-                                                 DarkColor = Colors.Brown, 
-                                                 LightColor = Colors.Black,
+                                                 DarkColor = Colors.Black,
+                                                 LightColor = Colors.DarkGray,
                                                  Desaturation = 0.5,
                                                  Toned = 1.0
                                              };
