@@ -58,11 +58,13 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Events\TrackCommandBarEvent.cs" />
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Interfaces\IBackdropService.cs" />
     <Compile Include="Interfaces\INavigationItem.cs" />
     <Compile Include="Interfaces\INavigationItemProvider.cs" />
     <Compile Include="Models\PlayerQueueItem.cs" />
@@ -162,6 +165,7 @@
     <Compile Include="RegionNames.cs" />
     <Compile Include="Models\CommandBar.cs" />
     <Compile Include="Models\PlayerQueue.cs" />
+    <Compile Include="Services\BackdropService.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -201,9 +205,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Images\darkwoodhw0.jpg" />
   </ItemGroup>

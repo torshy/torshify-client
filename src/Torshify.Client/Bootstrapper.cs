@@ -10,6 +10,7 @@ using Microsoft.Practices.Unity;
 
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure.Services;
 using Torshify.Client.Mocks;
 using Torshify.Client.Modules.Core;
 using Torshify.Client.Spotify;
@@ -35,6 +36,8 @@ namespace Torshify.Client
             Container.InstallCoreExtensions();
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
+            Container.RegisterType<IBackdropService, BackdropService>(new ContainerControlledLifetimeManager(), new InjectionProperty("CacheLocation", AppConstants.BackdropCacheFolder));
+
             base.ConfigureContainer();
         }
 
@@ -58,7 +61,7 @@ namespace Torshify.Client
 
         protected override void ConfigureModuleCatalog()
         {
-            
+
 #if !MockEnabled
             Type spotifyModule = typeof(SpotifyModule);
             ModuleCatalog.AddModule(new ModuleInfo(spotifyModule.Name,

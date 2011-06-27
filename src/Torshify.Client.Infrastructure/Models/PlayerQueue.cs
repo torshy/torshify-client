@@ -183,6 +183,7 @@ namespace Torshify.Client.Infrastructure.Models
         public void Set(IEnumerable<ITrack> tracks)
         {
             _playlist = new List<PlayerQueueItem>();
+            _left.Clear();
 
             foreach (var track in tracks)
             {

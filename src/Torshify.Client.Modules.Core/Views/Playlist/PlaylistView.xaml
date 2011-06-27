@@ -37,7 +37,7 @@
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
-                    SortMemberPath="{Binding Duration}">
+                    SortMemberPath="Duration">
                     <DataGridTemplateColumn.HeaderStyle>
                         <Style
                             TargetType="{x:Type DataGridColumnHeader}"

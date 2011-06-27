@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Spotify
 {
@@ -32,20 +33,16 @@ namespace Torshify.Client.Spotify
 
         internal const string UserAgent = "torshify";
 
-        internal static readonly string AppDataFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "torshify");
-
         internal static readonly string LogFolder = Path.Combine(
-            AppDataFolder,
+            AppConstants.AppDataFolder,
             "Log");
 
         internal static readonly string CacheFolder = Path.Combine(
-            AppDataFolder,
+            AppConstants.AppDataFolder,
             "SpotifyCache");
 
         internal static readonly string SettingsFolder = Path.Combine(
-            AppDataFolder,
+            AppConstants.AppDataFolder,
             "SpotifySettings");
     }
 }

@@ -4,12 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <Grid
-        Background="Green">
+    <Grid>
         <Button
+            Controls:WindowChrome.IsHitTestVisibleInChrome="True"
             Content="Back"
             Command="{Binding NavigateBackCommand}"
             HorizontalAlignment="Left"

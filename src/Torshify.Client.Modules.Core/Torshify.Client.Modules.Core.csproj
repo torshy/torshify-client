@@ -11,7 +11,8 @@
     <RootNamespace>Torshify.Client.Modules.Core</RootNamespace>
     <AssemblyName>Torshify.Client.Modules.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -50,6 +51,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -65,6 +69,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Caching">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Runtime.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -76,8 +83,14 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfShaderEffects">
+      <HintPath>..\..\lib\WpfShaderEffects\WpfShaderEffects.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ImageMap.cs" />
+    <Compile Include="Controls\ImageMapOverlay.cs" />
+    <Compile Include="Controls\ImageMontage.cs" />
     <Compile Include="CoreCommands.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="CoreRegionNames.cs" />
