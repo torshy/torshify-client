@@ -107,36 +107,43 @@ namespace Torshify.Client.Infrastructure.Services
 
         private void StartDownloading(string keywords, string downloadFolder, Action<string> foundBackdrop)
         {
-            string replacedSpaces = keywords.Replace(" ", "_");
-            Uri siteUri =
-                new Uri(
-                    "http://htbackdrops.com/api/97791497c33f06bce3f486d8d44e8bf2/searchXML?keywords=" + replacedSpaces + "&limit=2");
-
-            string result = "";
-
-            HttpWebRequest request = WebRequest.Create(siteUri) as HttpWebRequest;
-            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+            try
             {
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                result = reader.ReadToEnd();
+                string replacedSpaces = keywords.Replace(" ", "_");
+                Uri siteUri =
+                    new Uri(
+                        "http://htbackdrops.com/api/97791497c33f06bce3f486d8d44e8bf2/searchXML?keywords=" + replacedSpaces + "&limit=2");
+
+                string result = "";
+
+                HttpWebRequest request = WebRequest.Create(siteUri) as HttpWebRequest;
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    result = reader.ReadToEnd();
+                }
+
+                //load xml from web request result and get the image id's
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(result);
+
+                XmlNodeList nodelist = doc.SelectNodes("/search/images/image/id");
+
+                if (nodelist.Count == 0)
+                {
+                    return;
+                }
+
+                Parallel.ForEach(nodelist.Cast<XmlNode>(), node => ProcessImage(node.InnerText, downloadFolder));
+
+                if (TryGetFromCache(keywords, out result))
+                {
+                    foundBackdrop(result);
+                }
             }
-
-            //load xml from web request result and get the image id's
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(result);
-
-            XmlNodeList nodelist = doc.SelectNodes("/search/images/image/id");
-
-            if (nodelist.Count == 0)
+            catch (Exception e)
             {
-                return;
-            }
-
-            Parallel.ForEach(nodelist.Cast<XmlNode>(), node => ProcessImage(node.InnerText, downloadFolder));
-
-            if (TryGetFromCache(keywords, out result))
-            {
-                foundBackdrop(result);
+                Console.WriteLine(e);
             }
         }
 
