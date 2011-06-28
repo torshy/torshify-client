@@ -9,6 +9,10 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -18,7 +22,8 @@
 
         <StackPanel
             Grid.Column="2"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
             <Button
                 Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
                 <Icons:ShuffleIcon />
@@ -32,10 +37,12 @@
                 <Icons:PreviousSongIcon />
             </Button>
             <Button
+                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
                 <Icons:PauseIcon />
             </Button>
-                <Button
+            <Button
+                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
                 <Icons:PlayIcon />
             </Button>
