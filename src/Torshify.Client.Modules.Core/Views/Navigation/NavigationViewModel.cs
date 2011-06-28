@@ -120,7 +120,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         private bool CanExecuteNavigateToItem(INavigationItem item)
         {
-            return true;
+            return item != NavigationItems.CurrentItem;
         }
 
         #endregion Private Methods
