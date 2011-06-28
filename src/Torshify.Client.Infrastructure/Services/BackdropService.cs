@@ -15,6 +15,7 @@ namespace Torshify.Client.Infrastructure.Services
         #region Fields
 
         private Random _randomGen = new Random();
+        private const string ApiKey = "590b54eae4a816b5144c09f15a8f3876";
 
         #endregion Fields
 
@@ -112,7 +113,7 @@ namespace Torshify.Client.Infrastructure.Services
                 string replacedSpaces = keywords.Replace(" ", "_");
                 Uri siteUri =
                     new Uri(
-                        "http://htbackdrops.com/api/97791497c33f06bce3f486d8d44e8bf2/searchXML?keywords=" + replacedSpaces + "&limit=2");
+                        "http://htbackdrops.com/api/" + ApiKey + "/searchXML?keywords=" + replacedSpaces + "&limit=2");
 
                 string result = "";
 
@@ -149,7 +150,7 @@ namespace Torshify.Client.Infrastructure.Services
 
         private void ProcessImage(string imageId, string downloadFolder)
         {
-            string url = "http://htbackdrops.com/api/97791497c33f06bce3f486d8d44e8bf2/download/" + imageId + "/intermediate";
+            string url = "http://htbackdrops.com/api/" + ApiKey + "/download/" + imageId + "/intermediate";
 
             try
             {
