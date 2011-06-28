@@ -91,7 +91,8 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
                         CornerRadius="4"
-                        SnapsToDevicePixels="true" BorderThickness="{TemplateBinding BorderThickness}">
+                        SnapsToDevicePixels="true"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             Margin="{TemplateBinding Padding}"
@@ -126,5 +127,41 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style
+        x:Key="SuperSimpleButtonStyle"
+        TargetType="{x:Type Button}"
+        BasedOn="{StaticResource {x:Type Button}}">
+        <Setter
+            Property="Foreground"
+            Value="#FFCCCCCC" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Button}">
+                    <Border
+                        Background="Transparent">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition
+                        Property="IsMouseOver"
+                        Value="True" />
+                    <Condition
+                        Property="IsPressed"
+                        Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter
+                    Property="Foreground"
+                    Value="White" />
+            </MultiTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

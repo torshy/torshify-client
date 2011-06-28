@@ -22,7 +22,7 @@ namespace Torshify.Client.Infrastructure.Converters
                     return string.Format("{0}:{1:00}:{2:00}", t.Hours, t.Minutes, t.Seconds);
                 }
 
-                return string.Format("{0:00}:{1:00}", t.Minutes, t.Seconds);
+                return string.Format("{0:0}:{1:00}", t.Minutes, t.Seconds);
             }
 
             return null;

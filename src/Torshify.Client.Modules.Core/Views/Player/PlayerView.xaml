@@ -19,16 +19,17 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
         <StackPanel
             Grid.Column="2"
             Orientation="Horizontal"
             HorizontalAlignment="Right">
             <Button
+                Style="{DynamicResource SuperSimpleButtonStyle}"
                 Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
                 <Icons:ShuffleIcon />
             </Button>
             <Button
+                Style="{DynamicResource SuperSimpleButtonStyle}"
                 Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
                 <Icons:RepeatIcon />
             </Button>
