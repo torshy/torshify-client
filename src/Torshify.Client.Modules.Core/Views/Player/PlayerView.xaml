@@ -25,29 +25,51 @@
             HorizontalAlignment="Right">
             <Button
                 Style="{DynamicResource SuperSimpleButtonStyle}"
-                Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
-                <Icons:ShuffleIcon />
-            </Button>
-            <Button
-                Style="{DynamicResource SuperSimpleButtonStyle}"
                 Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
                 <Icons:RepeatIcon />
             </Button>
             <Button
+                Style="{DynamicResource SuperSimpleButtonStyle}"
+                Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
+                <Icons:ShuffleIcon />
+            </Button>
+            <Button
+                Margin="8,0,1,0"
+                Width="25"
+                Height="25"
+                Style="{DynamicResource CircleIconButtonStyle}"
                 Command="{x:Static Core:CoreCommands+Player.PreviousCommand}">
                 <Icons:PreviousSongIcon />
             </Button>
             <Button
+                Margin="1,0,1,0"
+                Width="34"
+                Height="34"
+                Style="{DynamicResource CircleIconButtonStyle}"
                 Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
-                <Icons:PauseIcon />
+                <Viewbox
+                    Margin="5">
+                    <Icons:PauseIcon />
+                </Viewbox>
             </Button>
             <Button
+                Margin="1,0,1,0"
+                Width="34"
+                Height="34"
+                Style="{DynamicResource CircleIconButtonStyle}"
                 Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
-                <Icons:PlayIcon />
+                <Viewbox
+                    Margin="5">
+                    <Icons:PlayIcon />
+                </Viewbox>
             </Button>
             <Button
+                Margin="1,0,1,0"
+                Width="25"
+                Height="25"
+                Style="{DynamicResource CircleIconButtonStyle}"
                 Command="{x:Static Core:CoreCommands+Player.NextCommand}">
                 <Icons:NextSongIcon />
             </Button>
