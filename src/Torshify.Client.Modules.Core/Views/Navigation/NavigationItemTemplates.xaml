@@ -12,8 +12,6 @@
                 DockPanel.Dock="Left"
                 Width="20"
                 Height="20"
-                Canvas.Left="0"
-                Canvas.Top="0"
                 Opacity="0.5">
                 <Path
                     Width="9.6733"
@@ -37,10 +35,27 @@
 
     <DataTemplate
         x:Key="{x:Type Navigation:PlayQueueNavigationItem}">
-        <TextBlock
-            Foreground="{DynamicResource ControlTextBrush}"
-            Text="Play Queue"
-            TextTrimming="CharacterEllipsis" />
+        <DockPanel
+            LastChildFill="True">
+            <Canvas
+                DockPanel.Dock="Left"
+                Width="20"
+                Height="20"
+                Opacity="0.5">
+                <Path
+                    Width="13.3385"
+                    Height="11.6719"
+                    Canvas.Left="2.8148"
+                    Canvas.Top="3.78318"
+                    Stretch="Fill"
+                    Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                    Data="M 6.79918,3.83006L 14.972,3.83006L 14.972,6.04881L 6.79918,6.04881L 6.79918,3.83006 Z M 2.8148,3.78318L 4.90855,3.78318L 4.90855,6.00193L 2.8148,6.00193L 2.8148,3.78318 Z M 6.79918,8.61131L 16.1533,8.61131L 16.1533,10.8301L 6.79918,10.8301L 6.79918,8.61131 Z M 2.8148,8.56443L 4.90855,8.56443L 4.90855,10.7832L 2.8148,10.7832L 2.8148,8.56443 Z M 6.79918,13.2363L 13.6066,13.2363L 13.6066,15.4551L 6.79918,15.4551L 6.79918,13.2363 Z M 2.8148,13.1894L 4.90855,13.1894L 4.90855,15.4082L 2.8148,15.4082L 2.8148,13.1894 Z " />
+            </Canvas>            <TextBlock
+                Foreground="{DynamicResource ControlTextBrush}"
+                Text="Play Queue"
+                TextTrimming="CharacterEllipsis" />
+        </DockPanel>
+
     </DataTemplate>
 
 </ResourceDictionary>
