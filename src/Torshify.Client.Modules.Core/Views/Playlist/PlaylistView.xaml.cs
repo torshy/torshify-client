@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Data;
+using System.Windows.Input;
 using Microsoft.Practices.Prism.Events;
 
 using Torshify.Client.Infrastructure.Controls;
@@ -59,6 +61,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
                 };
             }
         }
+
 
         #endregion Private Methods
     }
