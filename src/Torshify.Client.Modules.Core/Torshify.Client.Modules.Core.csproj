@@ -106,11 +106,23 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Resources\Icons\NextSongIcon.xaml.cs">
+      <DependentUpon>NextSongIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PauseIcon.xaml.cs">
+      <DependentUpon>PauseIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PlayIcon.xaml.cs">
+      <DependentUpon>PlayIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Icons\PlaylistIcon.xaml.cs">
       <DependentUpon>PlaylistIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resources\Icons\PlayQueueIcon.xaml.cs">
       <DependentUpon>PlayQueueIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PreviousSongIcon.xaml.cs">
+      <DependentUpon>PreviousSongIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resources\Icons\RepeatIcon.xaml.cs">
       <DependentUpon>RepeatIcon.xaml</DependentUpon>
@@ -161,11 +173,27 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\Icons\NextSongIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\PauseIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\PlayIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons\PlaylistIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Icons\PlayQueueIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\PreviousSongIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

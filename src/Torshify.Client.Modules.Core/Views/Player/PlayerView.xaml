@@ -9,33 +9,45 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <UniformGrid
-        Rows="2"
-        Columns="4">
-        <Button
-            Content="Previous"
-            Command="{x:Static Core:CoreCommands+Player.PreviousCommand}" />
-        <Button
-            Content="Pause"
-            Command="{x:Static Core:CoreCommands+Player.PauseCommand}" />
-        <Button
-            Content="Play"
-            Command="{x:Static Core:CoreCommands+Player.PlayCommand}" />
-        <Button
-            Content="Next"
-            Command="{x:Static Core:CoreCommands+Player.NextCommand}" />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel
+            Grid.Column="2"
+            Orientation="Horizontal">
+            <Button
+                Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
+                <Icons:ShuffleIcon />
+            </Button>
+            <Button
+                Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
+                <Icons:RepeatIcon />
+            </Button>
+            <Button
+                Command="{x:Static Core:CoreCommands+Player.PreviousCommand}">
+                <Icons:PreviousSongIcon />
+            </Button>
+            <Button
+                Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
+                <Icons:PauseIcon />
+            </Button>
+                <Button
+                Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
+                <Icons:PlayIcon />
+            </Button>
+            <Button
+                Command="{x:Static Core:CoreCommands+Player.NextCommand}">
+                <Icons:NextSongIcon />
+            </Button>
+        </StackPanel>
         <Label
             Content="{Binding Player.DurationPlayed}" />
         <Button
             Content="Now Playing"
             Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}" />
-        <Button
-            Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
-            <Icons:ShuffleIcon />
-        </Button>
-        <Button
-            Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
-            <Icons:RepeatIcon />
-        </Button>
-    </UniformGrid>
+    </Grid>
 </UserControl>
