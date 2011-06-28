@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -29,10 +30,12 @@
             Content="Now Playing"
             Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}" />
         <Button
-            Content="Shuffle"
-            Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}" />
+            Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
+            <Icons:ShuffleIcon />
+        </Button>
         <Button
-            Content="Repeat"
-            Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}" />
+            Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
+            <Icons:RepeatIcon />
+        </Button>
     </UniformGrid>
 </UserControl>

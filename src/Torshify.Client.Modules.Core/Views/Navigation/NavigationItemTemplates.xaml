@@ -2,29 +2,15 @@
     x:Class="Torshify.Client.Modules.Core.Views.Navigation.NavigationItemTemplates"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Navigation="clr-namespace:Torshify.Client.Modules.Core.Views.Navigation">
+    xmlns:Navigation="clr-namespace:Torshify.Client.Modules.Core.Views.Navigation"
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
 
     <DataTemplate
         x:Key="{x:Type Navigation:PlaylistNavigationItem}">
         <DockPanel
             LastChildFill="True">
-            <Canvas
-                DockPanel.Dock="Left"
-                Width="20"
-                Height="20"
-                Opacity="0.5">
-                <Path
-                    Width="9.6733"
-                    Height="12.2521"
-                    Canvas.Left="2.87399"
-                    Canvas.Top="4.04968"
-                    Stretch="Fill"
-                    StrokeMiterLimit="2.75"
-                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                    Data="M 5.76624,5.61302L 11.6165,4.54968L 11.8633,5.90743L 6.01302,6.97077L 5.76624,5.61302 Z M 6.07794,7.04994L 6.14288,14.895M 4.76505,13.9277C 5.53758,13.9344 6.16731,14.3593 6.1716,14.8768C 6.17588,15.3943 5.55309,15.8083 4.78056,15.8017C 4.00803,15.795 3.37829,15.37 3.37401,14.8526C 3.36972,14.3351 3.99251,13.921 4.76505,13.9277 Z M 11.9536,6.13635L 12.0185,13.9814M 10.6407,13.0141C 11.4132,13.0208 12.043,13.4457 12.0473,13.9632C 12.0515,14.4807 11.4288,14.8948 10.6562,14.8881C 9.88369,14.8814 9.25396,14.4564 9.24967,13.939C 9.24539,13.4215 9.86818,13.0074 10.6407,13.0141 Z " />
-            </Canvas>
-
+            <Icons:PlaylistIcon
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" />
             <TextBlock
                 Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                 FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
@@ -37,25 +23,14 @@
         x:Key="{x:Type Navigation:PlayQueueNavigationItem}">
         <DockPanel
             LastChildFill="True">
-            <Canvas
-                DockPanel.Dock="Left"
-                Width="20"
-                Height="20"
-                Opacity="0.5">
-                <Path
-                    Width="13.3385"
-                    Height="11.6719"
-                    Canvas.Left="2.8148"
-                    Canvas.Top="3.78318"
-                    Stretch="Fill"
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                    Data="M 6.79918,3.83006L 14.972,3.83006L 14.972,6.04881L 6.79918,6.04881L 6.79918,3.83006 Z M 2.8148,3.78318L 4.90855,3.78318L 4.90855,6.00193L 2.8148,6.00193L 2.8148,3.78318 Z M 6.79918,8.61131L 16.1533,8.61131L 16.1533,10.8301L 6.79918,10.8301L 6.79918,8.61131 Z M 2.8148,8.56443L 4.90855,8.56443L 4.90855,10.7832L 2.8148,10.7832L 2.8148,8.56443 Z M 6.79918,13.2363L 13.6066,13.2363L 13.6066,15.4551L 6.79918,15.4551L 6.79918,13.2363 Z M 2.8148,13.1894L 4.90855,13.1894L 4.90855,15.4082L 2.8148,15.4082L 2.8148,13.1894 Z " />
-            </Canvas>            <TextBlock
-                Foreground="{DynamicResource ControlTextBrush}"
+            <Icons:PlayQueueIcon
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"/>
+            <TextBlock
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                 Text="Play Queue"
                 TextTrimming="CharacterEllipsis" />
         </DockPanel>
-
     </DataTemplate>
 
 </ResourceDictionary>

@@ -106,6 +106,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Resources\Icons\PlaylistIcon.xaml.cs">
+      <DependentUpon>PlaylistIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PlayQueueIcon.xaml.cs">
+      <DependentUpon>PlayQueueIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\RepeatIcon.xaml.cs">
+      <DependentUpon>RepeatIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\ShuffleIcon.xaml.cs">
+      <DependentUpon>ShuffleIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -149,6 +161,22 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\Icons\PlaylistIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\PlayQueueIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\RepeatIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\ShuffleIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
