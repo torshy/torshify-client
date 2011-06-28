@@ -5,10 +5,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        
         <Button
             Controls:WindowChrome.IsHitTestVisibleInChrome="True"
             Content="Back"
@@ -28,6 +40,62 @@
             DisplayMemberPath="Track.Name"
             HorizontalAlignment="Right"
             Width="250" />
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <Button
+                Style="{DynamicResource SuperSimpleButtonStyle}"
+                Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
+                <Icons:RepeatIcon />
+            </Button>
+            <Button
+                Style="{DynamicResource SuperSimpleButtonStyle}"
+                Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
+                <Icons:ShuffleIcon />
+            </Button>
+            <Button
+                Margin="8,0,1,0"
+                Width="25"
+                Height="25"
+                Style="{DynamicResource CircleIconButtonStyle}"
+                Command="{x:Static Core:CoreCommands+Player.PreviousCommand}">
+                <Icons:PreviousSongIcon />
+            </Button>
+            <Button
+                Margin="1,0,1,0"
+                Width="34"
+                Height="34"
+                Style="{DynamicResource CircleIconButtonStyle}"
+                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
+                <Viewbox
+                    Margin="5">
+                    <Icons:PauseIcon />
+                </Viewbox>
+            </Button>
+            <Button
+                Margin="1,0,1,0"
+                Width="34"
+                Height="34"
+                Style="{DynamicResource CircleIconButtonStyle}"
+                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
+                <Viewbox
+                    Margin="5">
+                    <Icons:PlayIcon />
+                </Viewbox>
+            </Button>
+            <Button
+                Margin="1,0,1,0"
+                Width="25"
+                Height="25"
+                Style="{DynamicResource CircleIconButtonStyle}"
+                Command="{x:Static Core:CoreCommands+Player.NextCommand}">
+                <Icons:NextSongIcon />
+            </Button>
+        </StackPanel>
 
     </Grid>
 </UserControl>

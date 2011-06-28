@@ -114,18 +114,16 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private void DisplayBackgroundImage(ImageSource imageSource)
         {
             IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = region.GetView("KenBurnsBackground") as ImageMontage;
+            var kenBurnsView = region.GetView("KenBurnsBackground");
 
             if (kenBurnsView != null)
             {
-                kenBurnsView.Initialize(imageSource);
+                region.Remove(kenBurnsView);
             }
-            else
-            {
-                ImageMontage montage = new ImageMontage();
-                montage.Initialize(imageSource);
-                region.Add(montage.UI, "KenBurnsBackground");
-            }
+
+            ImageMontage montage = new ImageMontage();
+            montage.Initialize(imageSource);
+            region.Add(montage.UI, "KenBurnsBackground");
         }
 
         private void ExecuteNavigateBack()
