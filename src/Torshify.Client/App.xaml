@@ -19,6 +19,8 @@
                     Source="pack://application:,,,/Torshify.Client;component/Themes/ListBox.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/PasswordBox.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Client;component/Themes/Slider.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush

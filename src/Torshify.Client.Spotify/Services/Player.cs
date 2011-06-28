@@ -87,6 +87,10 @@ namespace Torshify.Client.Spotify.Services
                        ? DateTime.Now.Subtract(_trackStarted)
                        : _trackPaused.Subtract(_trackStarted);
             }
+            set
+            {
+                Seek(value);
+            }
         }
 
         public IPlayerQueue Playlist
@@ -150,6 +154,8 @@ namespace Torshify.Client.Spotify.Services
             if (_isPlaying)
             {
                 _session.PlayerSeek(timeSpan);
+                
+                RaisePropertyChanged("DurationPlayed");
             }
         }
 

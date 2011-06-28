@@ -127,6 +127,7 @@
     <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
     <Compile Include="Controls\WindowChromeWorker.cs" />
+    <Compile Include="Converters\BoolToVisibleOrHidden.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\TimeSpanToTextConverter.cs" />

@@ -19,4 +19,5 @@
             Stretch="Fill"
             Fill="{Binding Foreground, ElementName=Root}"
             Data="M 18.7495,9.47589L 11.2348,13.8145L 11.2348,5.13732L 18.7495,9.47589 Z M 11.252,9.9759L 3.73733,14.3145L 3.73733,5.63732L 11.252,9.9759 Z " />
-    </Canvas></UserControl>
+    </Canvas>
+</UserControl>

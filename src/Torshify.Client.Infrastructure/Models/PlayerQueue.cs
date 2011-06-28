@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Client.Infrastructure.Interfaces;
 using System.Linq;
 
 namespace Torshify.Client.Infrastructure.Models
 {
-    public class PlayerQueue : IPlayerQueue
+    public class PlayerQueue : NotificationObject, IPlayerQueue
     {
         #region Fields
 
@@ -55,6 +56,15 @@ namespace Torshify.Client.Infrastructure.Models
                 _shuffle = value;
                 Update();
                 OnShuffleChanged();
+                RaisePropertyChanged("Shuffle");
+            }
+        }
+
+        public bool HasCurrent
+        {
+            get
+            {
+                return Current != null;
             }
         }
 
@@ -65,6 +75,7 @@ namespace Torshify.Client.Infrastructure.Models
             {
                 _repeat = value;
                 OnRepeatChanged();
+                RaisePropertyChanged("Repeat");
             }
         }
 
@@ -117,6 +128,10 @@ namespace Torshify.Client.Infrastructure.Models
             {
                 _currentTrack = value;
                 OnCurrentChanged();
+                RaisePropertyChanged("Current");
+                RaisePropertyChanged("HasCurrent");
+                RaisePropertyChanged("CanGoNext");
+                RaisePropertyChanged("CanGoPrevious");
             }
         }
 

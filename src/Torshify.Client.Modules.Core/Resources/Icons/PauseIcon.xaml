@@ -25,5 +25,6 @@
             Canvas.Top="3.62173"
             Stretch="Fill"
             Fill="{Binding Foreground, ElementName=Root}" />
-    </Canvas>
+    </Canvas>
+
 </UserControl>

@@ -6,19 +6,152 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
     xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
+    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
+    xmlns:Player="clr-namespace:Torshify.Client.Modules.Core.Views.Player"
+    xmlns:WpfShaderEffects="clr-namespace:WpfShaderEffects;assembly=WpfShaderEffects"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300">
+    d:DesignWidth="300"
+    Height="80"
+    VerticalAlignment="Center">
     <UserControl.Resources>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:BoolToVisibleOrHidden
+            x:Key="BoolToVisibleOrHidden"
+            Collapse="False" />
+        <Converters:TimeSpanToTextConverter
+            x:Key="TimeSpanToTextConverter" />
+        <Player:TimeSpanLeftConverter
+            x:Key="TimeSpanLeftConverter" />
+        <Style
+            x:Key="AlbumArtButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource ControlTextBrush}" />
+            <Setter
+                Property="Padding"
+                Value="2" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <ContentPresenter />
+                                <Rectangle
+                                    Name="OverlayRect" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger
+                                Property="IsMouseOver"
+                                Value="True">
+                                <Setter
+                                    TargetName="OverlayRect"
+                                    Property="Fill"
+                                    Value="#30FFFFFF" />
+                            </Trigger>
+                            <Trigger
+                                Property="IsPressed"
+                                Value="True">
+                                <Setter
+                                    Property="Effect">
+                                    <Setter.Value>
+                                        <WpfShaderEffects:BloomShaderEffect />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
+        <Grid
+            Grid.Column="1">
+            <!--Visibility="{Binding Player.Playlist.HasCurrent, Converter={StaticResource BoolToVisibleOrHidden}}">-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="50" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Viewbox
+                Stretch="Uniform">
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="4"
+                    Style="{StaticResource AlbumArtButtonStyle}"
+                    Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}">
+                    <Image
+                        Source="{Binding Player.Playlist.Current.Track.Album.Cover}" />
+                </Button>
+            </Viewbox>
+
+            <Grid
+                Grid.Column="1"
+                Margin="8,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0"
+                    VerticalAlignment="Bottom">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        Text="{Binding Player.Playlist.Current.Track.Name}" />
+                </Grid>
+
+                <Slider
+                    Grid.Row="1"
+                    Minimum="0"
+                    Maximum="{Binding Player.Playlist.Current.Track.Duration.TotalSeconds, Mode=OneWay}"
+                    Value="{Binding Player.DurationPlayed.TotalSeconds, Mode=OneWay}" />
+
+                <Grid
+                    Grid.Row="2"
+                    VerticalAlignment="Top">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        FontSize="12"
+                        Text="{Binding Player.DurationPlayed, Converter={StaticResource TimeSpanToTextConverter}}" />
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        FontSize="12"
+                        Foreground="{DynamicResource ControlTextBrush}">
+                        <TextBlock.Text>
+                            <MultiBinding
+                                Converter="{StaticResource TimeSpanLeftConverter}">
+                                <Binding
+                                    Path="Player.Playlist.Current.Track.Duration" />
+                                <Binding
+                                    Path="Player.DurationPlayed" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </Grid>
+        </Grid>
+
         <StackPanel
             Grid.Column="2"
             Orientation="Horizontal"
@@ -74,10 +207,5 @@
                 <Icons:NextSongIcon />
             </Button>
         </StackPanel>
-        <Label
-            Content="{Binding Player.DurationPlayed}" />
-        <Button
-            Content="Now Playing"
-            Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}" />
     </Grid>
 </UserControl>

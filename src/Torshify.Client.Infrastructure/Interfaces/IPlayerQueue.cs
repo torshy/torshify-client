@@ -35,6 +35,11 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
+        bool HasCurrent
+        {
+            get;
+        }
+
         bool Repeat
         {
             get; set;
