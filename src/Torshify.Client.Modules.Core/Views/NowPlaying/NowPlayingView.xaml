@@ -20,7 +20,7 @@
             <RowDefinition
                 Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <Button
             Controls:WindowChrome.IsHitTestVisibleInChrome="True"
             Content="Back"
@@ -28,12 +28,43 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top" />
 
-        <Image
-            Width="300"
-            Height="300"
-            Source="{Binding CurrentTrack.Album.Cover}"
+        <DockPanel
+            LastChildFill="True"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center" />
+            VerticalAlignment="Bottom">
+            <Border
+                DockPanel.Dock="Left"
+                Padding="5"
+                Height="150"
+                Width="150">
+                <Image
+                    Source="{Binding CurrentTrack.Album.Cover}"
+                    Stretch="Uniform" />
+            </Border>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0">
+                    <TextBlock
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        Text="{Binding CurrentTrack.Album.Artist.Name}" />
+                    <TextBlock
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        Text="{Binding CurrentTrack.Album.Name}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1">
+                    <TextBlock
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        Text="{Binding CurrentTrack.Name}" />
+                </StackPanel>
+            </Grid>
+        </DockPanel>
 
         <ListBox
             ItemsSource="{Binding Playlist}"

@@ -23,7 +23,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         private IRegion _mainRegion;
         [ImportMany]
-        private IEnumerable<Lazy<INavigationItemProvider, IDictionary<string,object>>> _itemProviders;
+        private IEnumerable<Lazy<INavigationItemProvider, IDictionary<string,object>>> _itemProviders = null;
         private ICollectionView _navigationItemsIcv;
 
         #endregion Fields

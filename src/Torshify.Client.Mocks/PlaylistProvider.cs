@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Windows.Media.Imaging;
 using FizzWare.NBuilder;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -11,6 +11,7 @@ namespace Torshify.Client.Mocks
     {
         #region Fields
 
+        private BitmapImage _coverArtSource;
         private IList<Playlist> _playlists;
         private Random _random;
 
@@ -101,6 +102,11 @@ namespace Torshify.Client.Mocks
         {
             _playlists = new List<Playlist>();
             _random = new Random();
+            _coverArtSource = new BitmapImage();
+            _coverArtSource.BeginInit();
+            _coverArtSource.CacheOption = BitmapCacheOption.None;
+            _coverArtSource.UriSource = new Uri("pack://application:,,,/Torshify.Client.Mocks;component/UnknownCoverArt.png");
+            _coverArtSource.EndInit();
         }
 
         #endregion Constructors
@@ -177,6 +183,7 @@ namespace Torshify.Client.Mocks
                 .With(a => a.Year = _random.Next(1990, 2011))
                 .With(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
                 .With(a => a.Artist = GetArtist())
+                .With(a => a.Cover = _coverArtSource)
                 .Build();
         }
 

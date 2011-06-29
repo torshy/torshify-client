@@ -9,6 +9,7 @@ namespace Torshify.Client.Mocks
     {
         #region Fields
 
+        private bool _isPlaying;
         private PlayerQueue _playerQueue;
 
         #endregion Fields
@@ -31,17 +32,27 @@ namespace Torshify.Client.Mocks
 
         #region Properties
 
-        public bool IsPlaying
-        {
-            get;
-            private set;
-        }
-
         public TimeSpan DurationPlayed
         {
             get
             {
                 return TimeSpan.Zero;
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                return _isPlaying;
+            }
+            private set
+            {
+                if (_isPlaying != value)
+                {
+                    _isPlaying = value;
+                    OnIsPlayingChanged();
+                }
             }
         }
 
@@ -52,7 +63,7 @@ namespace Torshify.Client.Mocks
 
         #endregion Properties
 
-        #region Public Methods
+        #region Methods
 
         public void Pause()
         {
@@ -70,14 +81,20 @@ namespace Torshify.Client.Mocks
         {
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
         private void OnCurrentChanged(object sender, EventArgs e)
         {
         }
 
-        #endregion Private Methods
+        private void OnIsPlayingChanged()
+        {
+            var handler = IsPlayingChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion Methods
     }
 }
