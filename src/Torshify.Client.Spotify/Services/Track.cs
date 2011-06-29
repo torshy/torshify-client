@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
@@ -15,6 +17,8 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
+        private readonly Dispatcher _dispatcher;
+
         private Lazy<Album> _album;
         private Lazy<IEnumerable<Artist>> _artists;
 
@@ -22,11 +26,12 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        protected Track(ITrack track)
+        public Track(ITrack track, Dispatcher dispatcher)
         {
+            _dispatcher = dispatcher;
             InternalTrack = track;
 
-            _album = new Lazy<Album>(() => new Album(InternalTrack.Album));
+            _album = new Lazy<Album>(() => new Album(InternalTrack.Album, dispatcher));
             _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist)));
         }
 
@@ -64,6 +69,12 @@ namespace Torshify.Client.Spotify.Services
             get { return InternalTrack.Index; }
         }
 
+        public ITrack InternalTrack
+        {
+            get;
+            private set;
+        }
+
         public bool IsAvailable
         {
             get { return InternalTrack.IsAvailable; }
@@ -90,12 +101,6 @@ namespace Torshify.Client.Spotify.Services
         public int Popularity
         {
             get { return InternalTrack.Popularity; }
-        }
-
-        public ITrack InternalTrack
-        {
-            get;
-            private set;
         }
 
         #endregion Properties

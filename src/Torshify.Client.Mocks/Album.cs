@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -29,6 +30,12 @@ namespace Torshify.Client.Mocks
         }
 
         public BitmapSource Cover
+        {
+            get; 
+            set;
+        }
+
+        public IEnumerable<ITrack> Tracks
         {
             get; 
             set;

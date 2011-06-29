@@ -159,6 +159,18 @@ namespace Torshify.Client.Mocks
                 .Build();
         }
 
+        private IEnumerable<ITrack> GetTracks(IAlbum album)
+        {
+            return Builder<Track>
+                .CreateListOfSize(_random.Next(6, 35))
+                .WhereAll()
+                .Has(t => t.Name = _trackNames[_random.Next(0, _trackNames.Length - 1)])
+                .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
+                .Has(t => t.Album = album)
+                .Has(t => t.Artists = GetArtists())
+                .Build();
+        }
+
         private IEnumerable<IArtist> GetArtists()
         {
             return Builder<Artist>
@@ -184,6 +196,7 @@ namespace Torshify.Client.Mocks
                 .With(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
                 .With(a => a.Artist = GetArtist())
                 .With(a => a.Cover = _coverArtSource)
+                .With(a => a.Tracks = GetTracks(a))
                 .Build();
         }
 

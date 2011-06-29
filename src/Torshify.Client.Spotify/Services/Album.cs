@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Caching;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -9,11 +12,15 @@ using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
+using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
+
 namespace Torshify.Client.Spotify.Services
 {
     public class Album : NotificationObject, ITorshifyAlbum
     {
         #region Fields
+
+        private readonly Dispatcher _dispatcher;
 
         private Lazy<ITorshifyArtist> _artist;
 
@@ -21,8 +28,9 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        public Album(IAlbum album)
+        public Album(IAlbum album, Dispatcher dispatcher)
         {
+            _dispatcher = dispatcher;
             InternalAlbum = album;
 
             _artist = new Lazy<ITorshifyArtist>(() => new Artist(InternalAlbum.Artist));
@@ -32,30 +40,9 @@ namespace Torshify.Client.Spotify.Services
 
         #region Properties
 
-        public IAlbum InternalAlbum
-        {
-            get;
-            private set;
-        }
-
         public ITorshifyArtist Artist
         {
             get { return _artist.Value; }
-        }
-
-        public bool IsAvailable
-        {
-            get { return InternalAlbum.IsAvailable; }
-        }
-
-        public string Name
-        {
-            get { return InternalAlbum.Name; }
-        }
-
-        public int Year
-        {
-            get { return InternalAlbum.Year; }
         }
 
         public BitmapSource Cover
@@ -87,16 +74,75 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
+        public IAlbum InternalAlbum
+        {
+            get;
+            private set;
+        }
+
+        public bool IsAvailable
+        {
+            get { return InternalAlbum.IsAvailable; }
+        }
+
+        public string Name
+        {
+            get { return InternalAlbum.Name; }
+        }
+
+        public IEnumerable<ITorshifyTrack> Tracks
+        {
+            get
+            {
+                var tracksCache =
+                    MemoryCache.Default.Get("Torshify_AlbumTracks_" + GetHashCode()) as Lazy<IEnumerable<ITorshifyTrack>>;
+
+                if (tracksCache == null)
+                {
+                    tracksCache = new Lazy<IEnumerable<ITorshifyTrack>>(CreateTrackList);
+
+                    MemoryCache.Default.Add(
+                        "Torshify_AlbumTracks_" + GetHashCode(), 
+                        tracksCache,
+                        new CacheItemPolicy {SlidingExpiration = TimeSpan.FromSeconds(45)});
+                }
+
+                return tracksCache.Value;
+            }
+        }
+
+        public int Year
+        {
+            get { return InternalAlbum.Year; }
+        }
+
         #endregion Properties
 
-        #region Private Methods
+        #region Methods
 
-        private void OnCoverImageLoaded(object sender, EventArgs e)
+        private void AlbumBrowseCompleted(object sender, UserDataEventArgs e)
         {
-            IImage image = (IImage)sender;
-            image.Loaded -= OnCoverImageLoaded;
+            var trackList = (ObservableCollection<Track>) e.Tag;
+            var browse = (IAlbumBrowse) sender;
 
-            InitializeCover(image);
+            using(browse)
+            {
+                foreach (var spotifyTrack in browse.Tracks)
+                {
+                    Track track = new Track(spotifyTrack, _dispatcher);
+                    _dispatcher.BeginInvoke((Action<Track>) trackList.Add, DispatcherPriority.Background, track);
+                }
+            }
+
+            browse.Completed -= AlbumBrowseCompleted;
+        }
+
+        private IEnumerable<ITorshifyTrack> CreateTrackList()
+        {
+            var tracks = new ObservableCollection<Track>();
+            var browse = InternalAlbum.Browse(tracks);
+            browse.Completed += AlbumBrowseCompleted;
+            return tracks;
         }
 
         private void InitializeCover(IImage image)
@@ -107,6 +153,7 @@ namespace Torshify.Client.Spotify.Services
                 {
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.None;
                     bitmapImage.StreamSource = new MemoryStream(image.Data);
                     bitmapImage.EndInit();
                     bitmapImage.Freeze();
@@ -125,6 +172,14 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        #endregion Private Methods
+        private void OnCoverImageLoaded(object sender, EventArgs e)
+        {
+            IImage image = (IImage)sender;
+            image.Loaded -= OnCoverImageLoaded;
+
+            InitializeCover(image);
+        }
+
+        #endregion Methods
     }
 }

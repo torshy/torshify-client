@@ -1,3 +1,4 @@
+using System.Windows.Threading;
 using ITorshifyPlaylist = Torshify.Client.Infrastructure.Interfaces.IPlaylist;
 
 using ITorshifyPlaylistTrack = Torshify.Client.Infrastructure.Interfaces.IPlaylistTrack;
@@ -8,8 +9,8 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Constructors
 
-        public PlaylistTrack(ITorshifyPlaylist parentPlaylist, IPlaylistTrack track)
-            : base(track)
+        public PlaylistTrack(ITorshifyPlaylist parentPlaylist, IPlaylistTrack track, Dispatcher dispatcher)
+            : base(track, dispatcher)
         {
             Playlist = parentPlaylist;
         }
