@@ -5,8 +5,9 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
 
 using Torshify.Client.Infrastructure;
-using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core.Views;
+using Torshify.Client.Modules.Core.Views.Album;
+using Torshify.Client.Modules.Core.Views.Artist;
 using Torshify.Client.Modules.Core.Views.Navigation;
 using Torshify.Client.Modules.Core.Views.NowPlaying;
 using Torshify.Client.Modules.Core.Views.Player;
@@ -21,7 +22,6 @@ namespace Torshify.Client.Modules.Core
 
         private readonly IUnityContainer _container;
         private readonly IRegionManager _regionManager;
-        private readonly IPlayer _player;
 
         #endregion Fields
 
@@ -29,12 +29,10 @@ namespace Torshify.Client.Modules.Core
 
         public CoreModule(
             IUnityContainer container,
-            IRegionManager regionManager,
-            IPlayer player)
+            IRegionManager regionManager)
         {
             _container = container;
             _regionManager = regionManager;
-            _player = player;
         }
 
         #endregion Constructors
@@ -48,6 +46,8 @@ namespace Torshify.Client.Modules.Core
             _container.RegisterType<PlaylistView>(MusicRegionViewNames.PlaylistView);
             _container.RegisterType<PlayQueueView>(MusicRegionViewNames.PlayQueueView);
             _container.RegisterType<NowPlayingView>(MusicRegionViewNames.NowPlayingView);
+            _container.RegisterType<AlbumView>(MusicRegionViewNames.AlbumView);
+            _container.RegisterType<ArtistView>(MusicRegionViewNames.ArtistView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));
@@ -55,6 +55,8 @@ namespace Torshify.Client.Modules.Core
             _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(NavigationView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlaylistView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlayQueueView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(ArtistView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(AlbumView));
 
 #if MockEnabled
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));

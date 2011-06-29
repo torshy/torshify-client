@@ -9,6 +9,7 @@ using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -18,33 +19,40 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
     {
         #region Fields
 
-        private ICollectionView _tracks;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IRegionManager _regionManager;
+
         private IPlaylist _playlist;
+        private SubscriptionToken _trackMenuBarToken;
+        private ICollectionView _tracks;
 
         #endregion Fields
 
         #region Constructors
 
-        public PlaylistViewModel(IEventAggregator eventAggregator)
+        public PlaylistViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
-            eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent);
+            _eventAggregator = eventAggregator;
+            _regionManager = regionManager;
+
+            GoToAlbumCommand = new AutomaticCommand<IAlbum>(ExecuteGoToAlbum, CanExecuteGoToAlbum);
+            GoToArtistCommand = new AutomaticCommand<IArtist>(ExecuteGoToArtist, CanExecuteGoToArtist);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public ICollectionView Tracks
+        public AutomaticCommand<IAlbum> GoToAlbumCommand
         {
-            get
-            {
-                return _tracks;
-            }
-            private set
-            {
-                _tracks = value;
-                RaisePropertyChanged("Tracks");
-            }
+            get;
+            private set;
+        }
+
+        public AutomaticCommand<IArtist> GoToArtistCommand
+        {
+            get;
+            private set;
         }
 
         public IPlaylist Playlist
@@ -60,12 +68,50 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
             }
         }
 
+        public ICollectionView Tracks
+        {
+            get
+            {
+                return _tracks;
+            }
+            private set
+            {
+                _tracks = value;
+                RaisePropertyChanged("Tracks");
+            }
+        }
+
         #endregion Properties
 
-        #region Public Methods
+        #region Methods
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
+
+            if (Playlist != null && Tracks != null)
+            {
+                var selectedTrack = (ITrack)Tracks.CurrentItem;
+
+                if (selectedTrack != null)
+                {
+                    UriQuery query = new UriQuery();
+                    query.Add("PlaylistSelectedTrackID", selectedTrack.ID.ToString());
+
+                    navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(MusicRegionViewNames.PlaylistView + query, UriKind.Relative);
+                }
+            }
+        }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+
             Tracks = null;
 
             Playlist = navigationContext.Tag as IPlaylist;
@@ -90,30 +136,27 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
             }
         }
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
+        private bool CanExecuteGoToAlbum(IAlbum album)
         {
-            return true;
+            return album != null;
         }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
+        private bool CanExecuteGoToArtist(IArtist artist)
         {
-            if (Playlist != null && Tracks != null)
-            {
-                var selectedTrack = (ITrack)Tracks.CurrentItem;
-
-                if (selectedTrack != null)
-                {
-                    UriQuery query = new UriQuery();
-                    query.Add("PlaylistSelectedTrackID", selectedTrack.ID.ToString());
-
-                    navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(MusicRegionViewNames.PlaylistView + query, UriKind.Relative);
-                }
-            }
+            return artist != null;
         }
 
-        #endregion Public Methods
+        private void ExecuteGoToAlbum(IAlbum album)
+        {
+            Uri uri = new Uri(MusicRegionViewNames.AlbumView, UriKind.Relative);
+            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, album);
+        }
 
-        #region Private Methods
+        private void ExecuteGoToArtist(IArtist artist)
+        {
+            Uri uri = new Uri(MusicRegionViewNames.ArtistView, UriKind.Relative);
+            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, artist);
+        }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
@@ -122,6 +165,6 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
         }
 
-        #endregion Private Methods
+        #endregion Methods
     }
 }

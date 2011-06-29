@@ -35,10 +35,23 @@
                     Header="Track"
                     Binding="{Binding Name}"
                     Width="200" />
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Artist"
-                    Binding="{Binding Album.Artist.Name}"
-                    Width="175" />
+                    Width="175">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Hyperlink
+                                    Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Album.Artist}">
+                                        <TextBlock
+                                        Text="{Binding Album.Artist.Name}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
@@ -62,10 +75,23 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Album"
-                    Binding="{Binding Album.Name}"
-                    Width="175" />
+                    Width="175">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Hyperlink
+                                    Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Album}">
+                                        <TextBlock
+                                            Text="{Binding Album.Name}"
+                                            TextTrimming="CharacterEllipsis" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

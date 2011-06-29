@@ -132,6 +132,14 @@
     <Compile Include="Resources\Icons\ShuffleIcon.xaml.cs">
       <DependentUpon>ShuffleIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Album\AlbumView.xaml.cs">
+      <DependentUpon>AlbumView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Album\AlbumViewModel.cs" />
+    <Compile Include="Views\Artist\ArtistView.xaml.cs">
+      <DependentUpon>ArtistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Artist\ArtistViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -156,6 +164,8 @@
       <DependentUpon>PlayerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Player\PlayerViewModel.cs" />
+    <Compile Include="Views\Player\TimeSpanConverter.xaml.cs" />
+    <Compile Include="Views\Player\TimeSpanLeftConverter.xaml.cs" />
     <Compile Include="Views\Playlist\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
@@ -204,6 +214,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Icons\ShuffleIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Album\AlbumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Artist\ArtistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
