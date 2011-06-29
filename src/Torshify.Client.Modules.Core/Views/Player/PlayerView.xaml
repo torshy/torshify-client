@@ -83,8 +83,8 @@
         </Grid.ColumnDefinitions>
 
         <Grid
-            Grid.Column="1">
-            <!--Visibility="{Binding Player.Playlist.HasCurrent, Converter={StaticResource BoolToVisibleOrHidden}}">-->
+            Grid.Column="1"
+            Visibility="{Binding Player.Playlist.HasCurrent, Converter={StaticResource BoolToVisibleOrHidden}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="50" />

@@ -55,6 +55,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
+                                Foreground="#FFCCCCCC"
                                 Text="{Binding Duration, Converter={StaticResource TimeSpanToTextConverter}}"
                                 TextAlignment="Right"
                                 Margin="0,0,4,0" />
