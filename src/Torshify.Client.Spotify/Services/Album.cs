@@ -19,9 +19,9 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly Dispatcher _dispatcher;
-        
+
         private Lazy<Artist> _artist;
-        
+
         #endregion Fields
 
         #region Constructors
@@ -119,9 +119,9 @@ namespace Torshify.Client.Spotify.Services
 
         private void InitializeCover(IImage image)
         {
-            if (image.Error == Error.OK && image.Data.Length > 0)
+            try
             {
-                try
+                if (image.Error == Error.OK && image.Data.Length > 0)
                 {
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
@@ -137,10 +137,10 @@ namespace Torshify.Client.Spotify.Services
 
                     RaisePropertyChanged("Cover");
                 }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
             }
         }
 

@@ -65,6 +65,14 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
+        public bool IsLoading
+        {
+            get
+            {
+                return !_albumBrowse.IsComplete;
+            }
+        }
+
         public IEnumerable<ITorshifyTrack> Tracks
         {
             get
@@ -98,6 +106,8 @@ namespace Torshify.Client.Spotify.Services
             }
 
             browse.Completed -= AlbumBrowseCompleted;
+
+            RaisePropertyChanged("IsLoading");
         }
 
         #endregion Methods

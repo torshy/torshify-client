@@ -92,12 +92,23 @@
     <Compile Include="Controls\BusyIndicator.cs" />
     <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlCssParser.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlFromXamlConverter.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlLexicalAnalyzer.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlParser.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlSchema.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlToFlowDocumentConverter.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlTokenType.cs" />
+    <Compile Include="Controls\Html2Flow\HtmlToXamlConverter.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
     <Compile Include="Controls\PasswordBoxMonitor.cs" />
     <Compile Include="Controls\SearchTextBox.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
+    <Compile Include="Controls\SprocketControl.xaml.cs">
+      <DependentUpon>SprocketControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Standard\ComGuids.cs" />
     <Compile Include="Controls\Standard\CornerRadiusAnimation.cs" />
     <Compile Include="Controls\Standard\CornerRadiusAnimationBase.cs" />
@@ -186,6 +197,10 @@
     <Resource Include="Resources\Images\spotify-core-logo-96x96.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\SprocketControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\BorderlessWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

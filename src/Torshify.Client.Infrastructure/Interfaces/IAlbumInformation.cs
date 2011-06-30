@@ -18,5 +18,10 @@ namespace Torshify.Client.Infrastructure.Interfaces
         {
             get;
         }
+
+        bool IsLoading
+        {
+            get;
+        }
     }
 }
