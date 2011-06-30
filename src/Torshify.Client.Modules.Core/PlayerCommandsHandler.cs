@@ -39,7 +39,7 @@ namespace Torshify.Client.Modules.Core
 
             CoreCommands
                 .QueueTrackCommand
-                .RegisterCommand(new AutomaticCommand<ITrack>(ExecuteQueueTrack, CanExecuteQueueTrack));
+                .RegisterCommand(new AutomaticCommand<object>(ExecuteQueueTrack, CanExecuteQueueTrack));
 
             CoreCommands
                 .GoToNowPlayingCommand
@@ -158,14 +158,36 @@ namespace Torshify.Client.Modules.Core
             _player.Play();
         }
 
-        private bool CanExecuteQueueTrack(ITrack track)
+        private bool CanExecuteQueueTrack(object parameter)
         {
-            return track != null && track.IsAvailable;
+            ITrack track = parameter as ITrack;
+            if (track != null)
+            {
+                return track.IsAvailable;
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        private void ExecuteQueueTrack(ITrack track)
+        private void ExecuteQueueTrack(object parameter)
         {
-            _player.Playlist.Enqueue(track);
+            ITrack track = parameter as ITrack;
+            if (track != null)
+            {
+                _player.Playlist.Enqueue(track);
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                _player.Playlist.Enqueue(tracks);
+            }
         }
 
         private bool CanExecutePlayTrack(ITrack track)

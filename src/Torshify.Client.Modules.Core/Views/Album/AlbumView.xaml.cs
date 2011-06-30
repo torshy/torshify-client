@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 using Microsoft.Practices.Prism.Events;
 
@@ -44,14 +46,22 @@ namespace Torshify.Client.Modules.Core.Views.Album
         private void DataGridContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            var dg = (FrameworkElement)sender;
+            var dg = (MultiSelector)sender;
 
             if (element != null && element.DataContext is ITrack)
             {
-                var track = (ITrack)element.DataContext;
                 var commandbar = new CommandBar();
 
-                _eventAggregator.GetEvent<TrackCommandBarEvent>().Publish(new TrackCommandBarModel(track, commandbar));
+                if (dg.SelectedItems.Count == 1)
+                {
+                    var track = (ITrack)dg.SelectedItems[0];
+                    _eventAggregator.GetEvent<TrackCommandBarEvent>().Publish(new TrackCommandBarModel(track, commandbar));
+                }
+                else if (dg.SelectedItems.Count > 1)
+                {
+                    var tracks = dg.SelectedItems.Cast<ITrack>();
+                    _eventAggregator.GetEvent<TracksCommandBarEvent>().Publish(new TracksCommandBarModel(tracks, commandbar));
+                }
 
                 dg.ContextMenu = new CommandBarContextMenu
                 {

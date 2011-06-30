@@ -37,11 +37,11 @@ namespace Torshify.Client.Infrastructure.Events
     {
     }
 
-    public class TracksCommandBar
+    public class TracksCommandBarModel
     {
         #region Constructors
 
-        public TracksCommandBar(IEnumerable<ITrack> tracks, ICommandBar commandBar)
+        public TracksCommandBarModel(IEnumerable<ITrack> tracks, ICommandBar commandBar)
         {
             Tracks = tracks;
             CommandBar = commandBar;
@@ -64,7 +64,7 @@ namespace Torshify.Client.Infrastructure.Events
         #endregion Properties
     }
 
-    public class TracksCommandBarEvent : CompositePresentationEvent<TracksCommandBar>
+    public class TracksCommandBarEvent : CompositePresentationEvent<TracksCommandBarModel>
     {
     }
 }

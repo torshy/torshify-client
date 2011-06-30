@@ -25,6 +25,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         private IPlaylist _playlist;
         private SubscriptionToken _trackMenuBarToken;
         private ICollectionView _tracks;
+        private SubscriptionToken _tracksMenuBarToken;
 
         #endregion Fields
 
@@ -93,6 +94,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
+            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
 
             if (Playlist != null && Tracks != null)
             {
@@ -111,6 +113,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
 
             Tracks = null;
 
@@ -163,6 +166,13 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         #endregion Methods

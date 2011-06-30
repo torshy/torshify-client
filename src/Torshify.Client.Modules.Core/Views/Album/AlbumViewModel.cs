@@ -1,3 +1,5 @@
+using System.Linq;
+
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -15,6 +17,7 @@ namespace Torshify.Client.Modules.Core.Views.Album
 
         private IAlbum _album;
         private SubscriptionToken _trackMenuBarToken;
+        private SubscriptionToken _tracksMenuBarToken;
 
         #endregion Fields
 
@@ -57,11 +60,13 @@ namespace Torshify.Client.Modules.Core.Views.Album
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
+            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
 
             Album = navigationContext.Tag as IAlbum;
         }
@@ -71,6 +76,13 @@ namespace Torshify.Client.Modules.Core.Views.Album
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         #endregion Methods
