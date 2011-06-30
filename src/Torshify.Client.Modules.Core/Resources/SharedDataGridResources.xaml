@@ -16,6 +16,25 @@
     </Style>
 
     <DataTemplate
+        x:Key="DataGrid_Track_TrackTemplate">
+        <TextBlock
+            Name="Tb"
+            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+            Text="{Binding Name}"
+            TextTrimming="CharacterEllipsis" />
+        <DataTemplate.Triggers>
+            <DataTrigger
+                Binding="{Binding IsAvailable}"
+                Value="False">
+                <Setter
+                    TargetName="Tb"
+                    Property="Foreground"
+                    Value="{DynamicResource DisabledControlTextBrush}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate
         x:Key="DataGrid_Track_ArtistTemplate">
         <TextBlock>
             <Hyperlink
@@ -33,7 +52,7 @@
         x:Key="DataGrid_Track_DurationTemplate">
         <TextBlock
             x:Name="_text"
-            Foreground="#FFCCCCCC"
+            Foreground="{DynamicResource DisabledContolTextBrush}"
             Text="{Binding Duration, Converter={StaticResource TimeSpanToTextConverter}}"
             TextAlignment="Right"
             Margin="0,0,4,0" />
@@ -53,7 +72,8 @@
         x:Key="DataGrid_Track_AlbumTemplate">
         <TextBlock>
             <Hyperlink
-                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                Name="Link"
+                IsEnabled="{Binding Album.IsAvailable}"
                 Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                 CommandParameter="{Binding Album}">
                 <TextBlock
@@ -61,6 +81,16 @@
                     TextTrimming="CharacterEllipsis" />
              </Hyperlink>
         </TextBlock>
+        <DataTemplate.Triggers>
+            <DataTrigger
+                Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                Value="True">
+                <Setter
+                    TargetName="Link"
+                    Property="Foreground"
+                    Value="Black" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
 </ResourceDictionary>

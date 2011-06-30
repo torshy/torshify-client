@@ -160,7 +160,7 @@ namespace Torshify.Client.Modules.Core
 
         private bool CanExecuteQueueTrack(ITrack track)
         {
-            return true;
+            return track != null && track.IsAvailable;
         }
 
         private void ExecuteQueueTrack(ITrack track)
@@ -170,7 +170,7 @@ namespace Torshify.Client.Modules.Core
 
         private bool CanExecutePlayTrack(ITrack track)
         {
-            return true;
+            return track != null && track.IsAvailable;
         }
 
         private void ExecutePlayTrack(ITrack track)
@@ -185,7 +185,12 @@ namespace Torshify.Client.Modules.Core
 
                 for (int i = index; i < playlistTrack.Playlist.Tracks.Count(); i++)
                 {
-                    tracks.Add(playlistTrack.Playlist.Tracks.ElementAt(i));
+                    IPlaylistTrack item = playlistTrack.Playlist.Tracks.ElementAt(i);
+                    
+                    if (item.IsAvailable)
+                    {
+                        tracks.Add(item);
+                    }
                 }
 
                 _player.Playlist.Set(tracks);

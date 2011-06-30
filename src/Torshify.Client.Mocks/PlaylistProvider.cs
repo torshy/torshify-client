@@ -151,6 +151,9 @@ namespace Torshify.Client.Mocks
                 .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
                 .Has(t => t.Album = GetAlbum())
                 .Has(t => t.Artists = GetArtists())
+                .WhereRandom(6)
+                .Has(t => ((Album) t.Album).IsAvailable = false)
+                .Has(t => t.IsAvailable = false)
                 .Build();
         }
 
@@ -163,6 +166,9 @@ namespace Torshify.Client.Mocks
                 .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
                 .Has(t => t.Album = album)
                 .Has(t => t.Artists = GetArtists())
+                .WhereRandom(6)
+                .Has(t => ((Album)t.Album).IsAvailable = false)
+                .Has(t => t.IsAvailable = false)
                 .Build();
         }
 
@@ -191,6 +197,7 @@ namespace Torshify.Client.Mocks
                 .With(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
                 .With(a => a.Artist = GetArtist())
                 .With(a => a.Info = GetAlbumInformation(a))
+                .With(a => a.IsAvailable = true)
                 .Build();
         }
 

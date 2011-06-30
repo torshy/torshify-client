@@ -36,14 +36,13 @@
                 <ContextMenu />
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Track"
-                    Binding="{Binding Name}"
-                    Width="200" />
+                    Width="200"
+                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}" />
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
-                    SortMemberPath="Duration"
                     HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
                     CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
             </DataGrid.Columns>

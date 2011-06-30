@@ -34,10 +34,10 @@
                 <ContextMenu />
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Track"
-                    Binding="{Binding Name}"
-                    Width="200" />
+                    Width="200" 
+                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}"/>
                 <DataGridTemplateColumn
                     Header="Artist"
                     Width="175"

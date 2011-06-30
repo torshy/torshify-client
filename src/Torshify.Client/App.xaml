@@ -26,7 +26,11 @@
             <SolidColorBrush
                 x:Key="ControlTextBrush"
                 Color="White" />
-
+            
+            <SolidColorBrush
+                x:Key="DisabledControlTextBrush"
+                Color="#FFAAAAAA" />
+            
             <LinearGradientBrush
                 x:Key="TextBox_Border"
                 EndPoint="0,20"

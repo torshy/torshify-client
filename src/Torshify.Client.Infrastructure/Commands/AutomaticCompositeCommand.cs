@@ -16,11 +16,13 @@ namespace Torshify.Client.Infrastructure.Commands
     /// </remarks>
     public sealed class AutomaticCompositeCommand : ICommand
     {
+        private List<ICommand> _subcommands;
         /// <summary>
         /// Initializes a new instance of the <see cref="AutomaticCompositeCommand"/> class with no subcommands.
         /// </summary>
         public AutomaticCompositeCommand()
         {
+            _subcommands = new List<ICommand>();
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace Torshify.Client.Infrastructure.Commands
         /// <param name="subcommands">The subcommands used to initialize <see cref="Subcommands"/>.</param>
         public AutomaticCompositeCommand(IEnumerable<ICommand> subcommands)
         {
-            this.Subcommands = subcommands;
+            _subcommands = new List<ICommand>(subcommands);
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Torshify.Client.Infrastructure.Commands
         /// <para>A composite command cannot be executed if <see cref="Subcommands"/> contains no commands or includes a command that cannot be invoked.</para>
         /// <para>Executing a composite command executes its subcommands.</para>
         /// </remarks>
-        public IEnumerable<ICommand> Subcommands { get; set; }
+        public IEnumerable<ICommand> Subcommands { get { return _subcommands; } }
 
         /// <summary>
         /// Determines if this command can execute. See <see cref="Subcommands"/>.
@@ -81,6 +83,11 @@ namespace Torshify.Client.Infrastructure.Commands
             {
                 command.Execute(parameter);
             }
+        }
+
+        public void RegisterCommand(ICommand command)
+        {
+            _subcommands.Add(command);
         }
     }
 }
