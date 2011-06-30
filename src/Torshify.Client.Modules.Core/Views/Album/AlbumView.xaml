@@ -82,6 +82,22 @@
                         <DataGrid.ContextMenu>
                             <ContextMenu />
                         </DataGrid.ContextMenu>
+                        <DataGrid.Style>
+                            <Style
+                                TargetType="{x:Type DataGrid}"
+                                BasedOn="{StaticResource {x:Type DataGrid}}">
+                                <Setter
+                                    Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate
+                                            TargetType="{x:Type DataGrid}">
+                                            <ItemsPresenter
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.Style>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn
                                 Header="Index"
@@ -112,7 +128,8 @@
                 Grid.ColumnSpan="2"
                 Grid.Row="1"
                 Background="Black"
-                CornerRadius="4">
+                CornerRadius="4"
+                IsEnabled="False">
                 <DockPanel
                     LastChildFill="True">
                     <TextBlock

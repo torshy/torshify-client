@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
 
 using Microsoft.Practices.Prism.Events;
 
@@ -59,58 +58,6 @@ namespace Torshify.Client.Modules.Core.Views.Album
                     ItemsSource = commandbar.ChildMenuItems
                 };
             }
-        }
-
-        #endregion Methods
-    }
-
-    public class NavigateToStringBehavior : Behavior<WebBrowser>
-    {
-        #region Fields
-
-        public static readonly DependencyProperty NavigateToHtmlStringProperty = 
-            DependencyProperty.Register("NavigateToHtmlString", typeof(string), typeof(NavigateToStringBehavior),
-                new FrameworkPropertyMetadata((string)string.Empty,
-                    new PropertyChangedCallback(OnNavigateToHtmlStringChanged)));
-
-        #endregion Fields
-
-        #region Properties
-
-        public string NavigateToHtmlString
-        {
-            get { return (string)GetValue(NavigateToHtmlStringProperty); }
-            set { SetValue(NavigateToHtmlStringProperty, value); }
-        }
-
-        #endregion Properties
-
-        #region Methods
-
-        protected override void OnAttached()
-        {
-            base.OnAttached();
-
-            if (AssociatedObject != null && !string.IsNullOrEmpty(NavigateToHtmlString))
-            {
-                AssociatedObject.NavigateToString(NavigateToHtmlString);
-            }
-        }
-
-        protected virtual void OnNavigateToHtmlStringChanged(string oldNavigateToHtmlString, string newNavigateToHtmlString)
-        {
-            if (AssociatedObject != null && !string.IsNullOrEmpty(newNavigateToHtmlString))
-            {
-                AssociatedObject.NavigateToString(newNavigateToHtmlString);
-            }
-        }
-
-        private static void OnNavigateToHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            NavigateToStringBehavior target = (NavigateToStringBehavior)d;
-            string oldNavigateToHtmlString = (string)e.OldValue;
-            string newNavigateToHtmlString = target.NavigateToHtmlString;
-            target.OnNavigateToHtmlStringChanged(oldNavigateToHtmlString, newNavigateToHtmlString);
         }
 
         #endregion Methods
