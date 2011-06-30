@@ -11,33 +11,45 @@ namespace Torshify.Client.Mocks
 
         public IArtist Artist
         {
-            get; set;
+            get;
+            set;
         }
 
         public bool IsAvailable
         {
-            get; set;
+            get;
+            set;
         }
 
         public string Name
         {
-            get; set;
+            get;
+            set;
         }
 
         public int Year
         {
-            get; set;
+            get;
+            set;
         }
 
         public BitmapSource Cover
         {
-            get; 
-            set;
+            get
+            {
+                var coverArtSource = new BitmapImage();
+                coverArtSource.BeginInit();
+                coverArtSource.CacheOption = BitmapCacheOption.None;
+                coverArtSource.UriSource = new Uri("pack://application:,,,/Torshify.Client.Mocks;component/UnknownCoverArt.png");
+                coverArtSource.EndInit();
+
+                return coverArtSource;
+            }
         }
 
         public IEnumerable<ITrack> Tracks
         {
-            get; 
+            get;
             set;
         }
 

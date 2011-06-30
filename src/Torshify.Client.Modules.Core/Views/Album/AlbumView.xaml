@@ -4,15 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
     xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <Converters:TimeSpanToTextConverter
-            x:Key="TimeSpanToTextConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="..\..\Resources\SharedDataGridResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <DataGrid
@@ -22,8 +25,10 @@
             CanUserDeleteRows="False"
             AutoGenerateColumns="False"
             ContextMenuOpening="DataGridContextMenuOpening"
+            EnableRowVirtualization="True"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            ColumnHeaderHeight="0">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:DataGridTriStateSortingBehavior />
             </Interactivity:Interaction.Behaviors>
@@ -38,26 +43,9 @@
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
-                    SortMemberPath="Duration">
-                    <DataGridTemplateColumn.HeaderStyle>
-                        <Style
-                            TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
-                            <Setter
-                                Property="HorizontalContentAlignment"
-                                Value="Right" />
-                        </Style>
-                    </DataGridTemplateColumn.HeaderStyle>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Foreground="#FFCCCCCC"
-                                Text="{Binding Duration, Converter={StaticResource TimeSpanToTextConverter}}"
-                                TextAlignment="Right"
-                                Margin="0,0,4,0" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    SortMemberPath="Duration"
+                    HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
+                    CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

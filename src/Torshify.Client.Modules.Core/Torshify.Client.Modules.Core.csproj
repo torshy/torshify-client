@@ -217,6 +217,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\SharedDataGridResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Album\AlbumView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
