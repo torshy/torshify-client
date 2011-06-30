@@ -190,8 +190,24 @@ namespace Torshify.Client.Mocks
                 .With(a => a.Year = _random.Next(1990, 2011))
                 .With(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
                 .With(a => a.Artist = GetArtist())
-                .With(a => a.Tracks = GetTracks(a))
+                .With(a => a.Info = GetAlbumInformation(a))
                 .Build();
+        }
+
+        private IAlbumInformation GetAlbumInformation(IAlbum album)
+        {
+            return Builder<AlbumInformation>
+                .CreateNew()
+                .With(i => i.Review = "Album review here")
+                .With(i => i.Tracks = GetTracks(album))
+                .With(i => i.Copyrights = GetCopyrights())
+                .Build();
+        }
+
+        private IEnumerable<string> GetCopyrights()
+        {
+            yield return "2011 Torshify Records";
+            yield return "2010 Mock Records";
         }
 
         #endregion Private Methods

@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Interfaces;
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
@@ -21,9 +21,9 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly Dispatcher _dispatcher;
-
-        private Lazy<ITorshifyArtist> _artist;
-
+        
+        private Lazy<Artist> _artist;
+        
         #endregion Fields
 
         #region Constructors
@@ -33,7 +33,7 @@ namespace Torshify.Client.Spotify.Services
             _dispatcher = dispatcher;
             InternalAlbum = album;
 
-            _artist = new Lazy<ITorshifyArtist>(() => new Artist(InternalAlbum.Artist));
+            _artist = new Lazy<Artist>(() => new Artist(InternalAlbum.Artist));
         }
 
         #endregion Constructors
@@ -74,6 +74,26 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
+        public IAlbumInformation Info
+        {
+            get
+            {
+                var albumInfo = MemoryCache.Default.Get("Torshify_AlbumInfo_" + GetHashCode()) as Lazy<AlbumInformation>;
+
+                if (albumInfo == null)
+                {
+                    albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(InternalAlbum, _dispatcher));
+
+                    MemoryCache.Default.Add(
+                        "Torshify_AlbumInfo_" + GetHashCode(),
+                        albumInfo,
+                        new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(45) });
+                }
+
+                return albumInfo.Value;
+            }
+        }
+
         public IAlbum InternalAlbum
         {
             get;
@@ -90,27 +110,6 @@ namespace Torshify.Client.Spotify.Services
             get { return InternalAlbum.Name; }
         }
 
-        public IEnumerable<ITorshifyTrack> Tracks
-        {
-            get
-            {
-                var tracksCache =
-                    MemoryCache.Default.Get("Torshify_AlbumTracks_" + GetHashCode()) as Lazy<IEnumerable<ITorshifyTrack>>;
-
-                if (tracksCache == null)
-                {
-                    tracksCache = new Lazy<IEnumerable<ITorshifyTrack>>(CreateTrackList);
-
-                    MemoryCache.Default.Add(
-                        "Torshify_AlbumTracks_" + GetHashCode(), 
-                        tracksCache,
-                        new CacheItemPolicy {SlidingExpiration = TimeSpan.FromSeconds(45)});
-                }
-
-                return tracksCache.Value;
-            }
-        }
-
         public int Year
         {
             get { return InternalAlbum.Year; }
@@ -119,31 +118,6 @@ namespace Torshify.Client.Spotify.Services
         #endregion Properties
 
         #region Methods
-
-        private void AlbumBrowseCompleted(object sender, UserDataEventArgs e)
-        {
-            var trackList = (ObservableCollection<Track>) e.Tag;
-            var browse = (IAlbumBrowse) sender;
-
-            using(browse)
-            {
-                foreach (var spotifyTrack in browse.Tracks)
-                {
-                    Track track = new Track(spotifyTrack, _dispatcher);
-                    _dispatcher.BeginInvoke((Action<Track>) trackList.Add, DispatcherPriority.Background, track);
-                }
-            }
-
-            browse.Completed -= AlbumBrowseCompleted;
-        }
-
-        private IEnumerable<ITorshifyTrack> CreateTrackList()
-        {
-            var tracks = new ObservableCollection<Track>();
-            var browse = InternalAlbum.Browse(tracks);
-            browse.Completed += AlbumBrowseCompleted;
-            return tracks;
-        }
 
         private void InitializeCover(IImage image)
         {

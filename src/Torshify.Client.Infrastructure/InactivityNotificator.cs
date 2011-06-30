@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Timers;
 using System.Windows.Input;
-using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.Events;
+
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -16,7 +18,7 @@ namespace Torshify.Client.Infrastructure
         private bool _isSystemInactive;
         private bool _isApplicationInactive;
         private DateTime _lastAppicationInputActivity;
-        private DispatcherTimer _timer;
+        private Timer _timer;
 
         #endregion Fields
 
@@ -33,9 +35,9 @@ namespace Torshify.Client.Infrastructure
 
         public void Start()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(150);
-            _timer.Tick += OnInactivityCheckTick;
+            _timer = new Timer();
+            _timer.Interval = 200;
+            _timer.Elapsed += OnInactivityCheckTick;
             _timer.Start();
             _lastAppicationInputActivity = DateTime.Now;
             InputManager.Current.PostProcessInput += OnPreProcess;
@@ -43,7 +45,7 @@ namespace Torshify.Client.Infrastructure
 
         public void Stop()
         {
-            _timer.Tick -= OnInactivityCheckTick;
+            _timer.Elapsed -= OnInactivityCheckTick;
             _timer.Stop();
 
             InputManager.Current.PostProcessInput -= OnPreProcess;

@@ -47,9 +47,9 @@ namespace Torshify.Client.Mocks
             }
         }
 
-        public IEnumerable<ITrack> Tracks
+        public IAlbumInformation Info
         {
-            get;
+            get; 
             set;
         }
 

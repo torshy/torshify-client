@@ -80,6 +80,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Album.cs" />
+    <Compile Include="Services\AlbumInformation.cs" />
     <Compile Include="Services\Artist.cs" />
     <Compile Include="Services\Player.cs" />
     <Compile Include="Services\Playlist.cs" />

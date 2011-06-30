@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Album.cs" />
+    <Compile Include="AlbumInformation.cs" />
     <Compile Include="Artist.cs" />
     <Compile Include="MockModule.cs" />
     <Compile Include="Player.cs" />

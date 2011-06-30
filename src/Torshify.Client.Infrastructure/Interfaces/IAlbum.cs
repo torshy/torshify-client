@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 namespace Torshify.Client.Infrastructure.Interfaces
@@ -33,7 +32,7 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        IEnumerable<ITrack> Tracks
+        IAlbumInformation Info
         {
             get;
         }

@@ -19,7 +19,7 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid
-            ItemsSource="{Binding Album.Tracks}"
+            ItemsSource="{Binding Album.Info.Tracks}"
             IsReadOnly="True"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
