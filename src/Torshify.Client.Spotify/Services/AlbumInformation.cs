@@ -22,6 +22,7 @@ namespace Torshify.Client.Spotify.Services
         
         private bool _isLoading;
         private string _review;
+        private IAlbumBrowse _browse;
 
         #endregion Fields
 
@@ -33,9 +34,9 @@ namespace Torshify.Client.Spotify.Services
             _copyrights = new ObservableCollection<string>();
             _dispatcher = dispatcher;
             _album = album;
-            var albumBrowse = _album.Browse();
-            _isLoading = !albumBrowse.IsComplete;
-            albumBrowse.Completed += AlbumBrowseCompleted;
+            _browse = _album.Browse();
+            _isLoading = !_browse.IsComplete;
+            _browse.Completed += AlbumBrowseCompleted;
         }
 
         #endregion Constructors
@@ -95,23 +96,26 @@ namespace Torshify.Client.Spotify.Services
         {
             var browse = (IAlbumBrowse)sender;
 
+            Review = browse.Review;
+
+            _dispatcher.BeginInvoke(new Action<IAlbumBrowse>(LoadDataFromBrowse), DispatcherPriority.Background, browse);
+            browse.Completed -= AlbumBrowseCompleted;
+        }
+
+        private void LoadDataFromBrowse(IAlbumBrowse browse)
+        {
             using (browse)
             {
-                Review = browse.Review;
-
                 foreach (var copyright in browse.Copyrights)
                 {
-                    _dispatcher.BeginInvoke((Action<string>) _copyrights.Add, DispatcherPriority.Background, copyright);
+                    _copyrights.Add(copyright);
                 }
 
                 foreach (var spotifyTrack in browse.Tracks)
                 {
-                    Track track = new Track(spotifyTrack, _dispatcher);
-                    _dispatcher.BeginInvoke((Action<Track>)_tracks.Add, DispatcherPriority.Background, track);
+                    _tracks.Add(new Track(spotifyTrack, _dispatcher));
                 }
             }
-
-            browse.Completed -= AlbumBrowseCompleted;
 
             IsLoading = false;
         }

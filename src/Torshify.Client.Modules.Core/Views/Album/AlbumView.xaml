@@ -52,13 +52,23 @@
             <DockPanel
                 Grid.Column="1"
                 LastChildFill="True">
-                <TextBlock
+                <StackPanel
                     DockPanel.Dock="Top"
-                    Text="{Binding Album.Name}"
-                    TextTrimming="CharacterEllipsis"
-                    FontSize="30"
-                    FontWeight="Light"
-                    Foreground="{DynamicResource ControlTextBrush}" />
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Text="{Binding Album.Name}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="24"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource ControlTextBrush}" />
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="{Binding Album.Year, StringFormat={}({0})}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="24"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource DisabledControlTextBrush}" />
+                </StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition

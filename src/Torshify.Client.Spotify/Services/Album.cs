@@ -19,8 +19,8 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly Dispatcher _dispatcher;
-
         private Lazy<Artist> _artist;
+        private object _lockObject = new object();
 
         #endregion Fields
 
@@ -78,14 +78,17 @@ namespace Torshify.Client.Spotify.Services
             {
                 var albumInfo = MemoryCache.Default.Get("Torshify_AlbumInfo_" + InternalAlbum.GetHashCode()) as Lazy<AlbumInformation>;
 
-                if (albumInfo == null)
+                lock (_lockObject)
                 {
-                    albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(InternalAlbum, _dispatcher));
+                    if (albumInfo == null)
+                    {
+                        albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(InternalAlbum, _dispatcher));
 
-                    MemoryCache.Default.Add(
-                        "Torshify_AlbumInfo_" + InternalAlbum.GetHashCode(),
-                        albumInfo,
-                        new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(45) });
+                        MemoryCache.Default.Add(
+                            "Torshify_AlbumInfo_" + InternalAlbum.GetHashCode(),
+                            albumInfo,
+                            new CacheItemPolicy {SlidingExpiration = TimeSpan.FromSeconds(45)});
+                    }
                 }
 
                 return albumInfo.Value;

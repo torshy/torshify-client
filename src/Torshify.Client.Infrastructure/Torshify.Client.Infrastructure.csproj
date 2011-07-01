@@ -135,6 +135,7 @@
     <Compile Include="Controls\Standard\WindowExtensions.cs" />
     <Compile Include="Controls\SystemCommands.cs" />
     <Compile Include="Controls\SystemParameters2.cs" />
+    <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
     <Compile Include="Controls\WindowChromeWorker.cs" />

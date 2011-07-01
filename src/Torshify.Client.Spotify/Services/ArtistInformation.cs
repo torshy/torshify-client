@@ -28,6 +28,7 @@ namespace Torshify.Client.Spotify.Services
         private ObservableCollection<Track> _tracks;
         private ObservableCollection<Album> _albums;
         private ObservableCollection<Artist> _similarArtists;
+        private IArtistBrowse _browse;
 
         #endregion Fields
 
@@ -41,9 +42,9 @@ namespace Torshify.Client.Spotify.Services
             _similarArtists = new ObservableCollection<Artist>();
             _dispatcher = dispatcher;
             _artist = artist;
-            var browse = _artist.Browse();
-            _isLoading = !browse.IsComplete;
-            browse.Completed += ArtistBrowseCompleted;
+            _browse = _artist.Browse();
+            _isLoading = !_browse.IsComplete;
+            _browse.Completed += ArtistBrowseCompleted;
         }
 
         #endregion Constructors

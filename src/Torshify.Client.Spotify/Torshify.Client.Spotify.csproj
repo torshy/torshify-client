@@ -70,7 +70,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Torshify">
+    <Reference Include="Torshify, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />

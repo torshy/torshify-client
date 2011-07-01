@@ -14,7 +14,7 @@ namespace Torshify.Client.Mocks
         private IList<Playlist> _playlists;
         private Random _random;
 
-        private string _albumReview =
+        private string _latinText =
             "Eu sed putant vituperata efficiantur, prompta repudiandae at per. Novum integre equidem vix et, sea an quidam noster, eum nulla propriae ad. Justo mollis volutpat ius at, cum nihil tacimates at. Modo cibo decore sit et.";
 
         private string[] _playlistNames = {
@@ -197,6 +197,21 @@ namespace Torshify.Client.Mocks
         {
             return Builder<ArtistInformation>
                 .CreateNew()
+                .With(i => i.Albums = GetAlbums(artist))
+                .With(i => i.Biography = _latinText)
+                .Build();
+        }
+
+        private IEnumerable<IAlbum> GetAlbums(IArtist artist)
+        {
+            return Builder<Album>
+                .CreateListOfSize(_random.Next(3, 5))
+                .WhereAll()
+                .Has(a => a.Year = _random.Next(1990, 2011))
+                .Has(a => a.Name = _albumNames[_random.Next(0, _albumNames.Length - 1)])
+                .Has(a => a.Artist = artist)
+                .Has(a => a.Info = GetAlbumInformation(a))
+                .Has(a => a.IsAvailable = true)
                 .Build();
         }
 
@@ -216,7 +231,7 @@ namespace Torshify.Client.Mocks
         {
             return Builder<AlbumInformation>
                 .CreateNew()
-                .With(i => i.Review = _albumReview)
+                .With(i => i.Review = _latinText)
                 .With(i => i.Tracks = GetTracks(album))
                 .With(i => i.Copyrights = GetCopyrights())
                 .Build();

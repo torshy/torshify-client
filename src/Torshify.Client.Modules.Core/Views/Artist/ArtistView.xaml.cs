@@ -1,4 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Torshify.Client.Infrastructure.Controls;
 
 namespace Torshify.Client.Modules.Core.Views.Artist
 {
@@ -23,5 +27,37 @@ namespace Torshify.Client.Modules.Core.Views.Artist
         }
 
         #endregion Properties
+
+        private void DataGridContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            
+        }
+
+        private void DataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _albumsListControl.Items.Count; i++)
+            {
+                var dgContainer = _albumsListControl.ItemContainerGenerator.ContainerFromIndex(i);
+
+                if (dgContainer != null)
+                {
+                    var dg = dgContainer.FindVisualDescendantByType<DataGrid>();
+
+                    if (dg != e.Source)
+                    {
+                        if (Keyboard.Modifiers != ModifierKeys.Control)
+                        {
+                            dg.SelectedItem = null;
+                        }
+                    }
+                }
+            }
+            
+        }
     }
 }
