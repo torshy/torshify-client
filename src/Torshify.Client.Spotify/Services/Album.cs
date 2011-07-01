@@ -31,7 +31,7 @@ namespace Torshify.Client.Spotify.Services
             _dispatcher = dispatcher;
             InternalAlbum = album;
 
-            _artist = new Lazy<Artist>(() => new Artist(InternalAlbum.Artist));
+            _artist = new Lazy<Artist>(() => new Artist(InternalAlbum.Artist, dispatcher));
         }
 
         #endregion Constructors
@@ -76,14 +76,14 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                var albumInfo = MemoryCache.Default.Get("Torshify_AlbumInfo_" + GetHashCode()) as Lazy<AlbumInformation>;
+                var albumInfo = MemoryCache.Default.Get("Torshify_AlbumInfo_" + InternalAlbum.GetHashCode()) as Lazy<AlbumInformation>;
 
                 if (albumInfo == null)
                 {
                     albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(InternalAlbum, _dispatcher));
 
                     MemoryCache.Default.Add(
-                        "Torshify_AlbumInfo_" + GetHashCode(),
+                        "Torshify_AlbumInfo_" + InternalAlbum.GetHashCode(),
                         albumInfo,
                         new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(45) });
                 }

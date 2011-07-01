@@ -32,7 +32,7 @@ namespace Torshify.Client.Spotify.Services
             InternalTrack = track;
 
             _album = new Lazy<Album>(() => new Album(InternalTrack.Album, dispatcher));
-            _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist)));
+            _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist, dispatcher)));
         }
 
         #endregion Constructors

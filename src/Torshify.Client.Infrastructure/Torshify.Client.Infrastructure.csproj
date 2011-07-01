@@ -149,6 +149,7 @@
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
     <Compile Include="Interfaces\IAlbumInformation.cs" />
+    <Compile Include="Interfaces\IArtistInformation.cs" />
     <Compile Include="Interfaces\IBackdropService.cs" />
     <Compile Include="Interfaces\INavigationItem.cs" />
     <Compile Include="Interfaces\INavigationItemProvider.cs" />

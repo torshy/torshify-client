@@ -82,6 +82,7 @@
     <Compile Include="Services\Album.cs" />
     <Compile Include="Services\AlbumInformation.cs" />
     <Compile Include="Services\Artist.cs" />
+    <Compile Include="Services\ArtistInformation.cs" />
     <Compile Include="Services\Player.cs" />
     <Compile Include="Services\Playlist.cs" />
     <Compile Include="Services\PlaylistProvider.cs" />

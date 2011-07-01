@@ -9,6 +9,11 @@
             get;
         }
 
+        IArtistInformation Info
+        {
+            get;
+        }
+
         #endregion Properties
     }
 }

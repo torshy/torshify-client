@@ -5,5 +5,7 @@ namespace Torshify.Client.Mocks
     public class Artist : IArtist
     {
         public string Name { get; set; }
+
+        public IArtistInformation Info { get; set; }
     }
 }

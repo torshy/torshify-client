@@ -16,11 +16,11 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly IAlbum _album;
-        private readonly IAlbumBrowse _albumBrowse;
         private readonly ObservableCollection<string> _copyrights;
         private readonly Dispatcher _dispatcher;
         private readonly ObservableCollection<Track> _tracks;
-
+        
+        private bool _isLoading;
         private string _review;
 
         #endregion Fields
@@ -33,8 +33,9 @@ namespace Torshify.Client.Spotify.Services
             _copyrights = new ObservableCollection<string>();
             _dispatcher = dispatcher;
             _album = album;
-            _albumBrowse = _album.Browse();
-            _albumBrowse.Completed += AlbumBrowseCompleted;
+            var albumBrowse = _album.Browse();
+            _isLoading = !albumBrowse.IsComplete;
+            albumBrowse.Completed += AlbumBrowseCompleted;
         }
 
         #endregion Constructors
@@ -69,7 +70,12 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                return !_albumBrowse.IsComplete;
+                return _isLoading;
+            }
+            private set
+            {
+                _isLoading = value;
+                RaisePropertyChanged("IsLoading");
             }
         }
 
@@ -107,7 +113,7 @@ namespace Torshify.Client.Spotify.Services
 
             browse.Completed -= AlbumBrowseCompleted;
 
-            RaisePropertyChanged("IsLoading");
+            IsLoading = false;
         }
 
         #endregion Methods
