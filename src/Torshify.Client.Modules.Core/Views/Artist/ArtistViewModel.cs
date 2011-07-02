@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 
-using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 
-using Torshify.Client.Infrastructure.Collections;
-using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Modules.Core.Views.Artist.Tabs;
 
 namespace Torshify.Client.Modules.Core.Views.Artist
 {
@@ -18,52 +18,31 @@ namespace Torshify.Client.Modules.Core.Views.Artist
     {
         #region Fields
 
-        private SortedObservableCollection<IAlbum> _albums;
-        private ICollectionView _albumsIcv;
-        private IArtist _artist;
-        private IEventAggregator _eventAggregator;
-        private SubscriptionToken _tracksMenuBarToken;
-        private SubscriptionToken _trackMenuBarToken;
+        private ObservableCollection<ITab<IArtist>> _tabs;
+        private ICollectionView _tabsIcv;
 
         #endregion Fields
 
         #region Constructors
 
-        public ArtistViewModel(IEventAggregator eventAggregator)
+        public ArtistViewModel()
         {
-            _eventAggregator = eventAggregator;
+            _tabs = new ObservableCollection<ITab<IArtist>>();
+            _tabs.Add(ServiceLocator.Current.TryResolve<OverviewTabItemView>());
+            _tabs.Add(ServiceLocator.Current.TryResolve<BiographyTabItemView>());
+
+            _tabsIcv = new ListCollectionView(_tabs);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public ICollectionView Albums
+        public ICollectionView Tabs
         {
             get
             {
-                return _albumsIcv;
-            }
-            private set
-            {
-                _albumsIcv = value;
-                RaisePropertyChanged("Albums");
-            }
-        }
-
-        public IArtist Artist
-        {
-            get
-            {
-                return _artist;
-            }
-            set
-            {
-                if (_artist != value)
-                {
-                    _artist = value;
-                    RaisePropertyChanged("Artist");
-                }
+                return _tabsIcv;
             }
         }
 
@@ -78,125 +57,25 @@ namespace Torshify.Client.Modules.Core.Views.Artist
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
-            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
-
-            Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
-            Artist = null;
-            Albums = null;
-            _albums.Clear();
+            foreach (var tabItem in _tabs)
+            {
+                tabItem.ViewModel.Deinitialize(navigationContext);
+            }
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
-            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+            var artist = navigationContext.Tag as IArtist;
 
-            Artist = navigationContext.Tag as IArtist;
-
-            if (Artist != null)
+            foreach (var tabItem in _tabs)
             {
-                if (Artist.Info.IsLoading)
-                {
-                    Artist.Info.FinishedLoading += OnInfoFinishedLoading;
-                }
-                else
-                {
-                    PrepareData();
-                }
+                tabItem.ViewModel.SetModel(artist);
+                tabItem.ViewModel.Initialize(navigationContext);
             }
-        }
 
-        private void OnInfoFinishedLoading(object sender, EventArgs e)
-        {
-            PrepareData();
-        }
-
-        private void PrepareData()
-        {
-            _albums = new SortedObservableCollection<IAlbum>(new AlbumComparer());
-
-            Albums = CollectionViewSource.GetDefaultView(_albums);
-
-            lock (Artist.Info.Albums.SyncRoot)
-            {
-                foreach (var album in Artist.Info.Albums)
-                {
-                    if (album.IsAvailable)
-                    {
-                        _albums.Add(album);
-                    }
-                }
-            }
-        }
-
-        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
-        {
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
-        }
-
-        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
-        {
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+            Tabs.MoveCurrentToFirst();
         }
 
         #endregion Methods
-
-        #region Nested Types
-
-        private class AlbumComparer : IComparer<IAlbum>
-        {
-            #region Methods
-
-            public int Compare(IAlbum x, IAlbum y)
-            {
-                var xType = x.Type;
-                var yType = y.Type;
-
-                if (xType == yType)
-                {
-                    //return x.Year.CompareTo(y.Year) * -1;
-                    return 0;
-                }
-
-                if (xType == AlbumType.Album)
-                {
-                    if (yType != AlbumType.Album)
-                    {
-                        return -1;
-                    }
-                }
-
-                if (xType == AlbumType.Compilation)
-                {
-                    if (yType == AlbumType.Album || yType == AlbumType.Single)
-                    {
-                        return 1;
-                    }
-
-                    return -1;
-                }
-
-                if (xType == AlbumType.Single)
-                {
-                    if (yType != AlbumType.Album)
-                    {
-                        return -1;
-                    }
-
-                    return 1;
-                }
-
-                return 0;
-            }
-
-            #endregion Methods
-        }
-
-        #endregion Nested Types
     }
 }

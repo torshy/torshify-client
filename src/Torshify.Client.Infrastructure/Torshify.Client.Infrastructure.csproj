@@ -173,6 +173,8 @@
     <Compile Include="Interfaces\INotifyEnumerable.cs" />
     <Compile Include="Interfaces\ISearch.cs" />
     <Compile Include="Interfaces\ISearchProvider.cs" />
+    <Compile Include="Interfaces\ITab.cs" />
+    <Compile Include="Interfaces\ITabViewModel.cs" />
     <Compile Include="Models\PlayerQueueItem.cs" />
     <Compile Include="Models\CommandModel.cs" />
     <Compile Include="Interfaces\IAlbum.cs" />

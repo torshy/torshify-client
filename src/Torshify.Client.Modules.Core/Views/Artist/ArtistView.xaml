@@ -4,167 +4,26 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
-    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-                    Source="..\..\Resources\SharedDataGridResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <TextBlock
-            Grid.ColumnSpan="2"
-            Text="{Binding Artist.Name}"
-            TextTrimming="CharacterEllipsis"
-            FontSize="16"
-            FontWeight="Light"
-            Foreground="{DynamicResource ControlTextBrush}"
-            Margin="8,0,0,2" />
-
-        <TreeView
-            Grid.Row="1"
-            x:Name="_albumsListControl"
-            ItemsSource="{Binding Albums}"
-            BorderThickness="0"
-            Background="{x:Null}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            ScrollViewer.CanContentScroll="False">
-            <TreeView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </TreeView.ItemsPanel>
-            <TreeView.ItemContainerStyle>
-                <Style
-                    TargetType="{x:Type TreeViewItem}">
-                    <Setter
-                        Property="IsExpanded"
-                        Value="True" />
-                    <Setter
-                        Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate
-                                TargetType="{x:Type TreeViewItem}">
-                                <ContentPresenter
-                                    ContentSource="Header" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.ItemTemplate>
-                <DataTemplate>
-                    <Grid
-                        Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="140" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <DockPanel
-                            Grid.Column="0">
-                            <Border
-                                Margin="8"
-                                Padding="4"
-                                Background="{DynamicResource ControlTextBrush}"
-                                VerticalAlignment="Top">
-                                <ContentControl
-                                    Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
-                                    <ContentControl.ContentTemplate>
-                                        <DataTemplate>
-                                            <Controls:LayeredPanel
-                                                Width="125"
-                                                Height="125">
-                                                <Image
-                                                    Source="{Binding Bitmap}" />
-                                            </Controls:LayeredPanel>
-                                        </DataTemplate>
-                                    </ContentControl.ContentTemplate>
-                                </ContentControl>
-                            </Border>
-                        </DockPanel>
-                        <DockPanel
-                            Grid.Column="1"
-                            LastChildFill="True">
-                            <StackPanel
-                                DockPanel.Dock="Top"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Text="{Binding Name}"
-                                    TextTrimming="CharacterEllipsis"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="{DynamicResource ControlTextBrush}" />
-                                <TextBlock
-                                    Margin="4,0,0,0"
-                                    Text="{Binding Year, StringFormat={}({0})}"
-                                    TextTrimming="CharacterEllipsis"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="{DynamicResource DisabledControlTextBrush}" />
-                            </StackPanel>
-
-                            <DataGrid
-                                Style="{DynamicResource DataGrid_MinimalStyle}"
-                                ItemsSource="{Binding Info.Tracks, IsAsync=True}"
-                                IsReadOnly="True"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                AutoGenerateColumns="False"
-                                ContextMenuOpening="DataGridContextMenuOpening"
-                                SelectionChanged="DataGridSelectionChanged"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                HeadersVisibility="None">
-                                <Interactivity:Interaction.Behaviors>
-                                    <Behaviors:DataGridTriStateSortingBehavior />
-                                    <Behaviors:IgnoreMouseWheelBehavior />
-                                </Interactivity:Interaction.Behaviors>
-                                <DataGrid.ContextMenu>
-                                    <ContextMenu />
-                                </DataGrid.ContextMenu>
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn
-                                        Header="Index"
-                                        Width="Auto"
-                                        CellTemplate="{StaticResource DataGrid_Track_TrackIndexTemplate}" />
-                                    <DataGridTemplateColumn
-                                        Header="Track"
-                                        Width="400"
-                                        CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}" />
-                                    <DataGridTemplateColumn
-                                        Header="Time"
-                                        Width="75"
-                                        HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
-                                        CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DockPanel>
-                    </Grid>
-                </DataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-
-        <Controls:SprocketControl
-            Grid.RowSpan="2"
-            Visibility="{Binding Artist.Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
-            IsBusy="{Binding Artist.Info.IsLoading}"
-            Width="48"
-            Height="48"
-            Interval="70" />
-
-    </Grid>
+    <TabControl
+        ItemsSource="{Binding Tabs}"
+        IsSynchronizedWithCurrentItem="True">
+        <TabControl.ItemContainerStyle>
+            <Style
+                TargetType="{x:Type TabItem}"
+                BasedOn="{StaticResource {x:Type TabItem}}">
+                <Setter
+                    Property="Header"
+                    Value="{Binding ViewModel.Header}" />
+                <Setter
+                    Property="Visibility"
+                    Value="{Binding ViewModel.Visibility}" />
+                <Setter
+                    Property="Content"
+                    Value="{Binding}" />
+            </Style>
+        </TabControl.ItemContainerStyle>
+    </TabControl>
 </UserControl>

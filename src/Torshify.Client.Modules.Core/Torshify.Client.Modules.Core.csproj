@@ -141,6 +141,14 @@
       <DependentUpon>ArtistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Artist\ArtistViewModel.cs" />
+    <Compile Include="Views\Artist\Tabs\BiographyTabItemView.xaml.cs">
+      <DependentUpon>BiographyTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Artist\Tabs\BiographyTabItemViewModel.cs" />
+    <Compile Include="Views\Artist\Tabs\OverviewTabItemView.xaml.cs">
+      <DependentUpon>OverviewTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Artist\Tabs\OverviewTabItemViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -231,6 +239,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Artist\ArtistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Artist\Tabs\BiographyTabItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Artist\Tabs\OverviewTabItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

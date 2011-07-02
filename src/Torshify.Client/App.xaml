@@ -6,6 +6,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Client;component/Themes/TabControl.xaml" />
+                <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/Button.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Client;component/Themes/ScrollViewer.xaml" />
