@@ -18,9 +18,9 @@ namespace Torshify.Client.Spotify.Services
         private bool _isPlaying;
         private IPlayerQueue _playlist;
         private Error? _lastLoadStatus;
-        private DateTime _trackPaused;
-        private DateTime _trackStarted;
         private Timer _timer;
+
+        private TimeSpan _playLocation = TimeSpan.Zero;
 
         #endregion Fields
 
@@ -83,9 +83,7 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                return _isPlaying
-                       ? DateTime.Now.Subtract(_trackStarted)
-                       : _trackPaused.Subtract(_trackStarted);
+                return _playLocation;
             }
             set
             {
@@ -108,11 +106,6 @@ namespace Torshify.Client.Spotify.Services
             {
                 _session.PlayerPause();
                 IsPlaying = false;
-
-                if (_trackPaused == DateTime.MinValue)
-                {
-                    _trackPaused = DateTime.Now;
-                }
             }
         }
 
@@ -136,16 +129,6 @@ namespace Torshify.Client.Spotify.Services
             {
                 _session.PlayerPlay();
                 IsPlaying = true;
-
-                if (_trackPaused != DateTime.MinValue)
-                {
-                    _trackStarted = _trackStarted + DateTime.Now.Subtract(_trackPaused);
-                    _trackPaused = DateTime.MinValue;
-                }
-                else
-                {
-                    _trackStarted = DateTime.Now;
-                }
             }
         }
 
@@ -154,7 +137,7 @@ namespace Torshify.Client.Spotify.Services
             if (_isPlaying)
             {
                 _session.PlayerSeek(timeSpan);
-                
+                _playLocation = timeSpan;
                 RaisePropertyChanged("DurationPlayed");
             }
         }
@@ -211,6 +194,8 @@ namespace Torshify.Client.Spotify.Services
                 }
             }
 
+            _playLocation = _playLocation.Add(TimeSpan.FromMilliseconds(_timer.Interval));
+
             RaisePropertyChanged("DurationPlayed");
         }
 
@@ -227,7 +212,7 @@ namespace Torshify.Client.Spotify.Services
                     track.InternalTrack.Play();
                 }
 
-                _trackStarted = DateTime.Now;
+                _playLocation = TimeSpan.Zero;
             }
         }
 

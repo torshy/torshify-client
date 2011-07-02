@@ -12,5 +12,7 @@
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/WatermarkTextBox.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/SearchTextBox.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/DeferredValueSlider.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

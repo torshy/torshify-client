@@ -105,6 +105,7 @@
     <Compile Include="Controls\Html2Flow\HtmlTokenType.cs" />
     <Compile Include="Controls\Html2Flow\HtmlToXamlConverter.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
+    <Compile Include="Controls\DeferredValueSlider.cs" />
     <Compile Include="Controls\PasswordBoxMonitor.cs" />
     <Compile Include="Controls\SearchTextBox.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
@@ -219,6 +220,10 @@
     <Page Include="Themes\CommandBarContextMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\DeferredValueSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
