@@ -47,6 +47,12 @@ namespace Torshify.Client.Mocks
             }
         }
 
+        public IImage CoverArt
+        {
+            get; 
+            set;
+        }
+
         public IAlbumInformation Info
         {
             get; 

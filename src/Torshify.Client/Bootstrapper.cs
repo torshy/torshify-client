@@ -37,6 +37,7 @@ namespace Torshify.Client
             Container.RegisterStartable<InactivityNotificator, InactivityNotificator>();
             Container.RegisterInstance(typeof(Dispatcher), null, Application.Current.Dispatcher, new ContainerControlledLifetimeManager());
             Container.RegisterType<IBackdropService, BackdropService>(new ContainerControlledLifetimeManager(), new InjectionProperty("CacheLocation", AppConstants.BackdropCacheFolder));
+            Container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager(), new InjectionProperty("CacheLocation", AppConstants.CoverArtCacheFolder));
 
             base.ConfigureContainer();
         }

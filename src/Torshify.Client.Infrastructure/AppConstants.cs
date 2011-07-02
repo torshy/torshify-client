@@ -11,5 +11,8 @@ namespace Torshify.Client.Infrastructure
 
         public static readonly string BackdropCacheFolder = Path.Combine(
             AppDataFolder, "Backdrops");
+
+        public static readonly string CoverArtCacheFolder = Path.Combine(
+            AppDataFolder, "CoverArts");
     }
 }

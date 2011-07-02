@@ -14,6 +14,8 @@ using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
 
+using ITorshifyImage = Torshify.Client.Infrastructure.Interfaces.IImage;
+
 using TorshifyAlbumType = Torshify.Client.Infrastructure.Interfaces.AlbumType;
 
 namespace Torshify.Client.Spotify.Services
@@ -29,6 +31,7 @@ namespace Torshify.Client.Spotify.Services
         private Lazy<string> _name;
         private Lazy<int> _year;
         private object _lockObject = new object();
+        private Image _image;
 
         #endregion Fields
 
@@ -80,6 +83,19 @@ namespace Torshify.Client.Spotify.Services
                 }
 
                 return source;
+            }
+        }
+
+        public ITorshifyImage CoverArt
+        {
+            get
+            {
+                if (_image == null)
+                {
+                    _image = new Image(InternalAlbum.Session, InternalAlbum.CoverId);
+                }
+
+                return _image;
             }
         }
 

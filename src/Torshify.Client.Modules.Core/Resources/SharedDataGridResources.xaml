@@ -16,6 +16,11 @@
     <Converters:StringEmptyToVisibilityConverter
         x:Key="StringEmptyToVisibilityConverter" />
 
+    <Converters:ImageCacheConverter
+        x:Key="ThumbnailCoverArtImageCacheConverter"
+        DecodeHeight="125"
+        DecodeWidth="125" />
+    
     <Style
         x:Key="DataGrid_RightAlignedHeaderStyle"
         TargetType="{x:Type DataGridColumnHeader}"

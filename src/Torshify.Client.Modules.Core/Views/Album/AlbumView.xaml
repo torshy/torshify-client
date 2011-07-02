@@ -15,7 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
                     Source="..\..\Resources\SharedDataGridResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer
@@ -45,7 +45,7 @@
                 FontWeight="Light"
                 Foreground="{DynamicResource ControlTextBrush}"
                 Margin="8,0,0,2" />
-            
+
             <DockPanel
                 Grid.Row="1"
                 Grid.Column="0">
@@ -54,11 +54,17 @@
                     Padding="4"
                     Background="{DynamicResource ControlTextBrush}"
                     VerticalAlignment="Top">
-                    <Image
-                        VerticalAlignment="Top"
-                        Height="125"
-                        Width="125"
-                        Source="{Binding Album.Cover}" />
+                    <ContentControl
+                        Content="{Binding Album.CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="125"
+                                    Height="125"
+                                    Source="{Binding Bitmap}" />
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
                 </Border>
             </DockPanel>
 
@@ -150,8 +156,8 @@
                         DockPanel.Dock="Top"
                         Text="Review"
                         Foreground="{DynamicResource ControlTextBrush}"
-                        FontSize="16" 
-                        Margin="5"/>
+                        FontSize="16"
+                        Margin="5" />
                     <FlowDocumentScrollViewer
                         HorizontalAlignment="Stretch"
                         HorizontalScrollBarVisibility="Disabled"

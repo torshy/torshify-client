@@ -39,6 +39,11 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
+        IImage CoverArt
+        {
+            get;
+        }
+
         IAlbumInformation Info
         {
             get;
