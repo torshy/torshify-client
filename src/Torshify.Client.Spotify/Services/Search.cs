@@ -167,7 +167,6 @@ namespace Torshify.Client.Spotify.Services
         private void OnSearchCompleted(object sender, SearchEventArgs e)
         {
             ISearch search = (ISearch)sender;
-            search.Completed -= OnSearchCompleted;
             _dispatcher.BeginInvoke(new Action<ISearch>(LoadSearchData), DispatcherPriority.Background, search);
         }
 
@@ -196,7 +195,7 @@ namespace Torshify.Client.Spotify.Services
                     _artists.Add(new Artist(spotifyArtist, _dispatcher));
                 }
             }
-
+            search.Completed -= OnSearchCompleted;
             IsLoading = false;
             RaiseFinishedLoading();
         }
