@@ -24,7 +24,7 @@
                 Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <TextBlock
             Grid.ColumnSpan="2"
             Text="{Binding Artist.Name}"
@@ -33,7 +33,7 @@
             FontWeight="Light"
             Foreground="{DynamicResource ControlTextBrush}"
             Margin="8,0,0,2" />
-        
+
         <TreeView
             Grid.Row="1"
             x:Name="_albumsListControl"
@@ -41,6 +41,22 @@
             BorderThickness="0"
             Background="{x:Null}"
             VirtualizingStackPanel.IsVirtualizing="True">
+            <TreeView.OpacityMask>
+                <LinearGradientBrush
+                    EndPoint="0.5,1"
+                    StartPoint="0.5,0">
+                    <GradientStop
+                        Color="Black"
+                        Offset="0.02" />
+                    <GradientStop />
+                    <GradientStop
+                        Color="Black"
+                        Offset="0.98" />
+                    <GradientStop
+                        Color="#00000000"
+                        Offset="1" />
+                </LinearGradientBrush>
+            </TreeView.OpacityMask>
             <TreeView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
