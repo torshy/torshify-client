@@ -84,6 +84,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist
             Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
             Artist = null;
             Albums = null;
+            _albums.Clear();
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
