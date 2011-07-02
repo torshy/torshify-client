@@ -70,6 +70,9 @@
     <Compile Include="AppConstants.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
+    <Compile Include="Collections\NotifyCollection.cs" />
+    <Compile Include="Collections\SortedCollection.cs" />
+    <Compile Include="Collections\SortedObservableCollection.cs" />
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="Interfaces\IBackdropService.cs" />
     <Compile Include="Interfaces\INavigationItem.cs" />
     <Compile Include="Interfaces\INavigationItemProvider.cs" />
+    <Compile Include="Interfaces\INotifyEnumerable.cs" />
     <Compile Include="Models\PlayerQueueItem.cs" />
     <Compile Include="Models\CommandModel.cs" />
     <Compile Include="Interfaces\IAlbum.cs" />

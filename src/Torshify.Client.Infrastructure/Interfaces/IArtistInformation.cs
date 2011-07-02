@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+using System;
 using System.Windows.Media.Imaging;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface IArtistInformation
     {
-        IEnumerable<IAlbum> Albums
+        INotifyEnumerable<IAlbum> Albums
         {
             get;
         }
 
-        IEnumerable<ITrack> Tracks
+        INotifyEnumerable<ITrack> Tracks
         {
             get;
         }
@@ -20,12 +20,12 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        IEnumerable<IArtist> SimilarArtists
+        INotifyEnumerable<IArtist> SimilarArtists
         {
             get;
         }
 
-        IEnumerable<BitmapSource> Portraits
+        INotifyEnumerable<BitmapSource> Portraits
         {
             get;
         }
@@ -34,5 +34,7 @@ namespace Torshify.Client.Infrastructure.Interfaces
         {
             get;
         }
+
+        event EventHandler FinishedLoading;
     }
 }

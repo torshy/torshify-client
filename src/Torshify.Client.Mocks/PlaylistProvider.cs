@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using FizzWare.NBuilder;
-
+using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Mocks
@@ -133,7 +133,7 @@ namespace Torshify.Client.Mocks
         public void Initialize()
         {
             _playlists = Builder<Playlist>
-                .CreateListOfSize(_random.Next(10,25))
+                .CreateListOfSize(_random.Next(10, 25))
                 .WhereAll()
                 .Has(p => p.Name = _playlistNames[_random.Next(0, _playlistNames.Length - 1)])
                 .Has(p => p.Tracks = GetTracks(p))
@@ -155,7 +155,7 @@ namespace Torshify.Client.Mocks
                 .Has(t => t.Album = GetAlbum())
                 .Has(t => t.Artists = GetArtists())
                 .WhereRandom(6)
-                .Has(t => ((Album) t.Album).IsAvailable = false)
+                .Has(t => ((Album)t.Album).IsAvailable = false)
                 .Has(t => t.IsAvailable = false)
                 .Build();
         }
@@ -202,9 +202,9 @@ namespace Torshify.Client.Mocks
                 .Build();
         }
 
-        private IEnumerable<IAlbum> GetAlbums(IArtist artist)
+        private INotifyEnumerable<IAlbum> GetAlbums(IArtist artist)
         {
-            return Builder<Album>
+            return new NotifyCollection<IAlbum>(Builder<Album>
                 .CreateListOfSize(_random.Next(3, 5))
                 .WhereAll()
                 .Has(a => a.Year = _random.Next(1990, 2011))
@@ -212,7 +212,7 @@ namespace Torshify.Client.Mocks
                 .Has(a => a.Artist = artist)
                 .Has(a => a.Info = GetAlbumInformation(a))
                 .Has(a => a.IsAvailable = true)
-                .Build();
+                .Build());
         }
 
         private IAlbum GetAlbum()

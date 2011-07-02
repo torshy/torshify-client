@@ -21,7 +21,7 @@
     <Grid>
         <TreeView
             x:Name="_albumsListControl"
-            ItemsSource="{Binding Artist.Info.Albums}"
+            ItemsSource="{Binding Albums}"
             BorderThickness="0"
             Background="{x:Null}"
             VirtualizingStackPanel.IsVirtualizing="True">
