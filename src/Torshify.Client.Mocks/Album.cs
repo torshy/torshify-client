@@ -53,6 +53,12 @@ namespace Torshify.Client.Mocks
             set;
         }
 
+        public AlbumType Type
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
     }
 }

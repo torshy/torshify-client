@@ -120,30 +120,32 @@ namespace Torshify.Client.Spotify.Services
         {
             IArtistBrowse browse = (IArtistBrowse)sender;
             browse.Completed -= ArtistBrowseCompleted;
+            Biography = browse.Biography;
+            _dispatcher.BeginInvoke(new Action<IArtistBrowse>(LoadBrowseData), DispatcherPriority.Background, browse);
+        }
 
+        private void LoadBrowseData(IArtistBrowse browse)
+        {
             using (browse)
             {
-                Biography = browse.Biography;
-
                 foreach (var spotifyAlbum in browse.Albums)
                 {
-                    _dispatcher.BeginInvoke((Action<Album>) _albums.Add, DispatcherPriority.Background, new Album(spotifyAlbum, _dispatcher));
+                    _albums.Add(new Album(spotifyAlbum, _dispatcher));
                 }
 
                 foreach (var spotifyTrack in browse.Tracks)
                 {
-                    _dispatcher.BeginInvoke((Action<Track>)_tracks.Add, DispatcherPriority.Background, new Track(spotifyTrack, _dispatcher));
+                    _tracks.Add(new Track(spotifyTrack, _dispatcher));
                 }
 
                 foreach (var spotifyArtist in browse.SimilarArtists)
                 {
-                    _dispatcher.BeginInvoke((Action<Artist>)_similarArtists.Add, DispatcherPriority.Background, new Artist(spotifyArtist, _dispatcher));
+                    _similarArtists.Add(new Artist(spotifyArtist, _dispatcher));
                 }
             }
 
             IsLoading = false;
         }
-
         #endregion Methods
     }
 }

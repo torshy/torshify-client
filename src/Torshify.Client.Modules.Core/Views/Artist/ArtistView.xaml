@@ -19,27 +19,44 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <ItemsControl
+        <TreeView
             x:Name="_albumsListControl"
-            x:FieldModifier="private"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            ScrollViewer.CanContentScroll="True"
-            ItemsSource="{Binding Artist.Info.Albums}">
-            <ItemsControl.ItemsPanel>
+            ItemsSource="{Binding Artist.Info.Albums}"
+            BorderThickness="0"
+            Background="{x:Null}"
+            VirtualizingStackPanel.IsVirtualizing="True">
+            <TreeView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
+            </TreeView.ItemsPanel>
+            <TreeView.ItemContainerStyle>
+                <Style
+                    TargetType="{x:Type TreeViewItem}">
+                    <Setter
+                        Property="IsExpanded"
+                        Value="True" />
+                    <Setter
+                        Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate
+                                TargetType="{x:Type TreeViewItem}">
+                                <ContentPresenter
+                                    ContentSource="Header" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
                 <DataTemplate>
                     <Grid
                         Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
-                                Width="Auto" />
+                                Width="140" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-
                         <DockPanel
                             Grid.Column="0">
                             <Border
@@ -51,10 +68,9 @@
                                     VerticalAlignment="Top"
                                     Height="125"
                                     Width="125"
-                                    Source="{Binding Cover}" />
+                                    Source="{Binding Cover, IsAsync=True}" />
                             </Border>
                         </DockPanel>
-
                         <DockPanel
                             Grid.Column="1"
                             LastChildFill="True">
@@ -77,17 +93,15 @@
                             </StackPanel>
 
                             <DataGrid
-                                ItemsSource="{Binding Info.Tracks}"
+                                ItemsSource="{Binding Info.Tracks, IsAsync=True}"
                                 IsReadOnly="True"
                                 CanUserAddRows="False"
                                 CanUserDeleteRows="False"
                                 AutoGenerateColumns="False"
                                 ContextMenuOpening="DataGridContextMenuOpening"
                                 SelectionChanged="DataGridSelectionChanged"
-                                EnableRowVirtualization="True"
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                VirtualizingStackPanel.IsVirtualizing="True"
-                                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 HeadersVisibility="None">
                                 <Interactivity:Interaction.Behaviors>
                                     <Behaviors:DataGridTriStateSortingBehavior />
@@ -95,22 +109,32 @@
                                 <DataGrid.ContextMenu>
                                     <ContextMenu />
                                 </DataGrid.ContextMenu>
-                                <DataGrid.Style>
+                                <DataGrid.RowStyle>
                                     <Style
-                                        TargetType="{x:Type DataGrid}"
-                                        BasedOn="{StaticResource {x:Type DataGrid}}">
+                                        TargetType="{x:Type DataGridRow}"
+                                        BasedOn="{StaticResource {x:Type DataGridRow}}">
                                         <Setter
                                             Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate
-                                                    TargetType="{x:Type DataGrid}">
-                                                    <ItemsPresenter
-                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                    TargetType="{x:Type DataGridRow}">
+                                                    <Border
+                                                        x:Name="DGR_Border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        SnapsToDevicePixels="True">
+                                                        <SelectiveScrollingGrid>
+                                                            <DataGridCellsPresenter
+                                                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                        </SelectiveScrollingGrid>
+                                                    </Border>
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
-                                </DataGrid.Style>
+                                </DataGrid.RowStyle>
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn
                                         Header="Index"
@@ -128,36 +152,10 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DockPanel>
-                        
-                        <Controls:SprocketControl
-                            Grid.ColumnSpan="2"
-                            Visibility="{Binding Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            IsBusy="{Binding Info.IsLoading}"
-                            Width="48"
-                            Height="48"
-                            Interval="70" />
                     </Grid>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Style>
-                <Style
-                    TargetType="{x:Type ItemsControl}">
-                    <Setter
-                        Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate
-                                TargetType="{x:Type ItemsControl}">
-                                <ScrollViewer
-                                    Padding="{TemplateBinding Control.Padding}"
-                                    Focusable="False">
-                                    <ItemsPresenter />
-                                </ScrollViewer>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ItemsControl.Style>
-        </ItemsControl>
+            </TreeView.ItemTemplate>
+        </TreeView>
 
         <Controls:SprocketControl
             Visibility="{Binding Artist.Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"

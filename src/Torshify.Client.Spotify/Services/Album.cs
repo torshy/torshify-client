@@ -5,12 +5,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Client.Infrastructure.Interfaces;
+
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
+
+using TorshifyAlbumType = Torshify.Client.Infrastructure.Interfaces.AlbumType;
 
 namespace Torshify.Client.Spotify.Services
 {
@@ -19,7 +23,11 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly Dispatcher _dispatcher;
+
+        private Lazy<TorshifyAlbumType> _albumType;
         private Lazy<Artist> _artist;
+        private Lazy<string> _name;
+        private Lazy<int> _year;
         private object _lockObject = new object();
 
         #endregion Fields
@@ -32,6 +40,9 @@ namespace Torshify.Client.Spotify.Services
             InternalAlbum = album;
 
             _artist = new Lazy<Artist>(() => new Artist(InternalAlbum.Artist, dispatcher));
+            _albumType = new Lazy<TorshifyAlbumType>(GetAlbumType);
+            _name = new Lazy<string>(() => InternalAlbum.Name);
+            _year = new Lazy<int>(() => InternalAlbum.Year);
         }
 
         #endregion Constructors
@@ -103,42 +114,79 @@ namespace Torshify.Client.Spotify.Services
 
         public bool IsAvailable
         {
-            get { return InternalAlbum.IsAvailable; }
+            get
+            {
+                return InternalAlbum.IsAvailable;
+            }
         }
 
         public string Name
         {
-            get { return InternalAlbum.Name; }
+            get
+            {
+                return _name.Value;
+            }
+        }
+
+        public TorshifyAlbumType Type
+        {
+            get
+            {
+                return _albumType.Value;
+            }
         }
 
         public int Year
         {
-            get { return InternalAlbum.Year; }
+            get
+            {
+                return _year.Value;
+            }
         }
 
         #endregion Properties
 
         #region Methods
 
+        private TorshifyAlbumType GetAlbumType()
+        {
+            switch (InternalAlbum.Type)
+            {
+                case AlbumType.Album:
+                    return TorshifyAlbumType.Album;
+                case AlbumType.Single:
+                    return TorshifyAlbumType.Single;
+                case AlbumType.Compilation:
+                    return TorshifyAlbumType.Compilation;
+                case AlbumType.Unknown:
+                    return TorshifyAlbumType.Unknown;
+            }
+
+            return TorshifyAlbumType.Unknown;
+        }
+
         private void InitializeCover(IImage image)
         {
             try
             {
-                if (image.Error == Error.OK && image.Data.Length > 0)
+                using (image)
                 {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.CacheOption = BitmapCacheOption.None;
-                    bitmapImage.StreamSource = new MemoryStream(image.Data);
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
+                    if (image.Error == Error.OK && image.Data.Length > 0)
+                    {
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnDemand;
+                        bitmapImage.StreamSource = new MemoryStream(image.Data);
+                        bitmapImage.EndInit();
+                        bitmapImage.Freeze();
 
-                    MemoryCache.Default.Add(
-                        image.ImageId,
-                        bitmapImage,
-                        new CacheItemPolicy { SlidingExpiration = TimeSpan.FromMinutes(1) });
+                        MemoryCache.Default.Add(
+                            image.ImageId,
+                            bitmapImage,
+                            new CacheItemPolicy {SlidingExpiration = TimeSpan.FromMinutes(1)});
 
-                    RaisePropertyChanged("Cover");
+                        RaisePropertyChanged("Cover");
+                    }
                 }
             }
             catch (Exception exception)

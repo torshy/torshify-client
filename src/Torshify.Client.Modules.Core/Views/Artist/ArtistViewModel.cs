@@ -2,6 +2,7 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
+using System.Linq;
 
 namespace Torshify.Client.Modules.Core.Views.Artist
 {
@@ -10,7 +11,6 @@ namespace Torshify.Client.Modules.Core.Views.Artist
         #region Fields
 
         private IArtist _artist;
-        private ITrack _selectedTrack;
 
         #endregion Fields
 
@@ -43,6 +43,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            Artist = null;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

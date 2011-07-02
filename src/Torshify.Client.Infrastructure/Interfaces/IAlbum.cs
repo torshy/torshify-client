@@ -1,8 +1,15 @@
-﻿using System.Collections;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {
+    public enum AlbumType
+    {
+        Album,
+        Compilation,
+        Single,
+        Unknown
+    }
+
     public interface IAlbum
     {
         #region Properties
@@ -33,6 +40,11 @@ namespace Torshify.Client.Infrastructure.Interfaces
         }
 
         IAlbumInformation Info
+        {
+            get;
+        }
+
+        AlbumType Type
         {
             get;
         }
