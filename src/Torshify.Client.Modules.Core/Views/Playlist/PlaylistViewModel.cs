@@ -35,26 +35,11 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         {
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
-
-            GoToAlbumCommand = new AutomaticCommand<IAlbum>(ExecuteGoToAlbum, CanExecuteGoToAlbum);
-            GoToArtistCommand = new AutomaticCommand<IArtist>(ExecuteGoToArtist, CanExecuteGoToArtist);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public AutomaticCommand<IAlbum> GoToAlbumCommand
-        {
-            get;
-            private set;
-        }
-
-        public AutomaticCommand<IArtist> GoToArtistCommand
-        {
-            get;
-            private set;
-        }
 
         public IPlaylist Playlist
         {
@@ -137,28 +122,6 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
                     }
                 }
             }
-        }
-
-        private bool CanExecuteGoToAlbum(IAlbum album)
-        {
-            return album != null;
-        }
-
-        private bool CanExecuteGoToArtist(IArtist artist)
-        {
-            return artist != null;
-        }
-
-        private void ExecuteGoToAlbum(IAlbum album)
-        {
-            Uri uri = new Uri(MusicRegionViewNames.AlbumView, UriKind.Relative);
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, album);
-        }
-
-        private void ExecuteGoToArtist(IArtist artist)
-        {
-            Uri uri = new Uri(MusicRegionViewNames.ArtistView, UriKind.Relative);
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, artist);
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)

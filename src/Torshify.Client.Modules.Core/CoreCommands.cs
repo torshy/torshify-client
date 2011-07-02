@@ -15,6 +15,12 @@ namespace Torshify.Client.Modules.Core
             public static readonly CompositeCommand ToggleShuffleCommand = new CompositeCommand();
         }
 
+        public static class Views
+        {
+            public static readonly CompositeCommand GoToArtistCommand = new CompositeCommand();
+            public static readonly CompositeCommand GoToAlbumCommand = new CompositeCommand();
+        }
+
         public static readonly CompositeCommand PlayTrackCommand = new CompositeCommand();
         public static readonly CompositeCommand QueueTrackCommand = new CompositeCommand();
         public static readonly CompositeCommand NavigateBackCommand = new CompositeCommand();

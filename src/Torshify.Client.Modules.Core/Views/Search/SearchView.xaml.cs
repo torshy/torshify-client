@@ -24,5 +24,13 @@ namespace Torshify.Client.Modules.Core.Views.Search
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void DataGridContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+        }
+
+        #endregion Methods
     }
 }

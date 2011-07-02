@@ -126,7 +126,6 @@ namespace Torshify.Client.Spotify.Services
         {
             IArtistBrowse browse = (IArtistBrowse)sender;
             browse.Completed -= ArtistBrowseCompleted;
-            Biography = browse.Biography;
             _dispatcher.BeginInvoke(new Action<IArtistBrowse>(LoadBrowseData), DispatcherPriority.Background, browse);
         }
 
@@ -134,6 +133,8 @@ namespace Torshify.Client.Spotify.Services
         {
             using (browse)
             {
+                Biography = browse.Biography;
+
                 foreach (var spotifyAlbum in browse.Albums)
                 {
                     _albums.Add(new Album(spotifyAlbum, _dispatcher));

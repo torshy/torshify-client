@@ -2,7 +2,7 @@ using System;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Interfaces;
 
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
@@ -23,15 +23,15 @@ namespace Torshify.Client.Spotify.Services
 
         private readonly Dispatcher _dispatcher;
 
-        private INotifyEnumerable<ITorshifyAlbum> _albums;
-        private INotifyEnumerable<ITorshifyArtist> _artists;
+        private NotifyCollection<ITorshifyAlbum> _albums;
+        private NotifyCollection<ITorshifyArtist> _artists;
+        private NotifyCollection<ITorshifyTrack> _tracks;
         private string _didYouMean;
         private bool _isLoading;
         private string _query;
         private int _totalAlbums;
         private int _totalArtists;
         private int _totalTracks;
-        private INotifyEnumerable<ITorshifyTrack> _tracks;
 
         #endregion Fields
 
@@ -40,7 +40,16 @@ namespace Torshify.Client.Spotify.Services
         public Search(ISearch search, Dispatcher dispatcher)
         {
             _dispatcher = dispatcher;
+            _albums = new NotifyCollection<ITorshifyAlbum>();
+            _artists = new NotifyCollection<ITorshifyArtist>();
+            _tracks = new NotifyCollection<ITorshifyTrack>();
+
             InternalSearch = search;
+
+            if (!InternalSearch.IsComplete)
+            {
+                InternalSearch.Completed += OnSearchCompleted;
+            }
         }
 
         #endregion Constructors
@@ -66,6 +75,14 @@ namespace Torshify.Client.Spotify.Services
         public string DidYouMean
         {
             get { return _didYouMean; }
+            private set
+            {
+                if (_didYouMean != value)
+                {
+                    _didYouMean = value;
+                    RaisePropertyChanged("DidYouMean");
+                }
+            }
         }
 
         public ISearch InternalSearch
@@ -76,26 +93,66 @@ namespace Torshify.Client.Spotify.Services
         public bool IsLoading
         {
             get { return _isLoading; }
+            private set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    RaisePropertyChanged("IsLoading");
+                }
+            }
         }
 
         public string Query
         {
             get { return _query; }
+            private set
+            {
+                if (_query != value)
+                {
+                    _query = value;
+                    RaisePropertyChanged("Query");
+                }
+            }
         }
 
         public int TotalAlbums
         {
             get { return _totalAlbums; }
+            private set
+            {
+                if (_totalAlbums != value)
+                {
+                    _totalAlbums = value;
+                    RaisePropertyChanged("TotalAlbums");
+                }
+            }
         }
 
         public int TotalArtists
         {
             get { return _totalArtists; }
+            private set
+            {
+                if (_totalArtists != value)
+                {
+                    _totalArtists = value;
+                    RaisePropertyChanged("TotalArtists");
+                }
+            }
         }
 
         public int TotalTracks
         {
             get { return _totalTracks; }
+            private set
+            {
+                if (_totalTracks != value)
+                {
+                    _totalTracks = value;
+                    RaisePropertyChanged("TotalTracks");
+                }
+            }
         }
 
         public INotifyEnumerable<ITorshifyTrack> Tracks
@@ -104,5 +161,56 @@ namespace Torshify.Client.Spotify.Services
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void OnSearchCompleted(object sender, SearchEventArgs e)
+        {
+            ISearch search = (ISearch)sender;
+            search.Completed -= OnSearchCompleted;
+            _dispatcher.BeginInvoke(new Action<ISearch>(LoadSearchData), DispatcherPriority.Background, search);
+        }
+
+        private void LoadSearchData(ISearch search)
+        {
+            using (search)
+            {
+                TotalAlbums = search.TotalAlbums;
+                TotalTracks = search.TotalTracks;
+                TotalArtists = search.TotalArtists;
+                Query = search.Query;
+                DidYouMean = search.DidYouMean;
+
+                foreach (var spotifyAlbum in search.Albums)
+                {
+                    _albums.Add(new Album(spotifyAlbum, _dispatcher));
+                }
+
+                foreach (var spotifyTrack in search.Tracks)
+                {
+                    _tracks.Add(new Track(spotifyTrack, _dispatcher));
+                }
+
+                foreach (var spotifyArtist in search.Artists)
+                {
+                    _artists.Add(new Artist(spotifyArtist, _dispatcher));
+                }
+            }
+
+            IsLoading = false;
+            RaiseFinishedLoading();
+        }
+
+        private void RaiseFinishedLoading()
+        {
+            var handler = FinishedLoading;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion Methods
     }
 }

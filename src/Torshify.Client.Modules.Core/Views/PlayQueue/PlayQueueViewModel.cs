@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
@@ -36,26 +35,11 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
 
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
-
-            GoToAlbumCommand = new AutomaticCommand<IAlbum>(ExecuteGoToAlbum, CanExecuteGoToAlbum);
-            GoToArtistCommand = new AutomaticCommand<IArtist>(ExecuteGoToArtist, CanExecuteGoToArtist);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public AutomaticCommand<IAlbum> GoToAlbumCommand
-        {
-            get;
-            private set;
-        }
-
-        public AutomaticCommand<IArtist> GoToArtistCommand
-        {
-            get;
-            private set;
-        }
 
         public IEnumerable<PlayerQueueItem> Tracks
         {
@@ -89,28 +73,6 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         #endregion Public Methods
 
         #region Private Methods
-
-        private bool CanExecuteGoToAlbum(IAlbum album)
-        {
-            return album != null;
-        }
-
-        private bool CanExecuteGoToArtist(IArtist artist)
-        {
-            return artist != null;
-        }
-
-        private void ExecuteGoToAlbum(IAlbum album)
-        {
-            Uri uri = new Uri(MusicRegionViewNames.AlbumView, UriKind.Relative);
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, album);
-        }
-
-        private void ExecuteGoToArtist(IArtist artist)
-        {
-            Uri uri = new Uri(MusicRegionViewNames.ArtistView, UriKind.Relative);
-            _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, artist);
-        }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
