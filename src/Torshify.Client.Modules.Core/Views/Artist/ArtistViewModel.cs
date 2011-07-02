@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Collections;
+using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Artist
@@ -18,8 +21,20 @@ namespace Torshify.Client.Modules.Core.Views.Artist
         private SortedObservableCollection<IAlbum> _albums;
         private ICollectionView _albumsIcv;
         private IArtist _artist;
+        private IEventAggregator _eventAggregator;
+        private SubscriptionToken _tracksMenuBarToken;
+        private SubscriptionToken _trackMenuBarToken;
 
         #endregion Fields
+
+        #region Constructors
+
+        public ArtistViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
+
+        #endregion Constructors
 
         #region Properties
 
@@ -63,6 +78,9 @@ namespace Torshify.Client.Modules.Core.Views.Artist
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
+            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
+
             Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
             Artist = null;
             Albums = null;
@@ -70,6 +88,9 @@ namespace Torshify.Client.Modules.Core.Views.Artist
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+
             Artist = navigationContext.Tag as IArtist;
 
             if (Artist != null)
@@ -106,6 +127,20 @@ namespace Torshify.Client.Modules.Core.Views.Artist
                     }
                 }
             }
+        }
+
+        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         #endregion Methods
