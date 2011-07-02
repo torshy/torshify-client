@@ -19,6 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer
+        Name="OuterScrollViewer"
         HorizontalScrollBarVisibility="Auto"
         VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -139,10 +140,12 @@
                 Grid.ColumnSpan="2"
                 Grid.Row="2"
                 Background="Black"
-                CornerRadius="4"
-                IsEnabled="False">
+                CornerRadius="4">
                 <DockPanel
                     LastChildFill="True">
+                    <Interactivity:Interaction.Behaviors>
+                        <Behaviors:IgnoreMouseWheelBehavior />
+                    </Interactivity:Interaction.Behaviors>
                     <TextBlock
                         DockPanel.Dock="Top"
                         Text="Review"
@@ -150,8 +153,10 @@
                         FontSize="16" 
                         Margin="5"/>
                     <FlowDocumentScrollViewer
+                        HorizontalAlignment="Stretch"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Disabled"
+                        IsToolBarVisible="True"
                         Document="{Binding Album.Info.Review, Converter={StaticResource htmlToXamlConverter}}">
                     </FlowDocumentScrollViewer>
                 </DockPanel>

@@ -4,9 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="PlayQueueDataGridResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <DataGrid
             ItemsSource="{Binding Tracks}"
@@ -16,25 +26,33 @@
             CanUserSortColumns="False"
             CanUserReorderColumns="False"
             AutoGenerateColumns="False"
+            ContextMenuOpening="DataGridContextMenuOpening"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <Interactivity:Interaction.Behaviors>
+                <Behaviors:DataGridTriStateSortingBehavior />
+            </Interactivity:Interaction.Behaviors>
+            <DataGrid.ContextMenu>
+                <ContextMenu />
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Track"
-                    Binding="{Binding Track.Name}"
-                    Width="200" />
-                <DataGridTextColumn
+                    Width="200"
+                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}" />
+                <DataGridTemplateColumn
                     Header="Artist"
-                    Binding="{Binding Track.Album.Artist.Name}"
-                    Width="175" />
-                <DataGridTextColumn
+                    Width="175"
+                    CellTemplate="{StaticResource DataGrid_Track_ArtistTemplate}" />
+                <DataGridTemplateColumn
                     Header="Time"
-                    Binding="{Binding Track.Duration}"
-                    Width="75" />
-                <DataGridTextColumn
+                    Width="75"
+                    HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
+                    CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
+                <DataGridTemplateColumn
                     Header="Album"
-                    Binding="{Binding Track.Album.Name}"
-                    Width="175" />
+                    Width="175"
+                    CellTemplate="{StaticResource DataGrid_Track_AlbumTemplate}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

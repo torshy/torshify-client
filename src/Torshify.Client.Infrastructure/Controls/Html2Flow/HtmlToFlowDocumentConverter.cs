@@ -18,7 +18,7 @@ namespace Torshify.Client.Infrastructure.Controls.Html2Flow
                 FlowDocument flowDocument = new FlowDocument();
                 flowDocument.FontSize = 12;
                 flowDocument.FontFamily = new FontFamily("Segoe UI");
-
+                
                 string xaml = HtmlToXamlConverter.ConvertHtmlToXaml(value.ToString(), false);
 
                 using (MemoryStream stream = new MemoryStream((new ASCIIEncoding()).GetBytes(xaml)))
