@@ -13,6 +13,7 @@ using Torshify.Client.Modules.Core.Views.NowPlaying;
 using Torshify.Client.Modules.Core.Views.Player;
 using Torshify.Client.Modules.Core.Views.Playlist;
 using Torshify.Client.Modules.Core.Views.PlayQueue;
+using Torshify.Client.Modules.Core.Views.Search;
 
 namespace Torshify.Client.Modules.Core
 {
@@ -48,6 +49,7 @@ namespace Torshify.Client.Modules.Core
             _container.RegisterType<NowPlayingView>(MusicRegionViewNames.NowPlayingView);
             _container.RegisterType<AlbumView>(MusicRegionViewNames.AlbumView);
             _container.RegisterType<ArtistView>(MusicRegionViewNames.ArtistView);
+            _container.RegisterType<SearchView>(MusicRegionViewNames.SearchView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));
@@ -57,6 +59,7 @@ namespace Torshify.Client.Modules.Core
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlayQueueView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(ArtistView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(AlbumView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(SearchView));
 
 #if MockEnabled
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));

@@ -236,6 +236,11 @@ namespace Torshify.Client.Infrastructure.Services
                 return coverArtSource;
             }
 
+            public override int GetHashCode()
+            {
+                return ID.GetHashCode() ^ Path.GetHashCode();
+            }
+
             public override bool Equals(object obj)
             {
                 IImageCacheEntry cacheCacheEntry = obj as IImageCacheEntry;

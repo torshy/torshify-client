@@ -171,6 +171,8 @@
     <Compile Include="Interfaces\INavigationItem.cs" />
     <Compile Include="Interfaces\INavigationItemProvider.cs" />
     <Compile Include="Interfaces\INotifyEnumerable.cs" />
+    <Compile Include="Interfaces\ISearch.cs" />
+    <Compile Include="Interfaces\ISearchProvider.cs" />
     <Compile Include="Models\PlayerQueueItem.cs" />
     <Compile Include="Models\CommandModel.cs" />
     <Compile Include="Interfaces\IAlbum.cs" />

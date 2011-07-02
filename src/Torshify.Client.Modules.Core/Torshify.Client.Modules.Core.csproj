@@ -175,6 +175,10 @@
       <DependentUpon>PlayQueueView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayQueue\PlayQueueViewModel.cs" />
+    <Compile Include="Views\Search\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Search\SearchViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -259,6 +263,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PlayQueue\PlayQueueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Search\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
