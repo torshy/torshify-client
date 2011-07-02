@@ -1,5 +1,5 @@
 using System;
-
+using System.Windows.Threading;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 
@@ -16,9 +16,9 @@ namespace Torshify.Client.Mocks
 
         #region Constructors
 
-        public Player()
+        public Player(Dispatcher dispatcher)
         {
-            _playerQueue = new PlayerQueue();
+            _playerQueue = new PlayerQueue(dispatcher);
             _playerQueue.CurrentChanged += OnCurrentChanged;
         }
 

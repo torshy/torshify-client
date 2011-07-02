@@ -17,10 +17,9 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
-        private readonly Dispatcher _dispatcher;
-
         private Lazy<Album> _album;
         private Lazy<IEnumerable<Artist>> _artists;
+        private Lazy<TimeSpan> _duration;
 
         #endregion Fields
 
@@ -28,11 +27,11 @@ namespace Torshify.Client.Spotify.Services
 
         public Track(ITrack track, Dispatcher dispatcher)
         {
-            _dispatcher = dispatcher;
             InternalTrack = track;
 
             _album = new Lazy<Album>(() => new Album(InternalTrack.Album, dispatcher));
             _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist, dispatcher)));
+            _duration = new Lazy<TimeSpan>(() => InternalTrack.Duration);
         }
 
         #endregion Constructors
@@ -56,7 +55,7 @@ namespace Torshify.Client.Spotify.Services
 
         public TimeSpan Duration
         {
-            get { return InternalTrack.Duration; }
+            get { return _duration.Value; }
         }
 
         public int ID

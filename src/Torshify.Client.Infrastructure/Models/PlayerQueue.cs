@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Microsoft.Practices.Prism.ViewModel;
-using Torshify.Client.Infrastructure.Interfaces;
 using System.Linq;
+using System.Windows.Threading;
+
+using Microsoft.Practices.Prism.ViewModel;
+
+using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Infrastructure.Models
 {
@@ -11,22 +14,25 @@ namespace Torshify.Client.Infrastructure.Models
     {
         #region Fields
 
-        private Queue<PlayerQueueItem> _queue;
+        private readonly Dispatcher _dispatcher;
+
+        private PlayerQueueItem _currentTrack;
+        private ObservableCollection<PlayerQueueItem> _left;
         private List<PlayerQueueItem> _playlist;
         private int[] _playlistIndicies;
         private int _playlistTrackIndex;
+        private Queue<PlayerQueueItem> _queue;
         private object _queueLock = new object();
-        private PlayerQueueItem _currentTrack;
-        private bool _shuffle;
         private bool _repeat;
-        private ObservableCollection<PlayerQueueItem> _left;
+        private bool _shuffle;
 
         #endregion Fields
 
         #region Constructors
 
-        public PlayerQueue()
+        public PlayerQueue(Dispatcher dispatcher)
         {
+            _dispatcher = dispatcher;
             _queue = new Queue<PlayerQueueItem>();
             _playlist = new List<PlayerQueueItem>();
             _left = new ObservableCollection<PlayerQueueItem>();
@@ -36,48 +42,17 @@ namespace Torshify.Client.Infrastructure.Models
 
         #region Events
 
+        public event EventHandler Changed;
+
         public event EventHandler CurrentChanged;
 
         public event EventHandler RepeatChanged;
 
         public event EventHandler ShuffleChanged;
 
-        public event EventHandler Changed;
-
         #endregion Events
 
         #region Properties
-
-        public bool Shuffle
-        {
-            get { return _shuffle; }
-            set
-            {
-                _shuffle = value;
-                Update();
-                OnShuffleChanged();
-                RaisePropertyChanged("Shuffle");
-            }
-        }
-
-        public bool HasCurrent
-        {
-            get
-            {
-                return Current != null;
-            }
-        }
-
-        public bool Repeat
-        {
-            get { return _repeat; }
-            set
-            {
-                _repeat = value;
-                OnRepeatChanged();
-                RaisePropertyChanged("Repeat");
-            }
-        }
 
         public IEnumerable<PlayerQueueItem> All
         {
@@ -99,39 +74,6 @@ namespace Torshify.Client.Infrastructure.Models
                     if (track != Current)
                         yield return track;
                 }
-            }
-        }
-
-        public IEnumerable<PlayerQueueItem> Left
-        {
-            get
-            {
-                return _left;
-            }
-        }
-
-        public IEnumerable<PlayerQueueItem> Queued
-        {
-            get
-            {
-                return _queue.ToArray();
-            }
-        }
-
-        public PlayerQueueItem Current
-        {
-            get
-            {
-                return _currentTrack;
-            }
-            private set
-            {
-                _currentTrack = value;
-                OnCurrentChanged();
-                RaisePropertyChanged("Current");
-                RaisePropertyChanged("HasCurrent");
-                RaisePropertyChanged("CanGoNext");
-                RaisePropertyChanged("CanGoPrevious");
             }
         }
 
@@ -186,78 +128,147 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
+        public PlayerQueueItem Current
+        {
+            get
+            {
+                return _currentTrack;
+            }
+            private set
+            {
+                _currentTrack = value;
+                OnCurrentChanged();
+                RaisePropertyChanged("Current");
+                RaisePropertyChanged("HasCurrent");
+                RaisePropertyChanged("CanGoNext");
+                RaisePropertyChanged("CanGoPrevious");
+            }
+        }
+
+        public bool HasCurrent
+        {
+            get
+            {
+                return Current != null;
+            }
+        }
+
+        public IEnumerable<PlayerQueueItem> Left
+        {
+            get
+            {
+                return _left;
+            }
+        }
+
+        public IEnumerable<PlayerQueueItem> Queued
+        {
+            get
+            {
+                return _queue.ToArray();
+            }
+        }
+
+        public bool Repeat
+        {
+            get { return _repeat; }
+            set
+            {
+                _repeat = value;
+                OnRepeatChanged();
+                RaisePropertyChanged("Repeat");
+            }
+        }
+
+        public bool Shuffle
+        {
+            get { return _shuffle; }
+            set
+            {
+                _shuffle = value;
+                Update();
+                OnShuffleChanged();
+                RaisePropertyChanged("Shuffle");
+            }
+        }
+
         #endregion Properties
 
-        #region Public Methods
+        #region Methods
+
+        public void Enqueue(ITrack track)
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                lock (_queueLock)
+                {
+                    var item = new PlayerQueueItem(true, track);
+                    _queue.Enqueue(item);
+
+                    if (_playlist.Count > 0)
+                    {
+                        _left.Insert(_queue.Count, item);
+                    }
+                    else
+                    {
+                        _left.Add(item);
+                    }
+
+
+                }
+
+                OnChanged();
+            }
+            else
+            {
+                _dispatcher.BeginInvoke((Action<ITrack>)Enqueue, track);
+            }
+        }
+
+        public void Enqueue(IEnumerable<ITrack> tracks)
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                lock (_queueLock)
+                {
+                    foreach (var track in tracks)
+                    {
+                        var item = new PlayerQueueItem(true, track);
+                        _queue.Enqueue(item);
+                        if (_playlist.Count > 0)
+                        {
+                            _left.Insert(_queue.Count + 1, item);
+                        }
+                        else
+                        {
+                            _left.Add(item);
+                        }
+                    }
+                }
+
+                OnChanged();
+            }
+            else
+            {
+                _dispatcher.BeginInvoke((Action<IEnumerable<ITrack>>) Enqueue, tracks);
+            }
+        }
 
         public bool IsQueued(ITrack track)
         {
             return _queue.Any(i => i.Track.ID == track.ID);
         }
 
-        public void Set(IEnumerable<ITrack> tracks)
-        {
-            _playlist = new List<PlayerQueueItem>();
-            _left.Clear();
-
-            foreach (var track in tracks)
-            {
-                var item = new PlayerQueueItem(false, track);
-                _playlist.Add(item);
-                _left.Add(item);
-            }
-
-            Update();
-
-            Current = _playlist[_playlistIndicies[0]];
-
-            OnChanged();
-        }
-
-        public void Enqueue(ITrack track)
-        {
-            lock (_queueLock)
-            {
-                var item = new PlayerQueueItem(true, track);
-                _queue.Enqueue(item);
-                if (_playlist.Count > 0)
-                {
-                    _left.Insert(_queue.Count + 1, item);
-                }
-                else
-                {
-                    _left.Add(item);
-                }
-            }
-
-            OnChanged();
-        }
-
-        public void Enqueue(IEnumerable<ITrack> tracks)
-        {
-            lock (_queueLock)
-            {
-                foreach (var track in tracks)
-                {
-                    var item = new PlayerQueueItem(true, track);
-                    _queue.Enqueue(item);
-                    if (_playlist.Count > 0)
-                    {
-                        _left.Insert(_queue.Count + 1, item);
-                    }
-                    else
-                    {
-                        _left.Add(item);
-                    }
-                }
-            }
-
-            OnChanged();
-        }
-
         public bool Next()
         {
-            _left.Remove(Current);
+            if (_dispatcher.CheckAccess())
+            {
+                _left.Remove(Current);
+            }
+            else
+            {
+                _dispatcher.Invoke((Func<PlayerQueueItem, bool>)_left.Remove, Current);
+            }
 
             if (_queue.Count > 0)
             {
@@ -302,7 +313,16 @@ namespace Torshify.Client.Infrastructure.Models
 
                 int indexToPlay = _playlistIndicies[_playlistTrackIndex];
                 Current = _playlist[indexToPlay];
-                _left.Insert(0, Current);
+
+                if (_dispatcher.CheckAccess())
+                {
+                    _left.Insert(0, Current);
+                }
+                else
+                {
+                    _dispatcher.Invoke((Action<int, PlayerQueueItem>)_left.Insert, 0, Current);
+                }
+
                 return true;
             }
 
@@ -312,16 +332,57 @@ namespace Torshify.Client.Infrastructure.Models
 
                 int indexToPlay = _playlistIndicies[_playlistTrackIndex];
                 Current = _playlist[indexToPlay];
-                _left.Insert(0, Current);
+
+                if (_dispatcher.CheckAccess())
+                {
+                    _left.Insert(0, Current);
+                }
+                else
+                {
+                    _dispatcher.Invoke((Action<int, PlayerQueueItem>)_left.Insert, 0, Current);
+                }
+
                 return true;
             }
 
             return false;
         }
 
-        #endregion Public Methods
+        public void Set(IEnumerable<ITrack> tracks)
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                _playlist = new List<PlayerQueueItem>();
+                _left.Clear();
 
-        #region Protected Methods
+                foreach (var track in tracks)
+                {
+                    var item = new PlayerQueueItem(false, track);
+                    _playlist.Add(item);
+                    _left.Add(item);
+                }
+
+                Update();
+
+                Current = _playlist[_playlistIndicies[0]];
+
+                OnChanged();
+            }
+            else
+            {
+                _dispatcher.BeginInvoke((Action<IEnumerable<ITrack>>)Set, tracks);
+            }
+        }
+
+        protected virtual void OnChanged()
+        {
+            var handler = Changed;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
 
         protected virtual void OnCurrentChanged()
         {
@@ -353,19 +414,6 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
-        protected virtual void OnChanged()
-        {
-            var handler = Changed;
-
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
-        }
-        #endregion Protected Methods
-
-        #region Private Static Methods
-
         private static int[] BuildShuffledIndexArray(int size)
         {
             int[] array = new int[size];
@@ -396,10 +444,6 @@ namespace Torshify.Client.Infrastructure.Models
             array[firstIndex] = temp;
         }
 
-        #endregion Private Static Methods
-
-        #region Private Methods
-
         private void Update()
         {
             if (_playlist == null)
@@ -422,6 +466,6 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
-        #endregion Private Methods
+        #endregion Methods
     }
 }

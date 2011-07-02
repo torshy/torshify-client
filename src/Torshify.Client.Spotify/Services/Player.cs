@@ -1,6 +1,6 @@
 using System;
 using System.Timers;
-
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -26,7 +26,7 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        public Player(ISession session)
+        public Player(ISession session, Dispatcher dispatcher)
         {
             _bass = new BassPlayer();
 
@@ -35,8 +35,8 @@ namespace Torshify.Client.Spotify.Services
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
             _session.StopPlayback += OnSessionStopPlayback;
             _session.StartPlayback += OnSessionStartPlayback;
-            
-            _playlist = new PlayerQueue();
+
+            _playlist = new PlayerQueue(dispatcher);
             _playlist.CurrentChanged += OnCurrentChanged;
 
             _timer = new Timer(100);
@@ -200,6 +200,17 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
+            if (Playlist.Current != null)
+            {
+                if ((DurationPlayed >= Playlist.Current.Track.Duration) && IsPlaying)
+                {
+                    if (Playlist.CanGoNext)
+                    {
+                        Playlist.Next();
+                    }
+                }
+            }
+
             RaisePropertyChanged("DurationPlayed");
         }
 
