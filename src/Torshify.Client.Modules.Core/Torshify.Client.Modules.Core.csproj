@@ -92,6 +92,7 @@
     <Compile Include="Controls\ImageMapOverlay.cs" />
     <Compile Include="Controls\ImageMontage.cs" />
     <Compile Include="CoreCommands.cs" />
+    <Compile Include="CoreCommandsHandler.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="CoreRegionNames.cs" />
     <Compile Include="PlayerCommandsHandler.cs" />

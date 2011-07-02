@@ -154,6 +154,9 @@
     <Compile Include="Events\TrackCommandBarEvent.cs" />
     <Compile Include="IdleTimeDetector.cs" />
     <Compile Include="InactivityNotificator.cs" />
+    <Compile Include="Input\ExtendedMouseGesture.cs" />
+    <Compile Include="Input\ExtendedMouseBinding.cs" />
+    <Compile Include="Input\ExtendedMouseGestureConverter.cs" />
     <Compile Include="Interfaces\IAlbumInformation.cs" />
     <Compile Include="Interfaces\IArtistInformation.cs" />
     <Compile Include="Interfaces\IBackdropService.cs" />

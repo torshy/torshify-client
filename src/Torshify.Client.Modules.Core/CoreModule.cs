@@ -64,6 +64,7 @@ namespace Torshify.Client.Modules.Core
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("LoginView", UriKind.Relative));
 #endif    
             _container.Resolve<PlayerCommandsHandler>().Initialize();
+            _container.Resolve<CoreCommandsHandler>().Initialize();
         }
 
         #endregion Public Methods
