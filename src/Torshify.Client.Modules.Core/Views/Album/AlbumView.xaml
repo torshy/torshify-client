@@ -77,6 +77,7 @@
                             Height="Auto" />
                     </Grid.RowDefinitions>
                     <DataGrid
+                        Style="{DynamicResource DataGrid_MinimalStyle}"
                         ItemsSource="{Binding Album.Info.Tracks}"
                         IsReadOnly="True"
                         CanUserAddRows="False"
@@ -90,26 +91,11 @@
                         HeadersVisibility="None">
                         <Interactivity:Interaction.Behaviors>
                             <Behaviors:DataGridTriStateSortingBehavior />
+                            <Behaviors:IgnoreMouseWheelBehavior />
                         </Interactivity:Interaction.Behaviors>
                         <DataGrid.ContextMenu>
                             <ContextMenu />
                         </DataGrid.ContextMenu>
-                        <DataGrid.Style>
-                            <Style
-                                TargetType="{x:Type DataGrid}"
-                                BasedOn="{StaticResource {x:Type DataGrid}}">
-                                <Setter
-                                    Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate
-                                            TargetType="{x:Type DataGrid}">
-                                            <ItemsPresenter
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGrid.Style>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn
                                 Header="Index"
