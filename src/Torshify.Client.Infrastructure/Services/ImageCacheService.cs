@@ -48,7 +48,7 @@ namespace Torshify.Client.Infrastructure.Services
                         decodeWidth,
                         decodeHeight);
 
-                    _cache.Add(cacheKey, entry, new CacheItemPolicy {SlidingExpiration = TimeSpan.FromSeconds(30)});
+                    _cache.Add(cacheKey, entry, new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(30) });
                 }
                 else
                 {
@@ -94,8 +94,7 @@ namespace Torshify.Client.Infrastructure.Services
 
             private static readonly ActionPump _instance = new ActionPump();
 
-            private ConcurrentQueue<Action> _queue;
-            private AutoResetEvent _resetEvent = new AutoResetEvent(false);
+            private BlockingCollection<Action> _queue;
             private Thread _worker;
 
             #endregion Fields
@@ -104,7 +103,7 @@ namespace Torshify.Client.Infrastructure.Services
 
             public ActionPump()
             {
-                _queue = new ConcurrentQueue<Action>();
+                _queue = new BlockingCollection<Action>();
                 _worker = new Thread(Run);
                 _worker.IsBackground = true;
                 _worker.Start();
@@ -128,28 +127,23 @@ namespace Torshify.Client.Infrastructure.Services
 
             public void Enqueue(Action action)
             {
-                _queue.Enqueue(action);
-                _resetEvent.Set();
+                _queue.TryAdd(action);
             }
 
             private void Run()
             {
                 while (true)
                 {
-                    Action action;
-                    if (_queue.TryDequeue(out action))
-                    {
-                        try
-                        {
-                            action();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    }
+                    Action action = _queue.Take();
 
-                    _resetEvent.WaitOne();
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
                 }
             }
 
@@ -182,7 +176,7 @@ namespace Torshify.Client.Infrastructure.Services
                         SetBitmap(coverArtSource);
 
                         IsLoaded = true;
-                    }));
+                    }), LazyThreadSafetyMode.ExecutionAndPublication);
             }
 
             #endregion Constructors
@@ -193,7 +187,7 @@ namespace Torshify.Client.Infrastructure.Services
             {
                 get
                 {
-                    if (!_lazyLoad.IsValueCreated)
+                    if (_bitmap == null)
                     {
                         _lazyLoad.Value();
                     }
@@ -339,17 +333,24 @@ namespace Torshify.Client.Infrastructure.Services
                 bool success = false;
                 try
                 {
-                    using (MemoryStream stream = new MemoryStream(_image.Raw))
+                    if (!File.Exists(_saveLocation))
                     {
-                        JpegBitmapEncoder bitmapEncoder = new JpegBitmapEncoder();
-                        bitmapEncoder.Frames.Add(BitmapFrame.Create(stream));
-                        bitmapEncoder.QualityLevel = 100;
-
-                        using (FileStream fs = new FileStream(_saveLocation, FileMode.Create, FileAccess.Write))
+                        using (MemoryStream stream = new MemoryStream(_image.Raw))
                         {
-                            bitmapEncoder.Save(fs);
-                        }
+                            JpegBitmapEncoder bitmapEncoder = new JpegBitmapEncoder();
+                            bitmapEncoder.Frames.Add(BitmapFrame.Create(stream));
+                            bitmapEncoder.QualityLevel = 100;
 
+                            using (FileStream fs = new FileStream(_saveLocation, FileMode.Create, FileAccess.Write))
+                            {
+                                bitmapEncoder.Save(fs);
+                            }
+
+                            success = true;
+                        }
+                    }
+                    else
+                    {
                         success = true;
                     }
                 }
