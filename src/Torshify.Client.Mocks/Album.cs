@@ -42,7 +42,7 @@ namespace Torshify.Client.Mocks
                 coverArtSource.CacheOption = BitmapCacheOption.None;
                 coverArtSource.UriSource = new Uri("pack://application:,,,/Torshify.Client.Mocks;component/UnknownCoverArt.png");
                 coverArtSource.EndInit();
-
+                coverArtSource.Freeze();
                 return coverArtSource;
             }
         }
