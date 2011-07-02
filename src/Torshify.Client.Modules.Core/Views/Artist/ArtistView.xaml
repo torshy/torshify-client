@@ -19,7 +19,23 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock
+            Grid.ColumnSpan="2"
+            Text="{Binding Artist.Name}"
+            TextTrimming="CharacterEllipsis"
+            FontSize="16"
+            FontWeight="Light"
+            Foreground="{DynamicResource ControlTextBrush}"
+            Margin="8,0,0,2" />
+        
         <TreeView
+            Grid.Row="1"
             x:Name="_albumsListControl"
             ItemsSource="{Binding Albums}"
             BorderThickness="0"
@@ -134,6 +150,7 @@
         </TreeView>
 
         <Controls:SprocketControl
+            Grid.RowSpan="2"
             Visibility="{Binding Artist.Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
             IsBusy="{Binding Artist.Info.IsLoading}"
             Width="48"

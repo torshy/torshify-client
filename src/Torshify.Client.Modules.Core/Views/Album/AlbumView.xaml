@@ -32,9 +32,21 @@
                     Height="Auto" />
                 <RowDefinition
                     Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
             </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.ColumnSpan="2"
+                Text="{Binding Album.Artist.Name}"
+                TextTrimming="CharacterEllipsis"
+                FontSize="16"
+                FontWeight="Light"
+                Foreground="{DynamicResource ControlTextBrush}"
+                Margin="8,0,0,2" />
             
             <DockPanel
+                Grid.Row="1"
                 Grid.Column="0">
                 <Border
                     Margin="8"
@@ -50,6 +62,7 @@
             </DockPanel>
 
             <DockPanel
+                Grid.Row="1"
                 Grid.Column="1"
                 LastChildFill="True">
                 <StackPanel
@@ -124,7 +137,7 @@
             <Border
                 Visibility="{Binding Album.Info.Review, Converter={StaticResource StringEmptyToVisibilityConverter}}"
                 Grid.ColumnSpan="2"
-                Grid.Row="1"
+                Grid.Row="2"
                 Background="Black"
                 CornerRadius="4"
                 IsEnabled="False">
@@ -146,6 +159,7 @@
 
             <Controls:SprocketControl
                 Grid.ColumnSpan="2"
+                Grid.RowSpan="3"
                 Visibility="{Binding Album.Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
                 IsBusy="{Binding Album.Info.IsLoading}"
                 Width="48"

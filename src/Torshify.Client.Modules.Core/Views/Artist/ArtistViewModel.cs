@@ -74,11 +74,23 @@ namespace Torshify.Client.Modules.Core.Views.Artist
 
             if (Artist != null)
             {
-                Artist.Info.FinishedLoading += OnInfoFinishedLoading;
+                if (Artist.Info.IsLoading)
+                {
+                    Artist.Info.FinishedLoading += OnInfoFinishedLoading;
+                }
+                else
+                {
+                    PrepareData();
+                }
             }
         }
 
         private void OnInfoFinishedLoading(object sender, EventArgs e)
+        {
+            PrepareData();
+        }
+
+        private void PrepareData()
         {
             _albums = new SortedObservableCollection<IAlbum>(new AlbumComparer());
 
