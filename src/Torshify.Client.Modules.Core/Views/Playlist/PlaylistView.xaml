@@ -35,6 +35,9 @@
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
+                    Width="Auto"
+                    CellTemplate="{StaticResource DataGrid_Track_StarredTemplate}" />
+                <DataGridTemplateColumn
                     Header="Track"
                     Width="200" 
                     CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}"/>

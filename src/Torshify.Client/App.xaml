@@ -87,6 +87,40 @@
                 x:Key="TextBox_DisabledBackground"
                 Color="#F4F4F4" />
 
+            <RadialGradientBrush
+                x:Key="Star_NormalFillBrush"
+                RadiusX="0.534043"
+                RadiusY="0.559581"
+                Center="0.5,0.5"
+                GradientOrigin="0.5,0.5">
+                <RadialGradientBrush.GradientStops>
+                    <GradientStop
+                        Color="#FF373636"
+                        Offset="0.195349" />
+                    <GradientStop
+                        Color="#FF000000"
+                        Offset="0.893023" />
+                </RadialGradientBrush.GradientStops>
+            </RadialGradientBrush>
+
+            <SolidColorBrush
+                x:Key="Star_NormalStrokeBrush"
+                Color="#FF313131" />
+
+            <SolidColorBrush
+                x:Key="Star_MouseOverFillBrush" />
+
+            <SolidColorBrush
+                x:Key="Star_MouseOverStrokeBrush" />
+
+            <SolidColorBrush
+                x:Key="Star_PressedFillBrush"
+                Color="Orange"/>
+
+            <SolidColorBrush
+                x:Key="Star_PressedStrokeBrush" 
+                Color="Yellow"/>
+
         </ResourceDictionary>
 
     </Application.Resources>

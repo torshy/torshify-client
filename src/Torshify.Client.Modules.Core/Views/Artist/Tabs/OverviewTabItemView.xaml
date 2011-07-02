@@ -123,6 +123,9 @@
                                 </DataGrid.ContextMenu>
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn
+                                        Width="Auto"
+                                        CellTemplate="{StaticResource DataGrid_Track_StarredTemplate}" />
+                                    <DataGridTemplateColumn
                                         Header="Index"
                                         Width="Auto"
                                         CellTemplate="{StaticResource DataGrid_Track_TrackIndexTemplate}" />

@@ -133,6 +133,9 @@
     <Compile Include="Resources\Icons\ShuffleIcon.xaml.cs">
       <DependentUpon>ShuffleIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Icons\StarIcon.xaml.cs">
+      <DependentUpon>StarIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Album\AlbumView.xaml.cs">
       <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
@@ -227,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Icons\ShuffleIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\StarIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

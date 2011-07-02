@@ -27,5 +27,6 @@ namespace Torshify.Client.Modules.Core
         public static readonly CompositeCommand NavigateForwardCommand = new CompositeCommand();
         public static readonly CompositeCommand SearchCommand = new CompositeCommand();
         public static readonly CompositeCommand GoToNowPlayingCommand = new CompositeCommand();
+        public static readonly CompositeCommand ToggleTrackIsStarredCommand = new CompositeCommand();
     }
 }

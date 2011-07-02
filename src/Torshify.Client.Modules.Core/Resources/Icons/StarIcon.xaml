@@ -1,0 +1,27 @@
+﻿<UserControl
+    x:Name="Root"
+    x:Class="Torshify.Client.Modules.Core.Resources.Icons.StarIcon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    BorderThickness="0">
+    <Canvas
+        Width="20"
+        Height="20">
+        <Path
+            Width="12.9993"
+            Height="12.4517"
+            Canvas.Left="3.75568"
+            Canvas.Top="3.03377"
+            Stretch="Fill"
+            StrokeLineJoin="Round"
+            Stroke="{Binding BorderBrush, ElementName=Root}"
+            Fill="{Binding Foreground, ElementName=Root}"
+            Data="F1 M 13.8878,14.9855L 12.8464,10.7219L 16.255,7.95699L 11.8782,7.62991L 10.302,3.53377L 8.63843,7.59524L 4.25568,7.82857L 7.6043,10.6658L 6.47186,14.9061L 10.205,12.5981L 13.8878,14.9855 Z ">
+        </Path>
+    </Canvas>
+</UserControl>

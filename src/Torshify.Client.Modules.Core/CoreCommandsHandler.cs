@@ -49,6 +49,8 @@ namespace Torshify.Client.Modules.Core
                 .GoToAlbumCommand.RegisterCommand(new AutomaticCommand<IAlbum>(ExecuteGoToAlbum, CanExecuteGoToAlbum));
             CoreCommands.Views
                 .GoToArtistCommand.RegisterCommand(new AutomaticCommand<IArtist>(ExecuteGoToArtist, CanExecuteGoToArtist));
+            CoreCommands
+                .ToggleTrackIsStarredCommand.RegisterCommand(new AutomaticCommand<ITrack>(ExecuteToggleTrackIsStarred, CanExecuteToggleTrackIsStarred));
         }
 
         private bool CanExecuteGoToAlbum(IAlbum album)
@@ -61,6 +63,11 @@ namespace Torshify.Client.Modules.Core
             return artist != null;
         }
 
+        private bool CanExecuteToggleTrackIsStarred(ITrack track)
+        {
+            return track != null && track.IsAvailable;
+        }
+
         private void ExecuteGoToAlbum(IAlbum album)
         {
             Uri uri = new Uri(MusicRegionViewNames.AlbumView, UriKind.Relative);
@@ -71,6 +78,11 @@ namespace Torshify.Client.Modules.Core
         {
             Uri uri = new Uri(MusicRegionViewNames.ArtistView, UriKind.Relative);
             _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, artist);
+        }
+
+        private void ExecuteToggleTrackIsStarred(ITrack track)
+        {
+            track.IsStarred = !track.IsStarred;
         }
 
         #endregion Methods
