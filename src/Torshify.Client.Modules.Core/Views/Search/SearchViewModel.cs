@@ -6,10 +6,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
-
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.Search
@@ -18,8 +18,11 @@ namespace Torshify.Client.Modules.Core.Views.Search
     {
         #region Fields
 
+        private readonly IEventAggregator _eventAggregator;
         private readonly ISearchProvider _searchProvider;
 
+        private SubscriptionToken _tracksMenuBarToken;
+        private SubscriptionToken _trackMenuBarToken;
         private ISearch _currentSearch;
         private IList<ITrack> _searchResults;
 
@@ -27,8 +30,12 @@ namespace Torshify.Client.Modules.Core.Views.Search
 
         #region Constructors
 
-        public SearchViewModel(ISearchProvider searchProvider, Dispatcher dispatcher)
+        public SearchViewModel(
+            IEventAggregator eventAggregator, 
+            ISearchProvider searchProvider,
+            Dispatcher dispatcher)
         {
+            _eventAggregator = eventAggregator;
             _searchProvider = searchProvider;
             _searchResults = new ObservableCollection<ITrack>();
         }
@@ -61,11 +68,17 @@ namespace Torshify.Client.Modules.Core.Views.Search
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
+            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
+
             _currentSearch.FinishedLoading -= SearchFinishedLoading;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+
             string query = navigationContext.Parameters["Query"];
             _currentSearch = _searchProvider.Search(query, 0, int.MaxValue, 0, 10, 0, 10);
             _currentSearch.FinishedLoading += SearchFinishedLoading;
@@ -77,6 +90,20 @@ namespace Torshify.Client.Modules.Core.Views.Search
             search.FinishedLoading -= SearchFinishedLoading;
 
             SearchResults = new SearchResultsLoader(search.Query, search.Tracks, _searchProvider);
+        }
+
+        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         #endregion Methods
