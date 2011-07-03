@@ -90,6 +90,7 @@
     <Compile Include="Services\PlaylistTrack.cs" />
     <Compile Include="Services\Search.cs" />
     <Compile Include="Services\SearchProvider.cs" />
+    <Compile Include="Services\SessionObjectExtensions.cs" />
     <Compile Include="Services\Track.cs" />
     <Compile Include="SpotifyModule.cs" />
     <Compile Include="Views\Login\LoginView.xaml.cs">
