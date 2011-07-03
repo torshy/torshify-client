@@ -51,7 +51,7 @@
                                         Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
                                         CommandParameter="{Binding}">
                                          <TextBlock
-                                            Text="{Binding Year}"
+                                            Text="{Binding Name}"
                                             TextTrimming="CharacterEllipsis" />
                                     </Hyperlink>
                                 </TextBlock>
