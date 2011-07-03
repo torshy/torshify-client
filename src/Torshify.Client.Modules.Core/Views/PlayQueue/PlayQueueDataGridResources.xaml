@@ -2,7 +2,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
-    xmlns:conv="clr-namespace:Torshify.Client.Infrastructure.Controls.Html2Flow;assembly=Torshify.Client.Infrastructure" xmlns:Core="clr-namespace:Torshify.Client.Modules.Core">
+    xmlns:conv="clr-namespace:Torshify.Client.Infrastructure.Controls.Html2Flow;assembly=Torshify.Client.Infrastructure"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
+    xmlns:PlayQueue="clr-namespace:Torshify.Client.Modules.Core.Views.PlayQueue"
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
 
     <Converters:TimeSpanToTextConverter
         x:Key="TimeSpanToTextConverter" />
@@ -16,6 +19,9 @@
     <Converters:StringEmptyToVisibilityConverter
         x:Key="StringEmptyToVisibilityConverter" />
 
+    <PlayQueue:EqualInstanceToBooleanConverter
+        x:Key="EqualInstanceToBooleanConverter" />
+
     <Style
         x:Key="DataGrid_RightAlignedHeaderStyle"
         TargetType="{x:Type DataGridColumnHeader}"
@@ -24,6 +30,115 @@
             Property="HorizontalContentAlignment"
             Value="Right" />
     </Style>
+
+    <Style
+        x:Key="DataGrid_CenteringCellStyle"
+        TargetType="{x:Type DataGridCell}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type DataGridCell}">
+                    <Border
+                        Background="{TemplateBinding Background}">
+                        <ContentPresenter
+                            VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="DataGrid_EmphasizeCurrentlyPlayingSongRowStyle"
+        TargetType="{x:Type DataGridRow}"
+        BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <Style.Triggers>
+            <DataTrigger
+                Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding
+                        Converter="{StaticResource EqualInstanceToBooleanConverter}">
+                        <Binding
+                            Path="." />
+                        <Binding
+                            Path="DataContext.PlayQueue.Current"
+                            RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <Setter
+                    Property="VerticalContentAlignment"
+                    Value="Center" />
+                <Setter
+                    Property="Height"
+                    Value="50" />
+                <Setter
+                    Property="Foreground"
+                    Value="Black" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="Black" />
+                <Setter
+                    Property="BorderThickness"
+                    Value="0,0,0,1" />
+                <Setter
+                    Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush
+                            EndPoint="0.5,1"
+                            StartPoint="0.5,0">
+                            <GradientStop
+                                Color="#FFDDDDDD"
+                                Offset="0.1" />
+                            <GradientStop
+                                Color="#FFCCCCCC"
+                                Offset="1" />
+                            <GradientStop
+                                Color="#FF9F9F9F"
+                                Offset="0.9" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate
+        x:Key="DataGrid_Track_StarredTemplate">
+        <Button
+            Style="{DynamicResource SuperSimpleButtonStyle}"
+            Command="{x:Static Core:CoreCommands.ToggleTrackIsStarredCommand}"
+            CommandParameter="{Binding Track}">
+            <Icons:StarIcon
+                x:Name="Star" />
+        </Button>
+        <DataTemplate.Triggers>
+            <DataTrigger
+                Binding="{Binding Track.IsStarred}"
+                Value="False">
+                <Setter
+                    TargetName="Star"
+                    Property="Foreground"
+                    Value="{DynamicResource Star_NormalFillBrush}" />
+                <Setter
+                    TargetName="Star"
+                    Property="BorderBrush"
+                    Value="{DynamicResource Star_NormalStrokeBrush}" />
+            </DataTrigger>
+            <DataTrigger
+                Binding="{Binding Track.IsStarred}"
+                Value="True">
+                <Setter
+                    TargetName="Star"
+                    Property="Foreground"
+                    Value="{DynamicResource Star_PressedFillBrush}" />
+                <Setter
+                    TargetName="Star"
+                    Property="BorderBrush"
+                    Value="{DynamicResource Star_PressedStrokeBrush}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <DataTemplate
         x:Key="DataGrid_Track_TrackTemplate">
@@ -68,12 +183,29 @@
             Margin="0,0,4,0" />
         <DataTemplate.Triggers>
             <DataTrigger
+                Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding
+                        Converter="{StaticResource EqualInstanceToBooleanConverter}">
+                        <Binding
+                            Path="." />
+                        <Binding
+                            Path="DataContext.PlayQueue.Current"
+                            RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <Setter
+                    TargetName="_text"
+                    Property="Foreground"
+                    Value="Black" />
+            </DataTrigger>
+            <DataTrigger
                 Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
                 Value="True">
                 <Setter
                     TargetName="_text"
                     Property="Foreground"
-                    Value="Black" />
+                    Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -82,7 +214,7 @@
         x:Key="DataGrid_Track_AlbumTemplate">
         <TextBlock>
             <Hyperlink
-                Name="Link"
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
                 Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
                 CommandParameter="{Binding Track.Album}">
                 <TextBlock
@@ -90,16 +222,6 @@
                     TextTrimming="CharacterEllipsis" />
              </Hyperlink>
         </TextBlock>
-        <DataTemplate.Triggers>
-            <DataTrigger
-                Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                Value="True">
-                <Setter
-                    TargetName="Link"
-                    Property="Foreground"
-                    Value="Black" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
 </ResourceDictionary>

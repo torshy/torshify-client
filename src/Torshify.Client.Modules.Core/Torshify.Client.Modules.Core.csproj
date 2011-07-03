@@ -182,6 +182,7 @@
       <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Playlist\PlaylistViewModel.cs" />
+    <Compile Include="Views\PlayQueue\EqualInstanceToBooleanConverter.cs" />
     <Compile Include="Views\PlayQueue\PlayQueueView.xaml.cs">
       <DependentUpon>PlayQueueView.xaml</DependentUpon>
     </Compile>

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
@@ -15,23 +16,25 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         #region Fields
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly IRegionManager _regionManager;
         private readonly IPlayer _player;
+        private readonly IRegionManager _regionManager;
 
-        private SubscriptionToken _tracksMenuBarToken;
+        private IPlayerQueue _playQueue;
         private SubscriptionToken _trackMenuBarToken;
+        private SubscriptionToken _tracksMenuBarToken;
 
         #endregion Fields
 
         #region Constructors
 
         public PlayQueueViewModel(
-            IPlayer player, 
-            IEventAggregator eventAggregator, 
+            IPlayer player,
+            IEventAggregator eventAggregator,
             IRegionManager regionManager)
         {
             _player = player;
             _player.Playlist.Changed += OnPlaylistChanged;
+            _playQueue = player.Playlist;
 
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
@@ -40,6 +43,19 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         #endregion Constructors
 
         #region Properties
+
+        public IPlayerQueue PlayQueue
+        {
+            get
+            {
+                return _playQueue;
+            }
+            private set
+            {
+                _playQueue = value;
+                RaisePropertyChanged("PlayQueue");
+            }
+        }
 
         public IEnumerable<PlayerQueueItem> Tracks
         {
@@ -51,13 +67,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
 
         #endregion Properties
 
-        #region Public Methods
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
-            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
-        }
+        #region Methods
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
@@ -70,9 +80,16 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
         }
 
-        #endregion Public Methods
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
+            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+        }
 
-        #region Private Methods
+        private void OnPlaylistChanged(object sender, EventArgs e)
+        {
+            //RaisePropertyChanged("Tracks");
+        }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
@@ -88,11 +105,6 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
-        private void OnPlaylistChanged(object sender, EventArgs e)
-        {
-            //RaisePropertyChanged("Tracks");
-        }
-
-        #endregion Private Methods
+        #endregion Methods
     }
 }

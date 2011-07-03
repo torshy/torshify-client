@@ -28,7 +28,9 @@
             AutoGenerateColumns="False"
             ContextMenuOpening="DataGridContextMenuOpening"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            CellStyle="{StaticResource DataGrid_CenteringCellStyle}"
+            RowStyle="{StaticResource DataGrid_EmphasizeCurrentlyPlayingSongRowStyle}">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:DataGridTriStateSortingBehavior />
             </Interactivity:Interaction.Behaviors>
@@ -36,6 +38,9 @@
                 <ContextMenu />
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
+                <DataGridTemplateColumn
+                    Width="Auto"
+                    CellTemplate="{StaticResource DataGrid_Track_StarredTemplate}" />
                 <DataGridTemplateColumn
                     Header="Track"
                     Width="200"
