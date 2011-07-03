@@ -33,7 +33,8 @@
 
     <Style
         x:Key="DataGrid_CenteringCellStyle"
-        TargetType="{x:Type DataGridCell}">
+        TargetType="{x:Type DataGridCell}"
+        BasedOn="{StaticResource {x:Type DataGridCell}}">
         <Setter
             Property="Template">
             <Setter.Value>

@@ -203,7 +203,7 @@ namespace Torshify.Client.Spotify.Services
         {
             var track = Playlist.Current.Track as Track;
 
-            if (track != null)
+            if (track != null && track.InternalTrack.IsValid())
             {
                 track.InternalTrack.Load();
 
