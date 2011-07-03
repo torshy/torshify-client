@@ -73,7 +73,7 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                if (InternalTrack.IsLoaded)
+                if (InternalTrack.IsValid() && InternalTrack.IsLoaded)
                 {
                     return _duration.Value;
                 }
