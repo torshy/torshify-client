@@ -40,12 +40,28 @@ namespace Torshify.Client.Spotify.Services
 
         public ITorshifyAlbum Album
         {
-            get { return _album.Value; }
+            get
+            {
+                if (InternalTrack.IsLoaded)
+                {
+                    return _album.Value;
+                }
+
+                return null;
+            }
         }
 
         public IEnumerable<ITorshifyArtist> Artists
         {
-            get { return _artists.Value; }
+            get
+            {
+                if (InternalTrack.IsLoaded)
+                {
+                    return _artists.Value;
+                }
+
+                return null;
+            }
         }
 
         public int Disc
@@ -55,7 +71,15 @@ namespace Torshify.Client.Spotify.Services
 
         public TimeSpan Duration
         {
-            get { return _duration.Value; }
+            get
+            {
+                if (InternalTrack.IsLoaded)
+                {
+                    return _duration.Value;
+                }
+
+                return TimeSpan.Zero;
+            }
         }
 
         public int ID
@@ -103,5 +127,23 @@ namespace Torshify.Client.Spotify.Services
         }
 
         #endregion Properties
+
+        #region Methods
+
+        public virtual void Refresh()
+        {
+            RaisePropertyChanged(
+                "Album",
+                "Artists",
+                "Name",
+                "Popularity",
+                "Index",
+                "Disc",
+                "Duration",
+                "IsAvailable",
+                "IsStarred");
+        }
+
+        #endregion Methods
     }
 }
