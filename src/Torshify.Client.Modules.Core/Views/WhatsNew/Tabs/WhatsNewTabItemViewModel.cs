@@ -13,6 +13,7 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
+using System.Linq;
 
 namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 {
@@ -41,6 +42,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             _searchList = new List<ISearch>();
             _dispatcher = dispatcher;
 
+            NumberToFetchPerBatch = 9;
             GetMoreAlbumsCommand = new StaticCommand(GetMoreRandomAlbums);
         }
 
@@ -72,6 +74,12 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         public Visibility Visibility
         {
             get { return Visibility.Visible; }
+        }
+
+        public int NumberToFetchPerBatch
+        {
+            get; 
+            set;
         }
 
         #endregion Properties
@@ -126,22 +134,31 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             ISearch search = (ISearch) sender;
             search.FinishedLoading -= OnSearchFinishedLoading;
 
-            for (int i = 0; i < 9; i++)
-            {
-                int randomIndex = _random.Next(0, search.Tracks.Count);
-                ITrack randomTrack = search.Tracks[randomIndex];
+            int maxValue = search.Tracks.Count;
 
-                if (_albums.Contains(randomTrack.Album))
+            List<IAlbum> toAdd = new List<IAlbum>();
+            for (int i = 0; i < NumberToFetchPerBatch; i++)
+            {
+                int randomIndex = _random.Next(0, maxValue);
+                ITrack randomTrack = search.Tracks[randomIndex];
+                Func<IAlbum, bool> predicate = a => a.Name.Equals(randomTrack.Album.Name);
+
+                if (toAdd.Any(predicate) || _albums.Any(predicate))
                 {
                     i--;
                 }
                 else
                 {
-                    _dispatcher.BeginInvoke(
-                        (Action<IAlbum>) _albums.Add,
-                        DispatcherPriority.Background,
-                        randomTrack.Album);
+                    toAdd.Add(randomTrack.Album);
                 }
+            }
+
+            foreach (var album in toAdd)
+            {
+                _dispatcher.BeginInvoke(
+                    (Action<IAlbum>)_albums.Add,
+                    DispatcherPriority.Background,
+                    album);
             }
 
             _searchList.Remove(search);
