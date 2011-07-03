@@ -135,6 +135,9 @@
                                 Width="75"
                                 HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
                                 CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
+                            <DataGridTemplateColumn
+                                Width="50"
+                                CellTemplate="{StaticResource DataGrid_Track_PopularityTemplate}" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <ItemsControl
