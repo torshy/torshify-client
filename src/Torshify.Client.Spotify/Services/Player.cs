@@ -30,7 +30,7 @@ namespace Torshify.Client.Spotify.Services
         public Player(ISession session, Dispatcher dispatcher)
         {
             _bass = new BassPlayer();
-            _volume = 0.5f;
+            _volume = 0.2f;
             _session = session;
             _session.MusicDeliver += OnSessionMusicDeliver;
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
@@ -143,7 +143,6 @@ namespace Torshify.Client.Spotify.Services
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)
             {
                 _session.PlayerPlay();
-                IsPlaying = true;
             }
         }
 
