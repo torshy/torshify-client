@@ -75,6 +75,7 @@
     <Compile Include="AppConstants.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Collections\NotifyCollection.cs" />
     <Compile Include="Collections\SortedCollection.cs" />
     <Compile Include="Collections\SortedObservableCollection.cs" />
@@ -97,10 +98,14 @@
     <Compile Include="Commands\StaticCommand.cs" />
     <Compile Include="Commands\WeakCollection.cs" />
     <Compile Include="Commands\WeakReference.cs" />
+    <Compile Include="Controls\AnimatingPanel.cs" />
+    <Compile Include="Controls\AnimatingTilePanel.cs" />
     <Compile Include="Controls\BorderlessWindow.cs" />
     <Compile Include="Controls\BusyIndicator.cs" />
     <Compile Include="Controls\CommandBarContextMenu.cs" />
+    <Compile Include="Controls\CompositionTargetRenderingListening.cs" />
     <Compile Include="Controls\DoubleUtilities.cs" />
+    <Compile Include="Controls\GeoHelper.cs" />
     <Compile Include="Controls\Html2Flow\HtmlCssParser.cs" />
     <Compile Include="Controls\Html2Flow\HtmlFromXamlConverter.cs" />
     <Compile Include="Controls\Html2Flow\HtmlLexicalAnalyzer.cs" />
@@ -146,9 +151,11 @@
     <Compile Include="Controls\SystemCommands.cs" />
     <Compile Include="Controls\SystemParameters2.cs" />
     <Compile Include="Controls\UIHelpers.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
     <Compile Include="Controls\WindowChromeWorker.cs" />
+    <Compile Include="Controls\WpfUtil.cs" />
     <Compile Include="Converters\BoolToVisibleOrHidden.cs" />
     <Compile Include="Converters\ImageCacheConverter.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />

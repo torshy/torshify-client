@@ -42,6 +42,13 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
 
         public bool IsMe(IRegionNavigationJournalEntry entry)
         {
+            var parts = entry.Uri.OriginalString.Split('?');
+
+            if (parts[0] == _uri.OriginalString)
+            {
+                return true;
+            }
+
             return entry.Uri == _uri;
         }
 

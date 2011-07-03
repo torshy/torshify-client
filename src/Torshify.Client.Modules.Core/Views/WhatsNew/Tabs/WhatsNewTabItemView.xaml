@@ -5,8 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
-    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
-    mc:Ignorable="d"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core" xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -33,9 +32,12 @@
                 ItemsSource="{Binding Albums}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel
+                        <Controls:AnimatingTilePanel
                             ItemHeight="175"
                             ItemWidth="150" />
+                        <!--<WrapPanel
+                            ItemHeight="175"
+                            ItemWidth="150" />-->
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
