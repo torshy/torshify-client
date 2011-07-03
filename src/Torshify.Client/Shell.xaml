@@ -10,25 +10,24 @@
     Width="950"
     TextElement.FontFamily="Segoe UI"
     TextElement.FontSize="14">
-    <Grid
-        RenderTransformOrigin="0.498,0.5">
-        <Grid.Background>
-            <RadialGradientBrush
-                GradientOrigin="0.331,0.492">
-                <GradientStop
-                    Color="#FF373236"
-                    Offset="0" />
-                <GradientStop
-                    Color="Black"
-                    Offset="0.918" />
-                <GradientStop
-                    Color="Black"
-                    Offset="0.991" />
-                <GradientStop
-                    Color="#FF2B2525"
-                    Offset="0.442" />
-            </RadialGradientBrush>
-        </Grid.Background>
+    <infra:BorderlessWindow.Background>
+        <RadialGradientBrush
+            GradientOrigin="0.331,0.492">
+            <GradientStop
+                Color="#FF373236"
+                Offset="0" />
+            <GradientStop
+                Color="Black"
+                Offset="0.918" />
+            <GradientStop
+                Color="Black"
+                Offset="0.991" />
+            <GradientStop
+                Color="#FF2B2525"
+                Offset="0.442" />
+        </RadialGradientBrush>
+    </infra:BorderlessWindow.Background>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition
