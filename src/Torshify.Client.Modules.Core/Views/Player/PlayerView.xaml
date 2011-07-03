@@ -8,7 +8,9 @@
     xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
     xmlns:Player="clr-namespace:Torshify.Client.Modules.Core.Views.Player"
-    xmlns:WpfShaderEffects="clr-namespace:WpfShaderEffects;assembly=WpfShaderEffects" xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" mc:Ignorable="d"
+    xmlns:WpfShaderEffects="clr-namespace:WpfShaderEffects;assembly=WpfShaderEffects"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
     Height="80"
@@ -124,7 +126,7 @@
                     Minimum="0"
                     Maximum="{Binding Player.Playlist.Current.Track.Duration.TotalSeconds, Mode=OneWay}"
                     Value="{Binding Player.DurationPlayed.TotalSeconds, Mode=OneWay}"
-                    RequestValue="{Binding RequestSeek, Mode=OneWayToSource}"/>
+                    RequestValue="{Binding RequestSeek, Mode=OneWayToSource}" />
 
                 <Grid
                     Grid.Row="2"

@@ -81,17 +81,7 @@ namespace Torshify.Client.Infrastructure.Models
         {
             get
             {
-                if (_queue.Count > 0)
-                {
-                    return true;
-                }
-
-                if (_playlistIndicies == null || _playlistTrackIndex == -1)
-                {
-                    return false;
-                }
-
-                if (_playlistTrackIndex < (_playlistIndicies.Length - 1))
+                if (_left.Count > 0 || Current != null)
                 {
                     return true;
                 }
@@ -213,8 +203,6 @@ namespace Torshify.Client.Infrastructure.Models
                     {
                         _left.Add(item);
                     }
-
-
                 }
 
                 OnChanged();
@@ -270,30 +258,45 @@ namespace Torshify.Client.Infrastructure.Models
                 _dispatcher.Invoke((Func<PlayerQueueItem, bool>)_left.Remove, Current);
             }
 
+            PlayerQueueItem nextTrack = null;
+
+            // First we check if any tracks has bee queued
             if (_queue.Count > 0)
             {
-                Current = _queue.Dequeue();
-                return true;
+                nextTrack = _queue.Dequeue();
             }
 
-            if (_playlistIndicies == null)
+            // Now we check if there is tracks in the playlist
+            if (_playlist.Count > 0)
             {
-                return false;
-            }
+                // If we're before the end, we get the next in line
+                if (_playlistTrackIndex < (_playlistIndicies.Length - 1))
+                {
+                    _playlistTrackIndex++;
+                }
+                else if (Repeat)
+                {
+                    // We're repeating, so start at the beginning
+                    _playlistTrackIndex = 0;
+                }
+                else
+                {
+                    // We're done. Clear all caches and return false
+                    _playlist.Clear();
+                    _playlistIndicies = null;
+                    _playlistTrackIndex = -1;
+                    Current = null;
+                    return false;
+                }
 
-            if (_playlistTrackIndex < (_playlistIndicies.Length - 1))
-            {
-                _playlistTrackIndex++;
+                // Get the index for the next track
                 int indexToPlay = _playlistIndicies[_playlistTrackIndex];
-                Current = _playlist[indexToPlay];
-                return true;
+                nextTrack = _playlist[indexToPlay];
             }
 
-            if (Repeat)
+            if (nextTrack != null)
             {
-                _playlistTrackIndex = 0;
-                int indexToPlay = _playlistIndicies[_playlistTrackIndex];
-                Current = _playlist[indexToPlay];
+                Current = nextTrack;
                 return true;
             }
 

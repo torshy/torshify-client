@@ -144,8 +144,13 @@ namespace Torshify.Client.Spotify.Services
 
         public void Stop()
         {
-            _session.PlayerUnload();
-            IsPlaying = false;
+            if (_isPlaying)
+            {
+                _session.PlayerUnload();
+                IsPlaying = false;
+                _playLocation = TimeSpan.Zero;
+                RaisePropertyChanged("DurationPlayed");
+            }
         }
 
         #endregion Public Methods
@@ -192,27 +197,33 @@ namespace Torshify.Client.Spotify.Services
                         Playlist.Next();
                     }
                 }
+
+                _playLocation = _playLocation.Add(TimeSpan.FromMilliseconds(_timer.Interval));
+                RaisePropertyChanged("DurationPlayed");
             }
-
-            _playLocation = _playLocation.Add(TimeSpan.FromMilliseconds(_timer.Interval));
-
-            RaisePropertyChanged("DurationPlayed");
         }
 
         private void OnCurrentChanged(object sender, EventArgs e)
         {
-            var track = Playlist.Current.Track as Track;
-
-            if (track != null && track.InternalTrack.IsValid())
+            if (Playlist.Current != null)
             {
-                track.InternalTrack.Load();
+                var track = Playlist.Current.Track as Track;
 
-                if (IsPlaying)
+                if (track != null && track.InternalTrack.IsValid())
                 {
-                    track.InternalTrack.Play();
-                }
+                    track.InternalTrack.Load();
 
-                _playLocation = TimeSpan.Zero;
+                    if (IsPlaying)
+                    {
+                        track.InternalTrack.Play();
+                    }
+
+                    _playLocation = TimeSpan.Zero;
+                }
+            }
+            else
+            {
+                Stop();
             }
         }
 
