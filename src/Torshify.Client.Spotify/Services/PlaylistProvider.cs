@@ -6,7 +6,6 @@ using System.Windows.Threading;
 using Torshify.Client.Infrastructure.Interfaces;
 
 using ITorshifyPlaylist = Torshify.Client.Infrastructure.Interfaces.IPlaylist;
-using System.Linq;
 
 namespace Torshify.Client.Spotify.Services
 {
@@ -35,7 +34,7 @@ namespace Torshify.Client.Spotify.Services
             }
             else
             {
-                _session.LoginComplete += (s,e)=>
+                _session.LoginComplete += (s, e) =>
                                               {
                                                   if (e.Status == Error.OK)
                                                   {
@@ -73,13 +72,14 @@ namespace Torshify.Client.Spotify.Services
 
         private void InitializePlaylistContainer()
         {
-            _session.PlaylistContainer.PlaylistAdded += OnPlaylistContainerPlaylistAdded;
-            _session.PlaylistContainer.PlaylistRemoved += OnPlaylistContainerPlaylistRemoved;
-            _session.PlaylistContainer.PlaylistMoved += OnPlaylistContainerPlaylistMoved;
-
             if (_session.PlaylistContainer.IsLoaded)
             {
                 FetchPlaylists();
+
+                _session.PlaylistContainer.PlaylistAdded += OnPlaylistContainerPlaylistAdded;
+                _session.PlaylistContainer.PlaylistRemoved += OnPlaylistContainerPlaylistRemoved;
+                _session.PlaylistContainer.PlaylistMoved += OnPlaylistContainerPlaylistMoved;
+
             }
             else
             {
@@ -89,22 +89,14 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnPlaylistContainerPlaylistMoved(object sender, PlaylistMovedEventArgs e)
         {
-            ITorshifyPlaylist p = _playlists.FirstOrDefault(i => i.InternalPlaylist == e.Playlist);
-
-            if (p != null)
-            {
-                OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
-            }
+            ITorshifyPlaylist p = _playlists[e.OldIndex];
+            OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
         }
 
         private void OnPlaylistContainerPlaylistRemoved(object sender, PlaylistEventArgs e)
         {
-            ITorshifyPlaylist p = _playlists.FirstOrDefault(i => i.InternalPlaylist == e.Playlist);
-
-            if (p != null)
-            {
-                OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
-            }
+            ITorshifyPlaylist p = _playlists[e.Position];
+            OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
         }
 
         private void OnPlaylistContainerPlaylistAdded(object sender, PlaylistEventArgs e)
@@ -115,6 +107,10 @@ namespace Torshify.Client.Spotify.Services
         private void OnPlaylistContainerLoaded(object sender, EventArgs e)
         {
             _session.PlaylistContainer.Loaded -= OnPlaylistContainerLoaded;
+            _session.PlaylistContainer.PlaylistAdded += OnPlaylistContainerPlaylistAdded;
+            _session.PlaylistContainer.PlaylistRemoved += OnPlaylistContainerPlaylistRemoved;
+            _session.PlaylistContainer.PlaylistMoved += OnPlaylistContainerPlaylistMoved;
+
             FetchPlaylists();
         }
 
@@ -137,7 +133,7 @@ namespace Torshify.Client.Spotify.Services
             }
             else
             {
-                _dispatcher.BeginInvoke((Action<IPlaylist, int>) InsertAt, playlist, position);
+                _dispatcher.BeginInvoke((Action<IPlaylist, int>)InsertAt, playlist, position);
             }
         }
 
