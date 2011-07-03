@@ -168,6 +168,7 @@
     <Compile Include="Views\Navigation\PlaylistNavigationItemProvider.cs" />
     <Compile Include="Views\Navigation\PlayQueueNavigationItem.cs" />
     <Compile Include="Views\Navigation\RadioNavigationItem.cs" />
+    <Compile Include="Views\Navigation\WhatsNewNavigationItem.cs" />
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
     </Compile>
@@ -191,6 +192,18 @@
       <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Search\SearchViewModel.cs" />
+    <Compile Include="Views\WhatsNew\Tabs\TopListsTabItemView.xaml.cs">
+      <DependentUpon>TopListsTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WhatsNew\Tabs\TopListsTabItemViewModel.cs" />
+    <Compile Include="Views\WhatsNew\Tabs\WhatsNewTabItemView.xaml.cs">
+      <DependentUpon>WhatsNewTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WhatsNew\Tabs\WhatsNewTabItemViewModel.cs" />
+    <Compile Include="Views\WhatsNew\WhatsNewView.xaml.cs">
+      <DependentUpon>WhatsNewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WhatsNew\WhatsNewViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -293,6 +306,18 @@
     <Page Include="Views\Search\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WhatsNew\Tabs\TopListsTabItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WhatsNew\Tabs\WhatsNewTabItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WhatsNew\WhatsNewView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

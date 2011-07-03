@@ -9,6 +9,7 @@ namespace Torshify.Client.Modules.Core
 
     public static class MusicRegionViewNames
     {
+        public const string WhatsNew = "WhatsNewView";
         public const string NowPlayingView = "NowPlayingView";
         public const string PlaylistView = "PlaylistView";
         public const string AlbumView = "AlbumView";

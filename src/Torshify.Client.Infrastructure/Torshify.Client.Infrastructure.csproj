@@ -163,6 +163,7 @@
     <Compile Include="Input\ExtendedMouseGesture.cs" />
     <Compile Include="Input\ExtendedMouseBinding.cs" />
     <Compile Include="Input\ExtendedMouseGestureConverter.cs" />
+    <Compile Include="Interfaces\Genre.cs" />
     <Compile Include="Interfaces\IAlbumInformation.cs" />
     <Compile Include="Interfaces\IArtistInformation.cs" />
     <Compile Include="Interfaces\IBackdropService.cs" />

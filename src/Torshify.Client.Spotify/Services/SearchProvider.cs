@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Threading;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -37,6 +38,17 @@ namespace Torshify.Client.Spotify.Services
                 albumCount,
                 artistOffset,
                 artistCount,
+                userData);
+
+            return new Search(spotifySearch, _dispatcher);
+        }
+
+        public ITorshifySearch Search(int fromYear, int toYear, Genre genre, object userData = null)
+        {
+            var spotifySearch = _session.Search(
+                fromYear, 
+                toYear, 
+                (RadioGenre) genre, 
                 userData);
 
             return new Search(spotifySearch, _dispatcher);

@@ -6,6 +6,20 @@
     xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
 
     <DataTemplate
+        x:Key="{x:Type Navigation:WhatsNewNavigationItem}">
+        <DockPanel
+            LastChildFill="True">
+            <Icons:PlayQueueIcon
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" />
+            <TextBlock
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                Text="What's New"
+                TextTrimming="CharacterEllipsis" />
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate
         x:Key="{x:Type Navigation:PlaylistNavigationItem}">
         <DockPanel
             LastChildFill="True">

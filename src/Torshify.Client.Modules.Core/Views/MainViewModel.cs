@@ -97,6 +97,7 @@ namespace Torshify.Client.Modules.Core.Views
             if (MusicViewRegion == null)
             {
                 MusicViewRegion = RegionManager.Regions[CoreRegionNames.MainMusicRegion];
+                MusicViewRegion.RequestNavigate(MusicRegionViewNames.WhatsNew);
             }
         }
 

@@ -27,6 +27,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
             RegionManager = (IRegionManager)ServiceLocator.Current.GetInstance(typeof(IRegionManager));
 
             _items = new ObservableCollection<INavigationItem>();
+            _items.Add(new WhatsNewNavigationItem(RegionManager));
             _items.Add(new PlayQueueNavigationItem(RegionManager));
         }
 
