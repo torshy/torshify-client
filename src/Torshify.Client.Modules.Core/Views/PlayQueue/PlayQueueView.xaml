@@ -55,6 +55,10 @@
                     HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
                     CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
                 <DataGridTemplateColumn
+                    Header="Popularity"
+                    Width="SizeToHeader"
+                    CellTemplate="{StaticResource DataGrid_Track_PopularityTemplate}" />
+                <DataGridTemplateColumn
                     Header="Album"
                     Width="175"
                     CellTemplate="{StaticResource DataGrid_Track_AlbumTemplate}" />

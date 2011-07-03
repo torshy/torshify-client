@@ -170,6 +170,7 @@
     <DataTemplate
         x:Key="DataGrid_Track_PopularityTemplate">
         <Controls:BlockBarRect
+            Width="50"
             Background="{DynamicResource ControlTextBrush}"
             Foreground="Black"
             Value="{Binding Popularity}"
