@@ -5,7 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
-    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core" xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" mc:Ignorable="d"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -21,12 +23,12 @@
                     Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            
+
             <Button
                 Content="More"
-                Command="{Binding GetMoreAlbumsCommand}" 
-                HorizontalAlignment="Right"/>
-            
+                Command="{Binding GetMoreAlbumsCommand}"
+                HorizontalAlignment="Right" />
+
             <ItemsControl
                 Grid.Row="1"
                 ItemsSource="{Binding Albums}">
@@ -73,7 +75,11 @@
                                 Padding="4"
                                 Background="{DynamicResource ControlTextBrush}"
                                 VerticalAlignment="Top">
-                                <ContentControl
+                                <Button
+                                    Style="{DynamicResource SuperSimpleButtonStyle}"
+                                    Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
+                                    CommandParameter="{Binding}"
+                                    Cursor="Hand"
                                     Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
                                     <ContentControl.ContentTemplate>
                                         <DataTemplate>
@@ -83,7 +89,7 @@
                                                 Source="{Binding Bitmap}" />
                                         </DataTemplate>
                                     </ContentControl.ContentTemplate>
-                                </ContentControl>
+                                </Button>
                             </Border>
                         </DockPanel>
                     </DataTemplate>

@@ -9,7 +9,7 @@
         x:Key="{x:Type Navigation:WhatsNewNavigationItem}">
         <DockPanel
             LastChildFill="True">
-            <Icons:PlayQueueIcon
+            <Icons:RadioIcon
                 Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" />
             <TextBlock
                 Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
