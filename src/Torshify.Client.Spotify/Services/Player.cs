@@ -1,6 +1,7 @@
 using System;
 using System.Timers;
 using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -16,11 +17,11 @@ namespace Torshify.Client.Spotify.Services
 
         private BassPlayer _bass;
         private bool _isPlaying;
-        private IPlayerQueue _playlist;
         private Error? _lastLoadStatus;
-        private Timer _timer;
-
+        private IPlayerQueue _playlist;
         private TimeSpan _playLocation = TimeSpan.Zero;
+        private Timer _timer;
+        private float _volume;
 
         #endregion Fields
 
@@ -29,7 +30,7 @@ namespace Torshify.Client.Spotify.Services
         public Player(ISession session, Dispatcher dispatcher)
         {
             _bass = new BassPlayer();
-
+            _volume = 0.5f;
             _session = session;
             _session.MusicDeliver += OnSessionMusicDeliver;
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
@@ -52,6 +53,18 @@ namespace Torshify.Client.Spotify.Services
         #endregion Events
 
         #region Properties
+
+        public TimeSpan DurationPlayed
+        {
+            get
+            {
+                return _playLocation;
+            }
+            set
+            {
+                Seek(value);
+            }
+        }
 
         public bool IsPlaying
         {
@@ -79,26 +92,28 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        public TimeSpan DurationPlayed
-        {
-            get
-            {
-                return _playLocation;
-            }
-            set
-            {
-                Seek(value);
-            }
-        }
-
         public IPlayerQueue Playlist
         {
             get { return _playlist; }
         }
 
+        public float Volume
+        {
+            get
+            {
+                return _volume;
+            }
+            set
+            {
+                _volume = value;
+                _bass.Volume = value;
+                RaisePropertyChanged("Volume");
+            }
+        }
+
         #endregion Properties
 
-        #region Public Methods
+        #region Methods
 
         public void Pause()
         {
@@ -153,10 +168,6 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        #endregion Public Methods
-
-        #region Protected Methods
-
         protected virtual void OnIsPlayingChanged()
         {
             var handler = IsPlayingChanged;
@@ -164,42 +175,6 @@ namespace Torshify.Client.Spotify.Services
             if (handler != null)
             {
                 handler(this, EventArgs.Empty);
-            }
-        }
-
-        #endregion Protected Methods
-
-        #region Private Methods
-
-        private void OnSessionStartPlayback(object sender, SessionEventArgs e)
-        {
-            Console.WriteLine("Start playback");
-        }
-
-        private void OnSessionStopPlayback(object sender, SessionEventArgs e)
-        {
-            Console.WriteLine("Stop playback");
-        }
-
-        private void OnSessionPlayerTokenLost(object sender, SessionEventArgs e)
-        {
-            IsPlaying = false;
-        }
-
-        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (Playlist.Current != null)
-            {
-                if ((DurationPlayed >= Playlist.Current.Track.Duration) && IsPlaying)
-                {
-                    if (Playlist.CanGoNext)
-                    {
-                        Playlist.Next();
-                    }
-                }
-
-                _playLocation = _playLocation.Add(TimeSpan.FromMilliseconds(_timer.Interval));
-                RaisePropertyChanged("DurationPlayed");
             }
         }
 
@@ -241,6 +216,38 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        #endregion Private Methods
+        private void OnSessionPlayerTokenLost(object sender, SessionEventArgs e)
+        {
+            IsPlaying = false;
+        }
+
+        private void OnSessionStartPlayback(object sender, SessionEventArgs e)
+        {
+            Console.WriteLine("Start playback");
+        }
+
+        private void OnSessionStopPlayback(object sender, SessionEventArgs e)
+        {
+            Console.WriteLine("Stop playback");
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (Playlist.Current != null)
+            {
+                if ((DurationPlayed >= Playlist.Current.Track.Duration) && IsPlaying)
+                {
+                    if (Playlist.CanGoNext)
+                    {
+                        Playlist.Next();
+                    }
+                }
+
+                _playLocation = _playLocation.Add(TimeSpan.FromMilliseconds(_timer.Interval));
+                RaisePropertyChanged("DurationPlayed");
+            }
+        }
+
+        #endregion Methods
     }
 }

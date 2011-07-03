@@ -61,6 +61,12 @@ namespace Torshify.Client.Mocks
             get { return _playerQueue; }
         }
 
+        public float Volume
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods

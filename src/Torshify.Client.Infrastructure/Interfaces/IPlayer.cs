@@ -27,6 +27,12 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
+        float Volume
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods

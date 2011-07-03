@@ -1,6 +1,8 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace Torshify.Client.Infrastructure.Controls
 {
@@ -20,6 +22,7 @@ namespace Torshify.Client.Infrastructure.Controls
             DependencyProperty.Register("RequestValue", typeof(double), typeof(DeferredValueSlider),
                 new FrameworkPropertyMetadata((double)0));
 
+        private bool _isClicked = false;
         private bool _isDragging;
         private ProgressBar _progressBar;
         private Slider _slider;
@@ -65,6 +68,7 @@ namespace Torshify.Client.Infrastructure.Controls
             {
                 _slider.AddHandler(Thumb.DragStartedEvent, new DragStartedEventHandler(OnDragStarted));
                 _slider.AddHandler(Thumb.DragCompletedEvent, new DragCompletedEventHandler(OnDragCompleted));
+                _slider.AddHandler(PreviewMouseDownEvent, new MouseButtonEventHandler(OnSliderPreviewMouseDown), true);
                 _slider.ValueChanged += OnSliderValueChanged;
             }
 
@@ -102,10 +106,17 @@ namespace Torshify.Client.Infrastructure.Controls
             }
         }
 
+        private void OnSliderPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _isClicked = true;
+        }
+
         private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (!_isDragging)
+            if (_isClicked && !_isDragging)
             {
+                _isClicked = false;
+                RequestValue = e.OldValue;
                 RaiseRequestValueChangedEvent(e);
             }
         }

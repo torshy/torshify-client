@@ -3,31 +3,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls">
 
-
-    <LinearGradientBrush
+    <SolidColorBrush
         x:Key="ProgressBarBackground"
-        EndPoint="1,0"
-        StartPoint="0,0">
-        <GradientStop
-            Color="#BABABA"
-            Offset="0" />
-        <GradientStop
-            Color="#C7C7C7"
-            Offset="0.5" />
-        <GradientStop
-            Color="#BABABA"
-            Offset="1" />
-    </LinearGradientBrush>
+        Color="#FFE7EAEA" />
     <LinearGradientBrush
         x:Key="ProgressBarBorderBrush"
         EndPoint="0,1"
         StartPoint="0,0">
         <GradientStop
-            Color="#B2B2B2"
-            Offset="0" />
+            Color="#FFAEB1AF"
+            Offset="0.1" />
         <GradientStop
-            Color="#8C8C8C"
-            Offset="1" />
+            Color="White"
+            Offset=".9" />
     </LinearGradientBrush>
     <LinearGradientBrush
         x:Key="ProgressBarGlassyHighlight"
@@ -150,10 +138,10 @@
             Value="#01D328" />
         <Setter
             Property="Background"
-            Value="{StaticResource ProgressBarBackground}" />
+            Value="#FF4E4E4E" />
         <Setter
             Property="BorderBrush"
-            Value="{StaticResource ProgressBarBorderBrush}" />
+            Value="Black" />
         <Setter
             Property="BorderThickness"
             Value="1" />
@@ -166,7 +154,7 @@
                         x:Name="TemplateRoot"
                         SnapsToDevicePixels="true">
                         <Rectangle
-                            Fill="{DynamicResource ControlTextBrush}"
+                            Fill="{TemplateBinding Background}"
                             RadiusY="0"
                             RadiusX="0"
                             VerticalAlignment="Center"
@@ -223,7 +211,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <LinearGradientBrush
         x:Key="HorizontalSliderThumbNormalBackground"
         EndPoint="0,1"
@@ -391,11 +379,12 @@
                             Style="{StaticResource DeferredValueSlider_SliderStyle}"
                             Name="PART_Slider"
                             Minimum="{TemplateBinding Minimum}"
-                            Maximum="{TemplateBinding Maximum}" />
+                            Maximum="{TemplateBinding Maximum}"
+                            IsMoveToPointEnabled="True" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>    
+    </Style>
 
 </ResourceDictionary>
