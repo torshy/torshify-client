@@ -6,11 +6,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
+using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Modules.Core.Controls;
@@ -23,10 +25,14 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private readonly IBackdropService _backdropService;
         private readonly Dispatcher _dispatcher;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayer _player;
         private readonly IRegionManager _regionManager;
 
+        private SubscriptionToken _appInactivityToken;
         private IRegionNavigationService _navigationService;
+        private SubscriptionToken _sysInactivityToken;
+        private bool _isUserInactive;
 
         #endregion Fields
 
@@ -36,11 +42,13 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             IRegionManager regionManager,
             IPlayer player,
             IBackdropService backdropService,
+            IEventAggregator eventAggregator,
             Dispatcher dispatcher)
         {
             _regionManager = regionManager;
             _player = player;
             _backdropService = backdropService;
+            _eventAggregator = eventAggregator;
             _dispatcher = dispatcher;
 
             NavigateBackCommand = new StaticCommand(ExecuteNavigateBack);
@@ -85,6 +93,19 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
         }
 
+        public bool IsUserInactive
+        {
+            get { return _isUserInactive; }
+            set
+            {
+                if (_isUserInactive != value)
+                {
+                    _isUserInactive = value;
+                    RaisePropertyChanged("IsUserInactive");
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -96,6 +117,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            _eventAggregator.GetEvent<ApplicationInactivityEvent>().Unsubscribe(_appInactivityToken);
+            _eventAggregator.GetEvent<SystemInactivityEvent>().Unsubscribe(_sysInactivityToken);
+
             _player.Playlist.CurrentChanged -= OnCurrentSongChanged;
 
             IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
@@ -109,6 +133,16 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _appInactivityToken = _eventAggregator.GetEvent<ApplicationInactivityEvent>().Subscribe(
+                OnApplicationInactivity,
+                ThreadOption.PublisherThread,
+                true);
+
+            _sysInactivityToken =_eventAggregator.GetEvent<SystemInactivityEvent>().Subscribe(
+                OnSystemInactivity,
+                ThreadOption.PublisherThread,
+                true);
+
             _navigationService = navigationContext.NavigationService;
 
             if (_player.Playlist.Current != null)
@@ -169,6 +203,11 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             });
         }
 
+        private void OnApplicationInactivity(bool isInactive)
+        {
+            IsUserInactive = isInactive;
+        }
+
         private void OnCurrentSongChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged("CurrentTrack");
@@ -179,6 +218,10 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             {
                 GetBackdropForTrack(currentPlaying.Track);
             }
+        }
+
+        private void OnSystemInactivity(bool isInactive)
+        {
         }
 
         #endregion Methods
