@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Torshify.Client.Modules.Core.Views.PlayQueue
+namespace Torshify.Client.Infrastructure.Converters
 {
     public class EqualInstanceToBooleanConverter : IMultiValueConverter
     {

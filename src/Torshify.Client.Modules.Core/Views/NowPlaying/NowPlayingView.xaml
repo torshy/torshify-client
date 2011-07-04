@@ -11,35 +11,112 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter
-            x:Key="BooleanToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="NowPlayingViewResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition
-                Height="Auto" />
+                Height="80" />
         </Grid.RowDefinitions>
 
-        <Button
-            Controls:WindowChrome.IsHitTestVisibleInChrome="True"
-            Content="Back"
-            Command="{Binding NavigateBackCommand}"
+        <Viewbox
+            Height="60"
+            Width="60"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top" />
+            VerticalAlignment="Top"
+            Margin="15,-10,0,0">
+            <Button
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                Width="30"
+                Height="30"
+                Style="{DynamicResource CircleIconButtonStyle}"
+                Command="{Binding NavigateBackCommand}">
+                <Canvas
+                    Width="20"
+                    Height="20"
+                    Canvas.Left="0"
+                    Canvas.Top="0">
+                    <Viewbox
+                        Width="15.9844"
+                        Height="13.3287"
+                        Canvas.Left="2.32805"
+                        Canvas.Top="3.02547">
+                        <Canvas
+                            Width="15.9844"
+                            Height="13.3287">
+                            <Path
+                                Width="15.9132"
+                                Height="0"
+                                Canvas.Left="0.0712929"
+                                Canvas.Top="6.66203"
+                                Stretch="Fill"
+                                Data="F1 M 15.9844,6.66203L 0.0712929,6.66203" />
+                            <Viewbox
+                                Width="15.9844"
+                                Height="13.3287"
+                                Canvas.Left="0"
+                                Canvas.Top="0">
+                                <Canvas
+                                    Width="15.9844"
+                                    Height="13.3287">
+                                    <Rectangle
+                                        Width="11.5964"
+                                        Height="2.66477"
+                                        Canvas.Left="4.38801"
+                                        Canvas.Top="5.32965"
+                                        Stretch="Fill"
+                                        Fill="White" />
+                                    <Path
+                                        Width="10.2173"
+                                        Height="13.3241"
+                                        Canvas.Left="0"
+                                        Canvas.Top="0"
+                                        Stretch="Fill"
+                                        Fill="White"
+                                        Data="F1 M 4.88765,7.99442L 10.2173,13.3241L 6.70367,13.3241L 0.0712929,6.6917L 0,6.62041L 0.0712929,6.54911L 6.62039,0L 10.2173,0L 4.88765,5.32965L 4.88765,7.99442 Z " />
+                                </Canvas>
+                            </Viewbox>
+                        </Canvas>
+                    </Viewbox>
+                </Canvas>
+            </Button>
+        </Viewbox>
 
         <DockPanel
             LastChildFill="True"
             HorizontalAlignment="Left"
-            VerticalAlignment="Bottom">
+            VerticalAlignment="Bottom"
+            Margin="60">
+            <DockPanel.Effect>
+                <DropShadowEffect
+                    ShadowDepth="0"
+                    BlurRadius="40" />
+            </DockPanel.Effect>
             <Border
                 DockPanel.Dock="Left"
-                Padding="5"
-                Height="150"
-                Width="150">
-                <Image
-                    Source="{Binding CurrentTrack.Album.Cover}"
-                    Stretch="Uniform" />
+                Margin="8,0,8,0"
+                Padding="2"
+                Background="{DynamicResource ControlTextBrush}"
+                VerticalAlignment="Top"
+                Height="130"
+                Width="130">
+                <ContentControl
+                    Content="{Binding CurrentTrack.Track.Album.CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Image
+                                Width="125"
+                                Height="125"
+                                Source="{Binding Bitmap}" />
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
             </Border>
             <Grid>
                 <Grid.RowDefinitions>
@@ -51,81 +128,125 @@
                     Grid.Row="0">
                     <TextBlock
                         Foreground="{DynamicResource ControlTextBrush}"
-                        Text="{Binding CurrentTrack.Album.Artist.Name}" />
+                        Text="{Binding CurrentTrack.Track.Album.Artist.Name, Converter={StaticResource StringToUpperConverter}}"
+                        FontSize="25"
+                        FontWeight="SemiBold" />
                     <TextBlock
                         Foreground="{DynamicResource ControlTextBrush}"
-                        Text="{Binding CurrentTrack.Album.Name}" />
+                        Text="{Binding CurrentTrack.Track.Album.Name, Converter={StaticResource StringToUpperConverter}}"
+                        FontWeight="Light"
+                        FontSize="25" />
                 </StackPanel>
 
                 <StackPanel
-                    Grid.Row="1">
+                    Grid.Row="1"
+                    VerticalAlignment="Bottom">
                     <TextBlock
                         Foreground="{DynamicResource ControlTextBrush}"
-                        Text="{Binding CurrentTrack.Name}" />
+                        Text="{Binding CurrentTrack.Track.Name}"
+                        FontSize="25" />
                 </StackPanel>
             </Grid>
         </DockPanel>
 
-        <ListBox
-            ItemsSource="{Binding Playlist}"
-            DisplayMemberPath="Track.Name"
-            HorizontalAlignment="Right"
-            Width="250" />
+        <Grid
+            Margin="0,0,16,0">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="250" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Background="#DD000000"
+                Padding="4,16,0,0">
+                <ListBox
+                    Background="{x:Null}"
+                    BorderThickness="0"
+                    ItemsSource="{Binding Playlist}"
+                    ItemTemplate="{StaticResource NowPlaying_TrackListItemTemplate}"
+                    Width="350">
+                    <ListBox.Resources>
+                        <SolidColorBrush
+                            x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                            Color="#20FFFFFF" />
+                        <SolidColorBrush
+                            x:Key="{x:Static SystemColors.ControlBrushKey}"
+                            Color="#20FFFFFF" />
+                    </ListBox.Resources>
+                </ListBox>
+            </Border>
+        </Grid>
 
         <StackPanel
             Grid.Row="1"
-            Orientation="Horizontal"
-            HorizontalAlignment="Right">
-            <Button
-                Style="{DynamicResource SuperSimpleButtonStyle}"
-                Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
-                <Icons:RepeatIcon />
-            </Button>
-            <Button
-                Style="{DynamicResource SuperSimpleButtonStyle}"
-                Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
-                <Icons:ShuffleIcon />
-            </Button>
-            <Button
-                Margin="8,0,1,0"
-                Width="25"
-                Height="25"
-                Style="{DynamicResource CircleIconButtonStyle}"
-                Command="{x:Static Core:CoreCommands+Player.PreviousCommand}">
-                <Icons:PreviousSongIcon />
-            </Button>
-            <Button
-                Margin="1,0,1,0"
-                Width="34"
-                Height="34"
-                Style="{DynamicResource CircleIconButtonStyle}"
-                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
-                <Viewbox
-                    Margin="5">
-                    <Icons:PauseIcon />
-                </Viewbox>
-            </Button>
-            <Button
-                Margin="1,0,1,0"
-                Width="34"
-                Height="34"
-                Style="{DynamicResource CircleIconButtonStyle}"
-                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
-                <Viewbox
-                    Margin="5">
-                    <Icons:PlayIcon />
-                </Viewbox>
-            </Button>
-            <Button
-                Margin="1,0,1,0"
-                Width="25"
-                Height="25"
-                Style="{DynamicResource CircleIconButtonStyle}"
-                Command="{x:Static Core:CoreCommands+Player.NextCommand}">
-                <Icons:NextSongIcon />
-            </Button>
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Margin="0,0,16,0">
+            <StackPanel
+                Orientation="Horizontal">
+                <Button
+                    Style="{DynamicResource SuperSimpleButtonStyle}"
+                    Command="{x:Static Core:CoreCommands+Player.ToggleRepeatCommand}">
+                    <Icons:RepeatIcon />
+                </Button>
+                <Button
+                    Style="{DynamicResource SuperSimpleButtonStyle}"
+                    Command="{x:Static Core:CoreCommands+Player.ToggleShuffleCommand}">
+                    <Icons:ShuffleIcon />
+                </Button>
+                <Button
+                    Margin="8,0,1,0"
+                    Width="25"
+                    Height="25"
+                    Style="{DynamicResource CircleIconButtonStyle}"
+                    Command="{x:Static Core:CoreCommands+Player.PreviousCommand}">
+                    <Icons:PreviousSongIcon />
+                </Button>
+                <Button
+                    Margin="1,0,1,0"
+                    Width="34"
+                    Height="34"
+                    Style="{DynamicResource CircleIconButtonStyle}"
+                    Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{x:Static Core:CoreCommands+Player.PauseCommand}">
+                    <Viewbox
+                        Margin="5">
+                        <Icons:PauseIcon />
+                    </Viewbox>
+                </Button>
+                <Button
+                    Margin="1,0,1,0"
+                    Width="34"
+                    Height="34"
+                    Style="{DynamicResource CircleIconButtonStyle}"
+                    Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{x:Static Core:CoreCommands+Player.PlayCommand}">
+                    <Viewbox
+                        Margin="5">
+                        <Icons:PlayIcon />
+                    </Viewbox>
+                </Button>
+                <Button
+                    Margin="1,0,1,0"
+                    Width="25"
+                    Height="25"
+                    Style="{DynamicResource CircleIconButtonStyle}"
+                    Command="{x:Static Core:CoreCommands+Player.NextCommand}">
+                    <Icons:NextSongIcon />
+                </Button>
+            </StackPanel>
+            <Slider
+                Margin="8,0,8,0"
+                Minimum="0.0"
+                Maximum="1.0"
+                SmallChange="0.1"
+                LargeChange="0.2"
+                IsMoveToPointEnabled="True"
+                Value="{Binding Player.Volume}"
+                VerticalAlignment="Center" />
         </StackPanel>
 
     </Grid>

@@ -50,13 +50,13 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         #region Properties
 
-        public ITrack CurrentTrack
+        public PlayerQueueItem CurrentTrack
         {
             get
             {
                 if (_player.Playlist.Current != null)
                 {
-                    return _player.Playlist.Current.Track;
+                    return _player.Playlist.Current;
                 }
 
                 return null;
@@ -67,6 +67,14 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         {
             get;
             private set;
+        }
+
+        public IPlayer Player
+        {
+            get
+            {
+                return _player;
+            }
         }
 
         public IEnumerable<PlayerQueueItem> Playlist
@@ -109,6 +117,8 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
 
             _player.Playlist.CurrentChanged += OnCurrentSongChanged;
+
+            RaisePropertyChanged("CurrentTrack");
         }
 
         private void DisplayBackgroundImage(ImageSource imageSource)
@@ -143,7 +153,10 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
                                             BitmapImage bitmapImage = new BitmapImage();
                                             bitmapImage.BeginInit();
                                             bitmapImage.DecodePixelHeight = 800;
-                                            bitmapImage.StreamSource = File.OpenRead(backdropFile);
+                                            bitmapImage.StreamSource = new FileStream(
+                                                backdropFile,
+                                                FileMode.Open,
+                                                FileAccess.Read);
                                             bitmapImage.EndInit();
                                             bitmapImage.Freeze();
 

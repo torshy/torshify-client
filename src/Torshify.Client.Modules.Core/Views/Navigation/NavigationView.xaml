@@ -13,14 +13,6 @@
         <Style
             x:Key="NoAlternationColorListBoxItem"
             TargetType="{x:Type ListBoxItem}">
-            <Style.Resources>
-                <SolidColorBrush
-                    x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                    Color="Orange" />
-                <SolidColorBrush
-                    x:Key="{x:Static SystemColors.ControlBrushKey}"
-                    Color="#99FFFFFF" />
-            </Style.Resources>
             <Setter
                 Property="Background"
                 Value="Transparent" />
@@ -90,5 +82,14 @@
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
         IsSynchronizedWithCurrentItem="True"
         HorizontalContentAlignment="Stretch"
-        AlternationCount="0" />
+        AlternationCount="0">
+        <ListBox.Resources>
+            <SolidColorBrush
+                x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                Color="Orange" />
+            <SolidColorBrush
+                x:Key="{x:Static SystemColors.ControlBrushKey}"
+                Color="#99FFFFFF" />
+        </ListBox.Resources>
+    </ListBox>
 </UserControl>

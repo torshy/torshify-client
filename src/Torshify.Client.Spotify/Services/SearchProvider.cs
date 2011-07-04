@@ -13,6 +13,7 @@ namespace Torshify.Client.Spotify.Services
 
         private readonly Dispatcher _dispatcher;
         private readonly ISession _session;
+        private ISearch _search;
 
         #endregion Fields
 
