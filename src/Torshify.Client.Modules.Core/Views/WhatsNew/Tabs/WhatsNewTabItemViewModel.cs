@@ -100,7 +100,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
                 query.Add("WhatsNewTag", DateTime.Now.ToLongTimeString());
                 navContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(MusicRegionViewNames.WhatsNew + query,
                                                                                 UriKind.Relative);
-
+                
                 _albums = new ObservableCollection<IAlbum>();
                 Albums = new ListCollectionView(_albums);
 
@@ -118,12 +118,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         private void GetMoreRandomAlbums()
         {
-            // Ok ok so its not really "What's New". Its four years old random shite, but libspotify doesn't provide whats new.
-            // Might swap this out with a nation-combined toplist thing instead later.
-            var search = _searchProvider.Search(
-                DateTime.Now.Year - 4,
-                DateTime.Now.Year,
-                Genre.All);
+            var search = _searchProvider.Search("tag:new", 0, 0, 0, 250, 0, 0);
 
             search.FinishedLoading += OnSearchFinishedLoading;
             _searchList.Add(search);
@@ -134,14 +129,14 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             ISearch search = (ISearch) sender;
             search.FinishedLoading -= OnSearchFinishedLoading;
 
-            int maxValue = search.Tracks.Count;
+            int maxValue = search.Albums.Count;
 
             List<IAlbum> toAdd = new List<IAlbum>();
             for (int i = 0; i < NumberToFetchPerBatch; i++)
             {
                 int randomIndex = _random.Next(0, maxValue);
-                ITrack randomTrack = search.Tracks[randomIndex];
-                Func<IAlbum, bool> predicate = a => a.Name.Equals(randomTrack.Album.Name);
+                var random = search.Albums[randomIndex];
+                Func<IAlbum, bool> predicate = a => a.Name.Equals(random.Name);
 
                 if (toAdd.Any(predicate) || _albums.Any(predicate))
                 {
@@ -149,7 +144,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
                 }
                 else
                 {
-                    toAdd.Add(randomTrack.Album);
+                    toAdd.Add(random);
                 }
             }
 
