@@ -29,7 +29,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
+
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition
@@ -60,7 +60,7 @@
                         <Behaviors:InactivityFadeBehavior />
                     </Interactivity:Interaction.Behaviors>
                 </Rectangle>
-                
+
                 <Viewbox
                     Grid.ColumnSpan="3"
                     Height="60"
@@ -206,7 +206,8 @@
                         Padding="4,16,0,16">
                         <Interactivity:Interaction.Behaviors>
                             <Behaviors:InactivityFadeBehavior />
-                            <Behaviors:InactivityScaleBehavior />
+                            <Behaviors:InactivityScaleBehavior
+                                InDuration="0:0:0.1" />
                         </Interactivity:Interaction.Behaviors>
                         <ListBox
                             Background="{x:Null}"

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -13,6 +14,7 @@ using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
+using Torshify.Client.Infrastructure.Input;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Modules.Core.Controls;
@@ -33,6 +35,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private IRegionNavigationService _navigationService;
         private SubscriptionToken _sysInactivityToken;
         private bool _isUserInactive;
+        private double _requestSeek;
 
         #endregion Fields
 
@@ -106,6 +109,16 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
         }
 
+        public double RequestSeek
+        {
+            get { return _requestSeek; }
+            set
+            {
+                _requestSeek = value;
+                _player.Seek(TimeSpan.FromSeconds(value));
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -138,7 +151,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
                 ThreadOption.PublisherThread,
                 true);
 
-            _sysInactivityToken =_eventAggregator.GetEvent<SystemInactivityEvent>().Subscribe(
+            _sysInactivityToken = _eventAggregator.GetEvent<SystemInactivityEvent>().Subscribe(
                 OnSystemInactivity,
                 ThreadOption.PublisherThread,
                 true);
@@ -167,6 +180,12 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             ImageMontage montage = new ImageMontage();
             montage.Initialize(imageSource);
+            montage.UI.InputBindings.Add(
+                new ExtendedMouseBinding
+                {
+                    Command = NavigateBackCommand,
+                    Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
+                });
             region.Add(montage.UI, "KenBurnsBackground");
         }
 

@@ -52,7 +52,7 @@ namespace Torshify.Client.Infrastructure.Behaviors
             opacityAnimation.To = 0.0;
             opacityAnimation.Duration = animationDuration;
 
-            Timeline.SetDesiredFrameRate(opacityAnimation, 24);
+            Timeline.SetDesiredFrameRate(opacityAnimation, 10);
 
             Storyboard.SetTarget(opacityAnimation, AssociatedObject);
             Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
