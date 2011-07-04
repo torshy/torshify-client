@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
-    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
+    xmlns:Player="clr-namespace:Torshify.Client.Modules.Core.Views.Player">
 
     <BooleanToVisibilityConverter
         x:Key="BooleanToVisibilityConverter" />
@@ -17,6 +18,12 @@
 
     <Converters:EqualInstanceToBooleanConverter
         x:Key="EqualInstanceToBooleanConverter" />
+
+    <Converters:TimeSpanToTextConverter
+        x:Key="TimeSpanToTextConverter" />
+    
+    <Player:TimeSpanLeftConverter
+        x:Key="TimeSpanLeftConverter" />
 
     <Style
         TargetType="{x:Type ListBoxItem}">
@@ -62,7 +69,7 @@
                 Width="20">
                 <Icons:NowPlayingIcon
                     x:Name="NowPlayingIcon"
-                    Foreground="Orange"/>
+                    Foreground="Orange" />
             </Decorator>
             <StackPanel
                 Margin="2,4,2,4">

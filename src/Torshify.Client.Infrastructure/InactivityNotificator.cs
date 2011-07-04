@@ -57,7 +57,12 @@ namespace Torshify.Client.Infrastructure
 
         private void OnPreProcess(object sender, ProcessInputEventArgs e)
         {
-            _lastAppicationInputActivity = DateTime.Now;
+            if (e.StagingItem.Input is KeyboardEventArgs ||
+                e.StagingItem.Input is MouseEventArgs ||
+                e.StagingItem.Input is TouchEventArgs)
+            {
+                _lastAppicationInputActivity = DateTime.Now;
+            }
         }
 
         private void OnInactivityCheckTick(object sender, EventArgs e)

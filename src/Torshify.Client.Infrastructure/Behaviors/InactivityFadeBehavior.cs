@@ -1,71 +1,26 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Interactivity;
 using System.Windows.Media.Animation;
-using System.Windows.Threading;
-using Microsoft.Practices.Prism;
-using Microsoft.Practices.Prism.Events;
-using Microsoft.Practices.ServiceLocation;
-using Torshify.Client.Infrastructure.Events;
 
 namespace Torshify.Client.Infrastructure.Behaviors
 {
-    public class InactivityFadeBehavior : Behavior<FrameworkElement>
+    public class InactivityFadeBehavior : InactivityBehavior<FrameworkElement>
     {
-        public static readonly DependencyProperty BeginTimeProperty =
-            DependencyProperty.Register(
-                "BeginTime",
-                typeof(TimeSpan?),
-                typeof(InactivityFadeBehavior),
-                new FrameworkPropertyMetadata(null));
-
-        public TimeSpan? BeginTime
-        {
-            get { return (TimeSpan?)GetValue(BeginTimeProperty); }
-            set { SetValue(BeginTimeProperty, value); }
-        }
+        #region Methods
 
         protected override void OnAttached()
         {
             AssociatedObject.Opacity = 0.0;
-
-            ServiceLocator
-                .Current
-                .TryResolve<IEventAggregator>()
-                .GetEvent<ApplicationInactivityEvent>()
-                .Subscribe(OnInactivityChanged);
-
-            ServiceLocator
-                .Current
-                .TryResolve<IEventAggregator>()
-                .GetEvent<SystemInactivityEvent>()
-                .Subscribe(OnInactivityChanged);
-
-            TriggerFadeIn();
-
             base.OnAttached();
         }
 
-        private void OnInactivityChanged(bool isInactive)
+        protected override void OnDetaching()
         {
-            if (Dispatcher.CheckAccess())
-            {
-                if (isInactive)
-                {
-                    TriggerFadeOut();
-                }
-                else
-                {
-                    TriggerFadeIn();
-                }
-            }
-            else
-            {
-                Dispatcher.BeginInvoke((Action<bool>) OnInactivityChanged, DispatcherPriority.Background, isInactive);
-            }
+            AssociatedObject.Opacity = 1.0;
+            base.OnDetaching();
         }
 
-        private void TriggerFadeIn()
+        protected override void TriggerFadeIn()
         {
             Duration animationDuration = new Duration(TimeSpan.FromMilliseconds(200));
 
@@ -80,7 +35,7 @@ namespace Torshify.Client.Infrastructure.Behaviors
 
             Storyboard s = new Storyboard();
             s.Children.Add(opacityAnimation);
-            
+
             if (BeginTime != null)
             {
                 s.BeginTime = BeginTime;
@@ -89,7 +44,7 @@ namespace Torshify.Client.Infrastructure.Behaviors
             s.Begin();
         }
 
-        private void TriggerFadeOut()
+        protected override void TriggerFadeOut()
         {
             Duration animationDuration = new Duration(TimeSpan.FromMilliseconds(200));
 
@@ -106,5 +61,7 @@ namespace Torshify.Client.Infrastructure.Behaviors
             s.Children.Add(opacityAnimation);
             s.Begin();
         }
+
+        #endregion Methods
     }
 }

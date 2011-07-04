@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
+    <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />
     <Compile Include="Controls\BlockBarBase.cs" />

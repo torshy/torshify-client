@@ -24,13 +24,45 @@
     <UserControl.ContentTemplate>
         <DataTemplate>
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition
                         Height="80" />
                 </Grid.RowDefinitions>
 
+                <Rectangle
+                    Grid.ColumnSpan="3"
+                    Grid.RowSpan="2"
+                    VerticalAlignment="Bottom"
+                    Height="150">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush
+                            StartPoint="0,0"
+                            EndPoint="0,1">
+                            <GradientStop
+                                Color="#00000000"
+                                Offset="0" />
+                            <GradientStop
+                                Color="#02000000"
+                                Offset="0.2" />
+                            <GradientStop
+                                Color="#A0000000"
+                                Offset="1" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                    <Interactivity:Interaction.Behaviors>
+                        <Behaviors:InactivityFadeBehavior />
+                    </Interactivity:Interaction.Behaviors>
+                </Rectangle>
+                
                 <Viewbox
+                    Grid.ColumnSpan="3"
                     Height="60"
                     Width="60"
                     HorizontalAlignment="Left"
@@ -97,6 +129,7 @@
                 </Viewbox>
 
                 <DockPanel
+                    Grid.ColumnSpan="3"
                     LastChildFill="True"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
@@ -158,6 +191,7 @@
                 </DockPanel>
 
                 <Grid
+                    Grid.ColumnSpan="3"
                     Margin="0,0,16,0">
                     <Grid.RowDefinitions>
                         <RowDefinition
@@ -196,7 +230,61 @@
                     </Border>
                 </Grid>
 
+                <Grid
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+                    <Interactivity:Interaction.Behaviors>
+                        <Behaviors:InactivityFadeBehavior />
+                    </Interactivity:Interaction.Behaviors>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid
+                        Grid.Row="0"
+                        VerticalAlignment="Bottom">
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            Foreground="{DynamicResource ControlTextBrush}"
+                            Text="{Binding CurrentTrack.Track.Name}" />
+                    </Grid>
+                    <Controls:DeferredValueSlider
+                        Grid.Row="1"
+                        Minimum="0"
+                        Maximum="{Binding CurrentTrack.Track.Duration.TotalSeconds, Mode=OneWay}"
+                        Value="{Binding Player.DurationPlayed.TotalSeconds, Mode=OneWay}"
+                        RequestValue="{Binding RequestSeek, Mode=OneWayToSource}" />
+
+                    <Grid
+                        Grid.Row="2"
+                        VerticalAlignment="Top">
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            Foreground="{DynamicResource ControlTextBrush}"
+                            FontSize="12"
+                            Text="{Binding Player.DurationPlayed, Converter={StaticResource TimeSpanToTextConverter}}" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            FontSize="12"
+                            Foreground="{DynamicResource ControlTextBrush}">
+                        <TextBlock.Text>
+                            <MultiBinding
+                                    Converter="{StaticResource TimeSpanLeftConverter}">
+                                <Binding
+                                        Path="Player.Playlist.Current.Track.Duration" />
+                                <Binding
+                                        Path="Player.DurationPlayed" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
+                </Grid>
+
                 <StackPanel
+                    Grid.ColumnSpan="3"
                     Grid.Row="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
