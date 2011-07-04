@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 
 using Microsoft.Practices.Prism.Modularity;
@@ -72,6 +71,8 @@ namespace Torshify.Client.Spotify
             _container.RegisterType<ISearchProvider, SearchProvider>(new ContainerControlledLifetimeManager());
             _container.RegisterType<LoginView>("LoginView");
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
+
+            _container.Resolve<SpotifyLogging>().Initialize();
         }
 
         #endregion Public Methods

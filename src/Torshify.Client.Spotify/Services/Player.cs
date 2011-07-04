@@ -1,7 +1,7 @@
 using System;
 using System.Timers;
 using System.Windows.Threading;
-
+using log4net;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -13,6 +13,7 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
+        private readonly ILog _log = LogManager.GetLogger("Player");
         private readonly ISession _session;
 
         private BassPlayer _bass;
@@ -121,6 +122,8 @@ namespace Torshify.Client.Spotify.Services
             {
                 _session.PlayerPause();
                 IsPlaying = false;
+
+                _log.Info("Paused");
             }
         }
 
@@ -143,6 +146,7 @@ namespace Torshify.Client.Spotify.Services
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)
             {
                 _session.PlayerPlay();
+                _log.Info("Playing");
             }
         }
 
@@ -153,6 +157,8 @@ namespace Torshify.Client.Spotify.Services
                 _session.PlayerSeek(timeSpan);
                 _playLocation = timeSpan;
                 RaisePropertyChanged("DurationPlayed");
+
+                _log.Info("Seeking " + timeSpan);
             }
         }
 
@@ -164,6 +170,8 @@ namespace Torshify.Client.Spotify.Services
                 IsPlaying = false;
                 _playLocation = TimeSpan.Zero;
                 RaisePropertyChanged("DurationPlayed");
+
+                _log.Info("Stop");
             }
         }
 
@@ -193,10 +201,14 @@ namespace Torshify.Client.Spotify.Services
                     }
 
                     _playLocation = TimeSpan.Zero;
+
+                    _log.Info("Changing track to " + track.Name);
                 }
             }
             else
             {
+                _log.Info("No more tracks to play.");
+
                 Stop();
             }
         }

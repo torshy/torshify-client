@@ -9,6 +9,9 @@ namespace Torshify.Client.Infrastructure
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "torshify");
 
+        public static readonly string LogFolder = Path.Combine(
+            AppDataFolder, "Logs");
+
         public static readonly string BackdropCacheFolder = Path.Combine(
             AppDataFolder, "Backdrops");
 

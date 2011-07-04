@@ -76,6 +76,7 @@
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />
+    <Compile Include="ConsoleManager.cs" />
     <Compile Include="Controls\BlockBarBase.cs" />
     <Compile Include="Controls\BlockBarRect.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />

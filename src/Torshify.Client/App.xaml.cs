@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Windows;
 
 using Torshify.Client.Spotify;
 
@@ -32,8 +29,6 @@ namespace Torshify.Client
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += UnhandledException;
-            DispatcherUnhandledException += OnDispatcherUnhandledException;
             base.OnStartup(e);
 
             Bootstrapper = new Bootstrapper();
@@ -52,20 +47,5 @@ namespace Torshify.Client
         }
 
         #endregion Protected Methods
-
-        #region Private Methods
-
-        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            File.WriteAllText("CrashOnDispatcher.log", e.Exception.ToString());
-        }
-
-        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Exception ex = (Exception)e.ExceptionObject;
-            File.WriteAllText("Crash.log", ex.ToString());
-        }
-
-        #endregion Private Methods
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 using Microsoft.Practices.Prism.Regions;
 
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Input;
 using Torshify.Client.Infrastructure.Interfaces;
@@ -33,10 +34,10 @@ namespace Torshify.Client.Modules.Core
         {
             Application.Current.MainWindow.InputBindings.Add(
                 new ExtendedMouseBinding
-                    {
-                        Command = CoreCommands.NavigateBackCommand,
-                        Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
-                    });
+                {
+                    Command = CoreCommands.NavigateBackCommand,
+                    Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
+                });
 
             Application.Current.MainWindow.InputBindings.Add(
                 new ExtendedMouseBinding
@@ -45,6 +46,15 @@ namespace Torshify.Client.Modules.Core
                     Gesture = new ExtendedMouseGesture(MouseButton.XButton2)
                 });
 
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Debug.ToggleDebugWindowCommand,
+                    Gesture = new KeyGesture(Key.D0, ModifierKeys.Alt)
+                });
+
+            CoreCommands.Debug
+                .ToggleDebugWindowCommand.RegisterCommand(new StaticCommand(ExecuteToggleDebugWindowCommand));
             CoreCommands.Views
                 .GoToAlbumCommand.RegisterCommand(new AutomaticCommand<IAlbum>(ExecuteGoToAlbum, CanExecuteGoToAlbum));
             CoreCommands.Views
@@ -78,6 +88,14 @@ namespace Torshify.Client.Modules.Core
         {
             Uri uri = new Uri(MusicRegionViewNames.ArtistView, UriKind.Relative);
             _regionManager.RequestNavigate(CoreRegionNames.MainMusicRegion, uri, artist);
+        }
+
+        private void ExecuteToggleDebugWindowCommand()
+        {
+            ConsoleManager.Toggle();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("...torshify debug window...");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private void ExecuteToggleTrackIsStarred(ITrack track)

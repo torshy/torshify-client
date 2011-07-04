@@ -91,6 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Log\CustomConsoleColorAppender.cs" />
     <Compile Include="Unity\UnityClearBuildPlanStrategies .cs" />
     <Compile Include="Unity\UnityExtensions.cs" />
     <Compile Include="Unity\UnitySafeBehaviorExtension .cs" />

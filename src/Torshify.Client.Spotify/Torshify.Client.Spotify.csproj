@@ -52,6 +52,9 @@
     <Reference Include="Bass.Net">
       <HintPath>..\..\lib\BASS\Bass.Net.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\Log4Net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -92,6 +95,7 @@
     <Compile Include="Services\SearchProvider.cs" />
     <Compile Include="Services\SessionObjectExtensions.cs" />
     <Compile Include="Services\Track.cs" />
+    <Compile Include="SpotifyLogging.cs" />
     <Compile Include="SpotifyModule.cs" />
     <Compile Include="Views\Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
