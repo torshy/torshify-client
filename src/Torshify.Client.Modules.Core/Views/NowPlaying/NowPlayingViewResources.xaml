@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure">
+    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
+    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
 
     <BooleanToVisibilityConverter
         x:Key="BooleanToVisibilityConverter" />
@@ -19,6 +20,12 @@
 
     <Style
         TargetType="{x:Type ListBoxItem}">
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource ControlTextBrush}" />
+        <Setter
+            Property="FocusVisualStyle"
+            Value="{x:Null}" />
         <Style.Triggers>
             <Trigger
                 Property="IsMouseOver"
@@ -48,19 +55,31 @@
 
     <DataTemplate
         x:Key="NowPlaying_TrackListItemTemplate">
-        <StackPanel
-            Margin="2,4,2,4">
-            <TextBlock
-                Name="TrackLabel"
-                Text="{Binding Track.Name}"
-                FontWeight="SemiBold"
-                FontSize="20" />
-            <TextBlock
-                Name="ArtistLabel"
-                Text="{Binding Track.Album.Artist.Name, Converter={StaticResource StringToUpperConverter}}"
-                FontWeight="SemiBold"
-                FontSize="12" />
-        </StackPanel>
+        <DockPanel
+            LastChildFill="True">
+            <Decorator
+                DockPanel.Dock="Left"
+                Width="20">
+                <Icons:NowPlayingIcon
+                    x:Name="NowPlayingIcon"
+                    Foreground="Orange"/>
+            </Decorator>
+            <StackPanel
+                Margin="2,4,2,4">
+                <TextBlock
+                    Name="TrackLabel"
+                    Text="{Binding Track.Name}"
+                    TextTrimming="CharacterEllipsis"
+                    FontWeight="SemiBold"
+                    FontSize="20" />
+                <TextBlock
+                    Name="ArtistLabel"
+                    Text="{Binding Track.Album.Artist.Name, Converter={StaticResource StringToUpperConverter}}"
+                    TextTrimming="CharacterEllipsis"
+                    FontWeight="SemiBold"
+                    FontSize="12" />
+            </StackPanel>
+        </DockPanel>
         <DataTemplate.Triggers>
             <DataTrigger
                 Value="False">
@@ -74,6 +93,10 @@
                             RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
                     </MultiBinding>
                 </DataTrigger.Binding>
+                <Setter
+                    TargetName="NowPlayingIcon"
+                    Property="Visibility"
+                    Value="Collapsed" />
                 <Setter
                     TargetName="ArtistLabel"
                     Property="Foreground"

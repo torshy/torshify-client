@@ -112,6 +112,9 @@
     <Compile Include="Resources\Icons\NextSongIcon.xaml.cs">
       <DependentUpon>NextSongIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Icons\NowPlayingIcon.xaml.cs">
+      <DependentUpon>NowPlayingIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Icons\PauseIcon.xaml.cs">
       <DependentUpon>PauseIcon.xaml</DependentUpon>
     </Compile>
@@ -218,6 +221,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\Icons\NextSongIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Icons\NowPlayingIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

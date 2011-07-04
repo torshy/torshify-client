@@ -84,7 +84,8 @@
                             </Viewbox>
                         </Canvas>
                     </Viewbox>
-                </Canvas>
+                </Canvas>
+
             </Button>
         </Viewbox>
 
@@ -161,12 +162,13 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Background="#DD000000"
-                Padding="4,16,0,0">
+                Padding="4,16,0,16">
                 <ListBox
                     Background="{x:Null}"
                     BorderThickness="0"
                     ItemsSource="{Binding Playlist}"
                     ItemTemplate="{StaticResource NowPlaying_TrackListItemTemplate}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     Width="350">
                     <ListBox.Resources>
                         <SolidColorBrush
@@ -175,6 +177,9 @@
                         <SolidColorBrush
                             x:Key="{x:Static SystemColors.ControlBrushKey}"
                             Color="#20FFFFFF" />
+                        <SolidColorBrush
+                            x:Key="{x:Static SystemColors.ControlTextBrushKey}"
+                            Color="White" />
                     </ListBox.Resources>
                 </ListBox>
             </Border>

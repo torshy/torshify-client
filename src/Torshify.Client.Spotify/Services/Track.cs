@@ -42,7 +42,7 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                if (InternalTrack.IsLoaded)
+                if (InternalTrack.IsValid() && InternalTrack.IsLoaded)
                 {
                     return _album.Value;
                 }
@@ -55,7 +55,7 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
-                if (InternalTrack.IsLoaded)
+                if (InternalTrack.IsValid() && InternalTrack.IsLoaded)
                 {
                     return _artists.Value;
                 }

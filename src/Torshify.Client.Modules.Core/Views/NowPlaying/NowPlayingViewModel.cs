@@ -146,6 +146,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private void GetBackdropForTrack(ITrack track)
         {
+            if (track == null || track.Album == null || track.Album.Artist == null)
+                return;
+
             _backdropService.GetBackdrop(track.Album.Artist.Name, backdropFile =>
             {
                 Task.Factory.StartNew(() =>
