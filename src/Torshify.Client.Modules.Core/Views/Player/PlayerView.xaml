@@ -25,6 +25,10 @@
             x:Key="TimeSpanToTextConverter" />
         <Player:TimeSpanLeftConverter
             x:Key="TimeSpanLeftConverter" />
+        <Converters:ImageCacheConverter
+            x:Key="ThumbnailCoverArtImageCacheConverter"
+            DecodeHeight="125"
+            DecodeWidth="125" />
         <Style
             x:Key="AlbumArtButtonStyle"
             TargetType="{x:Type Button}">
@@ -99,8 +103,17 @@
                     Margin="4"
                     Style="{StaticResource AlbumArtButtonStyle}"
                     Command="{x:Static Core:CoreCommands.GoToNowPlayingCommand}">
-                    <Image
-                        Source="{Binding Player.Playlist.Current.Track.Album.Cover}" />
+                    <ContentControl
+                        Content="{Binding Player.Playlist.Current.Track.Album.CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="125"
+                                    Height="125"
+                                    Source="{Binding Bitmap}" />
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
                 </Button>
             </Viewbox>
 

@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Imaging;
-
-namespace Torshify.Client.Infrastructure.Interfaces
+﻿namespace Torshify.Client.Infrastructure.Interfaces
 {
     public enum AlbumType
     {
@@ -30,11 +28,6 @@ namespace Torshify.Client.Infrastructure.Interfaces
         }
 
         int Year
-        {
-            get;
-        }
-
-        BitmapSource Cover
         {
             get;
         }

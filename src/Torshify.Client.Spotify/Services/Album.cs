@@ -57,35 +57,6 @@ namespace Torshify.Client.Spotify.Services
             get { return _artist.Value; }
         }
 
-        public BitmapSource Cover
-        {
-            get
-            {
-                string coverId = InternalAlbum.CoverId;
-
-                var source = MemoryCache.Default.Get(coverId) as BitmapSource;
-
-                if (source == null)
-                {
-                    if (!string.IsNullOrEmpty(coverId))
-                    {
-                        IImage image = InternalAlbum.Session.GetImage(coverId);
-
-                        if (!image.IsLoaded)
-                        {
-                            image.Loaded += OnCoverImageLoaded;
-                        }
-                        else
-                        {
-                            InitializeCover(image);
-                        }
-                    }
-                }
-
-                return source;
-            }
-        }
-
         public ITorshifyImage CoverArt
         {
             get
@@ -179,44 +150,6 @@ namespace Torshify.Client.Spotify.Services
             }
 
             return TorshifyAlbumType.Unknown;
-        }
-
-        private void InitializeCover(IImage image)
-        {
-            try
-            {
-                using (image)
-                {
-                    if (image.Error == Error.OK && image.Data.Length > 0)
-                    {
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnDemand;
-                        bitmapImage.StreamSource = new MemoryStream(image.Data);
-                        bitmapImage.EndInit();
-                        bitmapImage.Freeze();
-
-                        MemoryCache.Default.Add(
-                            image.ImageId,
-                            bitmapImage,
-                            new CacheItemPolicy {SlidingExpiration = TimeSpan.FromMinutes(1)});
-
-                        RaisePropertyChanged("Cover");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
-        }
-
-        private void OnCoverImageLoaded(object sender, EventArgs e)
-        {
-            IImage image = (IImage)sender;
-            image.Loaded -= OnCoverImageLoaded;
-
-            InitializeCover(image);
         }
 
         #endregion Methods
