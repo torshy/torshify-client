@@ -12,6 +12,7 @@ using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 {
@@ -124,8 +125,30 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
+            // This isn't working 100% because of the UI virtualization, and the caching/cleanup method i'm using for the album information.
+            // This will only queue up what the view has created, which probably is just a fraction of certain artists' tracks. 
+            // TODO : Figure it out
+            List<ITrack> tracksToPlay = new List<ITrack>();
+            bool addRest = false;
+            foreach (var album in _albums)
+            {
+                int index = album.Info.Tracks.IndexOf(model.Track);
+
+                if (index != -1 && addRest == false)
+                {
+                    tracksToPlay.AddRange(album.Info.Tracks.Skip(index));
+                    addRest = true;
+                    continue;
+                }
+
+                if (addRest)
+                {
+                    tracksToPlay.AddRange(album.Info.Tracks);
+                }
+            }
+
             model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
         }
 
