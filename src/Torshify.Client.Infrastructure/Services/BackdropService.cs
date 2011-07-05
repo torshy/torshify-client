@@ -47,7 +47,7 @@ namespace Torshify.Client.Infrastructure.Services
 
         #region Methods
 
-        public void GetBackdrop(string artistName, Action<string> foundBackdrop)
+        public void GetBackdrop(string artistName, Action<string> foundBackdrop, Action didNotFindBackdrop = null)
         {
             _logger.Log("Searching for backdrop for artist " + artistName, Category.Info, Priority.Low);
 
@@ -64,7 +64,7 @@ namespace Torshify.Client.Infrastructure.Services
 
             string downloadFolder = Path.Combine(CacheLocation, StringToHash(artistName));
             Directory.CreateDirectory(downloadFolder);
-            Task.Factory.StartNew(() => StartDownloading(artistName, downloadFolder, foundBackdrop));
+            Task.Factory.StartNew(() => StartDownloading(artistName, downloadFolder, foundBackdrop, didNotFindBackdrop));
         }
 
         public bool TryGetFromCache(string artistName, out string fileName)
@@ -151,7 +151,7 @@ namespace Torshify.Client.Infrastructure.Services
             }
         }
 
-        private void StartDownloading(string keywords, string downloadFolder, Action<string> foundBackdrop)
+        private void StartDownloading(string keywords, string downloadFolder, Action<string> foundBackdrop, Action didNotFindBackdrop)
         {
             try
             {
@@ -177,6 +177,11 @@ namespace Torshify.Client.Infrastructure.Services
 
                 if (nodelist.Count == 0)
                 {
+                    if (didNotFindBackdrop != null)
+                    {
+                        didNotFindBackdrop();
+                    }
+
                     _logger.Log("Unable to find backdrops for " + keywords, Category.Info, Priority.Medium);
                     return;
                 }

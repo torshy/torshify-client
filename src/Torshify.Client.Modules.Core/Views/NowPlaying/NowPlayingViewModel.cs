@@ -194,14 +194,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private void DisplayBackgroundImage(ImageSource imageSource)
         {
+            RemoveKenBurnsEffect();
+
             IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = region.GetView("KenBurnsBackground");
-
-            if (kenBurnsView != null)
-            {
-                region.Remove(kenBurnsView);
-            }
-
             ImageMontage montage = new ImageMontage();
             montage.Initialize(imageSource);
             montage.UI.InputBindings.Add(
@@ -211,6 +206,17 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
                     Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
                 });
             region.Add(montage.UI, "KenBurnsBackground");
+        }
+
+        private void RemoveKenBurnsEffect()
+        {
+            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
+            var kenBurnsView = region.GetView("KenBurnsBackground");
+
+            if (kenBurnsView != null)
+            {
+                region.Remove(kenBurnsView);
+            }
         }
 
         private void ExecuteNavigateBack()
@@ -226,31 +232,35 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             if (track == null || track.Album == null || track.Album.Artist == null)
                 return;
 
-            _backdropService.GetBackdrop(track.Album.Artist.Name, backdropFile =>
-            {
-                Task.Factory.StartNew(() =>
-                                        {
-                                            try
+            _backdropService.GetBackdrop(
+                track.Album.Artist.Name,
+                backdropFile =>
+                {
+                    Task.Factory.StartNew(() =>
                                             {
-                                                BitmapImage bitmapImage = new BitmapImage();
-                                                bitmapImage.BeginInit();
-                                                bitmapImage.DecodePixelHeight = 800;
-                                                bitmapImage.StreamSource = new FileStream(
-                                                    backdropFile,
-                                                    FileMode.Open,
-                                                    FileAccess.Read);
-                                                bitmapImage.EndInit();
-                                                bitmapImage.Freeze();
+                                                try
+                                                {
+                                                    BitmapImage bitmapImage = new BitmapImage();
+                                                    bitmapImage.BeginInit();
+                                                    bitmapImage.DecodePixelHeight = 800;
+                                                    bitmapImage.StreamSource = new FileStream(
+                                                        backdropFile,
+                                                        FileMode.Open,
+                                                        FileAccess.Read);
+                                                    bitmapImage.EndInit();
+                                                    bitmapImage.Freeze();
 
-                                                _dispatcher.BeginInvoke(
-                                                    new Action<ImageSource>(DisplayBackgroundImage), bitmapImage);
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
-                                            }
-                                        });
-            });
+                                                    _dispatcher.BeginInvoke(
+                                                        new Action<ImageSource>(DisplayBackgroundImage), bitmapImage);
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                                                }
+                                            });
+                },
+                didNotFindBackdrop: () => _dispatcher.BeginInvoke((Action)RemoveKenBurnsEffect,
+                                                                DispatcherPriority.Background));
         }
 
         private void OnApplicationInactivity(bool isInactive)
@@ -258,28 +268,36 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             IsUserInactive = isInactive;
         }
 
+        // TODO : Refactor this method when bothered. Awful stuff
         private void OnCurrentSongChanged(object sender, EventArgs e)
         {
-            var previousTrack = CurrentTrack;
+            var previous = CurrentTrack;
             CurrentTrack = _player.Playlist.Current;
 
             if (CurrentTrack != null)
             {
-                if (previousTrack != null)
+                ITrack currentTrack = CurrentTrack.Track;
+
+                if (previous != null)
                 {
                     _backdropDelayDownloadTimer.Stop();
 
                     // Only get a new backdrop if the current artist is different than the previous
-                    if (previousTrack.Track.Album.Artist.Name != CurrentTrack.Track.Album.Artist.Name)
+                    ITrack previousTrack = previous.Track;
+
+                    if (previousTrack.Album != null && currentTrack.Album != null)
                     {
-                        // Start the timer. This is done to limit the amount of times we need to get a backdrop, if the user presses Next/Previous a alot
-                        _backdropDelayDownloadTimer.Tag = CurrentTrack.Track;
-                        _backdropDelayDownloadTimer.Start();
+                        if (previousTrack.Album.Artist.Name != currentTrack.Album.Artist.Name)
+                        {
+                            // Start the timer. This is done to limit the amount of times we need to get a backdrop, if the user presses Next/Previous a alot
+                            _backdropDelayDownloadTimer.Tag = currentTrack;
+                            _backdropDelayDownloadTimer.Start();
+                        }
                     }
                 }
                 else
                 {
-                    GetBackdropForTrack(CurrentTrack.Track);
+                    GetBackdropForTrack(currentTrack);
                 }
             }
             else
@@ -291,7 +309,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private void OnDelayedBackdropFetchTimerElapsed(object sender, EventArgs eventArgs)
         {
             _backdropDelayDownloadTimer.Stop();
-            ITrack track = (ITrack) _backdropDelayDownloadTimer.Tag;
+            ITrack track = (ITrack)_backdropDelayDownloadTimer.Tag;
             GetBackdropForTrack(track);
         }
 

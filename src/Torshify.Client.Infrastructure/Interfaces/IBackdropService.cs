@@ -15,7 +15,7 @@ namespace Torshify.Client.Infrastructure.Interfaces
 
         #region Methods
 
-        void GetBackdrop(string artistName, Action<string> foundBackdrop);
+        void GetBackdrop(string artistName, Action<string> foundBackdrop, Action didNotFindBackdrop = null);
 
         bool TryGetFromCache(string artistName, out string fileName);
 
