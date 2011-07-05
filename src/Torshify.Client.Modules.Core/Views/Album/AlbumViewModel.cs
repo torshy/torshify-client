@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Modules.Core.Views.Album
 {
@@ -73,8 +74,13 @@ namespace Torshify.Client.Modules.Core.Views.Album
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
+            // Get the rest of the tracks from the album, including the one selected.
+            var tracks = Album.Info.Tracks;
+            int index = tracks.IndexOf(model.Track);
+            tracks = tracks.Skip(index);
+
             model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracks)
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
         }
 

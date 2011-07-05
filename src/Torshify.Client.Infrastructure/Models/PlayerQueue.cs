@@ -114,6 +114,11 @@ namespace Torshify.Client.Infrastructure.Models
                     return true;
                 }
 
+                if (Current.IsQueued && _playlist.Count > 0 && !_playlist[0].IsQueued)
+                {
+                    return true;
+                }
+
                 return false;
             }
         }
@@ -225,7 +230,7 @@ namespace Torshify.Client.Infrastructure.Models
                         _queue.Enqueue(item);
                         if (_playlist.Count > 0)
                         {
-                            _left.Insert(_queue.Count + 1, item);
+                            _left.Insert(_queue.Count, item);
                         }
                         else
                         {
@@ -238,7 +243,7 @@ namespace Torshify.Client.Infrastructure.Models
             }
             else
             {
-                _dispatcher.BeginInvoke((Action<IEnumerable<ITrack>>) Enqueue, tracks);
+                _dispatcher.BeginInvoke((Action<IEnumerable<ITrack>>)Enqueue, tracks);
             }
         }
 
@@ -348,6 +353,26 @@ namespace Torshify.Client.Infrastructure.Models
                 return true;
             }
 
+            if (Current.IsQueued && _playlistTrackIndex == 0 && _playlist.Count > 0)
+            {
+                int indexToPlay = _playlistIndicies[_playlistTrackIndex];
+                var toRemove = Current;
+                Current = _playlist[indexToPlay];
+
+                if (_dispatcher.CheckAccess())
+                {
+                    _left.Remove(toRemove);
+                    _left.Insert(0, Current);
+                }
+                else
+                {
+                    _dispatcher.Invoke((Func<PlayerQueueItem, bool>)_left.Remove, toRemove);
+                    _dispatcher.Invoke((Action<int, PlayerQueueItem>)_left.Insert, 0, Current);
+                }
+
+                return true;
+            }
+
             return false;
         }
 
@@ -363,6 +388,14 @@ namespace Torshify.Client.Infrastructure.Models
                     var item = new PlayerQueueItem(false, track);
                     _playlist.Add(item);
                     _left.Add(item);
+                }
+
+                var tempQueue = new Queue<PlayerQueueItem>(_queue);
+                _queue.Clear();
+
+                while (tempQueue.Count > 0)
+                {
+                    Enqueue(tempQueue.Dequeue().Track);
                 }
 
                 Update();

@@ -71,13 +71,13 @@ namespace Torshify.Client.Tests
                 Assert.AreEqual(tracks.Count() - (i + 1), _queue.Left.Count());
             }
 
-            while(_queue.Left.Count() != tracks.Count())
+            while (_queue.Left.Count() != tracks.Count())
             {
                 bool result = _queue.Previous();
                 Console.WriteLine(_queue.Left.Count());
                 Assert.IsTrue(result);
             }
-           
+
             Assert.IsFalse(_queue.CanGoPrevious);
         }
 
@@ -95,6 +95,17 @@ namespace Torshify.Client.Tests
             }
 
             Assert.IsTrue(_queue.CanGoPrevious);
+        }
+
+        [Test]
+        public void Set_MultipleQueueMultiple_QueuedSongsShouldStartNext()
+        {
+            _queue.Set(GetTracks(5));
+            _queue.Enqueue(new[] { GetTrack("Queue0"), GetTrack("Queue1"), GetTrack("Queue2") });
+            _queue.Next();
+
+            Assert.AreEqual("Queue0", _queue.Left.First().Track.Name);
+            Assert.AreEqual("Queue0", _queue.Current.Track.Name);
         }
 
         [Test]
@@ -132,6 +143,52 @@ namespace Torshify.Client.Tests
             _queue.Enqueue(GetTrack("Testing queue"));
             _queue.Next();
             Assert.AreEqual("Testing queue", _queue.Current.Track.Name);
+        }
+
+        [Test]
+        public void Enqueue_OneTrackThenSetMultiple_NextSongShouldBeTheQueued()
+        {
+            _queue.Enqueue(GetTrack("The queued"));
+            _queue.Set(GetTracks(3));
+            _queue.Next();
+
+            Assert.AreEqual("The queued", _queue.Left.First().Track.Name);
+            Assert.AreEqual("The queued", _queue.Current.Track.Name);
+        }
+
+        [Test]
+        public void Enqueue_OneTrackThenSetMultiple_PlayQueuedShouldBeAbleToGoPrevious()
+        {
+            _queue.Enqueue(GetTrack("The queued"));
+            _queue.Set(GetTracks(3));
+            _queue.Next();
+
+            Assert.IsTrue(_queue.CanGoPrevious);
+
+            var result = _queue.Previous();
+            Assert.IsTrue(result);
+
+            Assert.AreEqual("Track0", _queue.Current.Track.Name);
+        }
+
+        [Test]
+        public void Enqueue_OneTrackThenSetMultiple_PlayQueuedShouldBeAbleToGoPrevious_AndNextAgainShouldBeNotTheQueued()
+        {
+            _queue.Enqueue(GetTrack("The queued"));
+            _queue.Set(GetTracks(3));
+            _queue.Next();
+
+            Assert.IsTrue(_queue.CanGoPrevious);
+
+            var result = _queue.Previous();
+            Assert.IsTrue(result);
+
+            Assert.AreEqual("Track0", _queue.Current.Track.Name);
+
+            _queue.Next();
+
+            Assert.AreEqual("Track1", _queue.Left.First().Track.Name);
+            Assert.AreEqual("Track1", _queue.Current.Track.Name);
         }
 
         private ITrack GetTrack(string name = "TrackName")
