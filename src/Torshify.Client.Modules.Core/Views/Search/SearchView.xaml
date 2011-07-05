@@ -48,7 +48,6 @@
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
-                    SortMemberPath="Duration"
                     HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
                     CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
                 <DataGridTemplateColumn

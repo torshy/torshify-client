@@ -40,11 +40,13 @@
                 <DataGridTemplateColumn
                     Header="Track"
                     Width="200" 
-                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}"/>
+                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}"
+                    SortMemberPath="Name" />
                 <DataGridTemplateColumn
                     Header="Artist"
                     Width="175"
-                    CellTemplate="{StaticResource DataGrid_Track_ArtistTemplate}" />
+                    CellTemplate="{StaticResource DataGrid_Track_ArtistTemplate}"
+                    SortMemberPath="Album.Artist.Name" />
                 <DataGridTemplateColumn
                     Header="Time"
                     Width="75"
@@ -54,7 +56,8 @@
                 <DataGridTemplateColumn
                     Header="Album"
                     Width="175"
-                    CellTemplate="{StaticResource DataGrid_Track_AlbumTemplate}" />
+                    CellTemplate="{StaticResource DataGrid_Track_AlbumTemplate}" 
+                    SortMemberPath="Album.Name" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

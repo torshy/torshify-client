@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Threading;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
@@ -25,6 +26,7 @@ namespace Torshify.Client.Modules.Core.Views.Search
         private SubscriptionToken _trackMenuBarToken;
         private ISearch _currentSearch;
         private IList<ITrack> _searchResults;
+        private ICollectionView _searchResultsIcv;
 
         #endregion Fields
 
@@ -44,15 +46,15 @@ namespace Torshify.Client.Modules.Core.Views.Search
 
         #region Properties
 
-        public IList<ITrack> SearchResults
+        public ICollectionView SearchResults
         {
             get
             {
-                return _searchResults;
+                return _searchResultsIcv;
             }
             private set
             {
-                _searchResults = value;
+                _searchResultsIcv = value;
                 RaisePropertyChanged("SearchResults");
             }
         }
@@ -89,7 +91,8 @@ namespace Torshify.Client.Modules.Core.Views.Search
             ISearch search = (ISearch)sender;
             search.FinishedLoading -= SearchFinishedLoading;
 
-            SearchResults = new SearchResultsLoader(search.Query, search.Tracks, _searchProvider);
+            _searchResults = new SearchResultsLoader(search.Query, search.Tracks, _searchProvider);
+            SearchResults = new ListCollectionView((IList)_searchResults);
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
@@ -233,12 +236,12 @@ namespace Torshify.Client.Modules.Core.Views.Search
 
             public bool Contains(ITrack item)
             {
-                throw new NotImplementedException();
+                return _list.Contains(item);
             }
 
             public void CopyTo(ITrack[] array, int arrayIndex)
             {
-                throw new NotImplementedException();
+                array.CopyTo(_list.ToArray(), arrayIndex);
             }
 
             public void CopyTo(Array array, int index)
@@ -266,7 +269,7 @@ namespace Torshify.Client.Modules.Core.Views.Search
 
             public int IndexOf(ITrack item)
             {
-                throw new NotImplementedException();
+                return _list.IndexOf(item);
             }
 
             public void Insert(int index, object value)
