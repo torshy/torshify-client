@@ -35,7 +35,7 @@ namespace Torshify.Client.Modules.Core
         {
             CoreCommands
                 .PlayTrackCommand
-                .RegisterCommand(new AutomaticCommand<ITrack>(ExecutePlayTrack, CanExecutePlayTrack));
+                .RegisterCommand(new AutomaticCommand<object>(ExecutePlayTrack, CanExecutePlayTrack));
 
             CoreCommands
                 .QueueTrackCommand
@@ -190,42 +190,64 @@ namespace Torshify.Client.Modules.Core
             }
         }
 
-        private bool CanExecutePlayTrack(ITrack track)
+        private bool CanExecutePlayTrack(object parameter)
         {
-            return track != null && track.IsAvailable;
+            ITrack track = parameter as ITrack;
+            if (track != null)
+            {
+                return track.IsAvailable;
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        private void ExecutePlayTrack(ITrack track)
+        private void ExecutePlayTrack(object parameter)
         {
-            IPlaylistTrack playlistTrack = track as IPlaylistTrack;
-
+            IPlaylistTrack playlistTrack = parameter as IPlaylistTrack;
             if (playlistTrack != null)
             {
                 int index = playlistTrack.Playlist.Tracks.IndexOf(playlistTrack);
 
-                List<ITrack> tracks = new List<ITrack>();
+                List<ITrack> tracksToadd = new List<ITrack>();
 
                 for (int i = index; i < playlistTrack.Playlist.Tracks.Count(); i++)
                 {
                     IPlaylistTrack item = playlistTrack.Playlist.Tracks.ElementAt(i);
-                    
+
                     if (item.IsAvailable)
                     {
-                        tracks.Add(item);
+                        tracksToadd.Add(item);
                     }
                 }
 
-                _player.Playlist.Set(tracks);
+                _player.Playlist.Set(tracksToadd);
                 _player.Play();
+
+                return;
             }
-            else
+
+            ITrack track = parameter as ITrack;
+            if (track != null)
             {
                 _player.Playlist.Set(new[] { track });
                 _player.Play();
 
-                // 1. Get all tracks by artist
-                // 2. Jump to the track
-                // 3. Create a playlist with the remaining tracks
+                return;
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                _player.Playlist.Set(tracks);
+                _player.Play();
+
+                return;
             }
         }
 
