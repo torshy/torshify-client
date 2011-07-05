@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Mocks", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Spotify", "src\Torshify.Client.Spotify\Torshify.Client.Spotify.csproj", "{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Tests", "src\Torshify.Client.Tests\Torshify.Client.Tests.csproj", "{1F453121-2886-4C3D-8252-3D7122F5B3AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,26 @@ Global
 		{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugMockEnabled|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugMockEnabled|Any CPU.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugMockEnabled|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugMockEnabled|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugMockEnabled|x86.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugVerbose|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugVerbose|Any CPU.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugVerbose|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugVerbose|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.DebugVerbose|x86.ActiveCfg = Debug|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

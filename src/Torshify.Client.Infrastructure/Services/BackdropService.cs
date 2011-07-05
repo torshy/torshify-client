@@ -6,6 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+
+using Microsoft.Practices.Prism.Logging;
+
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Infrastructure.Services
@@ -14,15 +17,19 @@ namespace Torshify.Client.Infrastructure.Services
     {
         #region Fields
 
-        private Random _randomGen = new Random();
         private const string ApiKey = "590b54eae4a816b5144c09f15a8f3876";
+
+        private readonly ILoggerFacade _logger;
+
+        private Random _randomGen = new Random();
 
         #endregion Fields
 
         #region Constructors
 
-        public BackdropService()
+        public BackdropService(ILoggerFacade logger)
         {
+            _logger = logger;
             CacheLocation = Environment.CurrentDirectory;
         }
 
@@ -42,13 +49,18 @@ namespace Torshify.Client.Infrastructure.Services
 
         public void GetBackdrop(string artistName, Action<string> foundBackdrop)
         {
+            _logger.Log("Searching for backdrop for artist " + artistName, Category.Info, Priority.Low);
+
             string fileName;
 
             if (TryGetFromCache(artistName, out fileName))
             {
+                _logger.Log("Found in cache [" + fileName + "]", Category.Debug, Priority.Low);
                 foundBackdrop(fileName);
                 return;
             }
+
+            _logger.Log("Not in cache. Searching..", Category.Debug, Priority.Low);
 
             string downloadFolder = Path.Combine(CacheLocation, StringToHash(artistName));
             Directory.CreateDirectory(downloadFolder);
@@ -106,6 +118,39 @@ namespace Torshify.Client.Infrastructure.Services
             return ByteArrayToString(tmpHash);
         }
 
+        private void ProcessImage(string imageId, string downloadFolder)
+        {
+            string url = "http://htbackdrops.com/api/" + ApiKey + "/download/" + imageId + "/intermediate";
+
+            try
+            {
+                _logger.Log("Saving backdrop " + imageId, Category.Debug, Priority.Low);
+
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    Stream responseStream = response.GetResponseStream();
+                    byte[] buffer = new byte[1024];
+                    int bytes;
+                    bytes = responseStream.Read(buffer, 0, buffer.Length);
+
+                    string filePath = Path.Combine(downloadFolder, imageId + ".jpg");
+                    using (FileStream fileStream = File.OpenWrite(filePath))
+                    {
+                        while (bytes > 0)
+                        {
+                            fileStream.Write(buffer, 0, bytes);
+                            bytes = responseStream.Read(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.Message, Category.Warn, Priority.Medium);
+            }
+        }
+
         private void StartDownloading(string keywords, string downloadFolder, Action<string> foundBackdrop)
         {
             try
@@ -132,6 +177,7 @@ namespace Torshify.Client.Infrastructure.Services
 
                 if (nodelist.Count == 0)
                 {
+                    _logger.Log("Unable to find backdrops for " + keywords, Category.Info, Priority.Medium);
                     return;
                 }
 
@@ -144,38 +190,7 @@ namespace Torshify.Client.Infrastructure.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-            }
-        }
-
-        private void ProcessImage(string imageId, string downloadFolder)
-        {
-            string url = "http://htbackdrops.com/api/" + ApiKey + "/download/" + imageId + "/intermediate";
-
-            try
-            {
-                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    Stream responseStream = response.GetResponseStream();
-                    byte[] buffer = new byte[1024];
-                    int bytes;
-                    bytes = responseStream.Read(buffer, 0, buffer.Length);
-
-                    string filePath = Path.Combine(downloadFolder, imageId + ".jpg");
-                    using (FileStream fileStream = File.OpenWrite(filePath))
-                    {
-                        while (bytes > 0)
-                        {
-                            fileStream.Write(buffer, 0, bytes);
-                            bytes = responseStream.Read(buffer, 0, buffer.Length);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                _logger.Log(e.Message, Category.Warn, Priority.Medium);
             }
         }
 

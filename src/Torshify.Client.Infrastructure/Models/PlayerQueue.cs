@@ -267,7 +267,7 @@ namespace Torshify.Client.Infrastructure.Models
             }
 
             // Now we check if there is tracks in the playlist
-            if (_playlist.Count > 0)
+            if (nextTrack == null && _playlist.Count > 0)
             {
                 // If we're before the end, we get the next in line
                 if (_playlistTrackIndex < (_playlistIndicies.Length - 1))

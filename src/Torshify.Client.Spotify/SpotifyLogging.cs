@@ -40,7 +40,7 @@ namespace Torshify.Client.Spotify
 
         private void OnConnectionError(object sender, SessionEventArgs e)
         {
-            _log.Error(e.Message + "[" + e.Status + "]");
+            _log.Error("Connection error " + e.Message + "[" + e.Status + "]");
         }
 
         private void OnEndOfTrack(object sender, SessionEventArgs e)
@@ -50,7 +50,7 @@ namespace Torshify.Client.Spotify
 
         private void OnException(object sender, SessionEventArgs e)
         {
-            _log.Error(e.Message);
+            _log.Error("Exception: " + e.Message);
         }
 
         private void OnLogInComplete(object sender, SessionEventArgs e)

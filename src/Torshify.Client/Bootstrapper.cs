@@ -10,6 +10,7 @@ using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.ServiceLocation;
@@ -39,6 +40,11 @@ namespace Torshify.Client
         public void Dispose()
         {
             Container.Dispose();
+        }
+
+        protected override ILoggerFacade CreateLogger()
+        {
+            return new Log4NetFacade();
         }
 
         protected override void ConfigureContainer()

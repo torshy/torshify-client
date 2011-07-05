@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -28,14 +30,18 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private readonly IBackdropService _backdropService;
         private readonly Dispatcher _dispatcher;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILoggerFacade _logger;
         private readonly IPlayer _player;
         private readonly IRegionManager _regionManager;
 
         private SubscriptionToken _appInactivityToken;
-        private IRegionNavigationService _navigationService;
-        private SubscriptionToken _sysInactivityToken;
+        private DispatcherTimer _backdropDelayDownloadTimer;
+        private PlayerQueueItem _currentTrack;
+        private bool _hackFirstTime = true;
         private bool _isUserInactive;
+        private IRegionNavigationService _navigationService;
         private double _requestSeek;
+        private SubscriptionToken _sysInactivityToken;
 
         #endregion Fields
 
@@ -46,14 +52,18 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             IPlayer player,
             IBackdropService backdropService,
             IEventAggregator eventAggregator,
+            ILoggerFacade logger,
             Dispatcher dispatcher)
         {
             _regionManager = regionManager;
             _player = player;
             _backdropService = backdropService;
             _eventAggregator = eventAggregator;
+            _logger = logger;
             _dispatcher = dispatcher;
-
+            _backdropDelayDownloadTimer = new DispatcherTimer();
+            _backdropDelayDownloadTimer.Interval = TimeSpan.FromSeconds(1);
+            _backdropDelayDownloadTimer.Tick += OnDelayedBackdropFetchTimerElapsed;
             NavigateBackCommand = new StaticCommand(ExecuteNavigateBack);
         }
 
@@ -65,12 +75,25 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         {
             get
             {
-                if (_player.Playlist.Current != null)
-                {
-                    return _player.Playlist.Current;
-                }
+                return _currentTrack;
+            }
+            private set
+            {
+                _currentTrack = value;
+                RaisePropertyChanged("CurrentTrack");
+            }
+        }
 
-                return null;
+        public bool IsUserInactive
+        {
+            get { return _isUserInactive; }
+            set
+            {
+                if (_isUserInactive != value)
+                {
+                    _isUserInactive = value;
+                    RaisePropertyChanged("IsUserInactive");
+                }
             }
         }
 
@@ -96,26 +119,25 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
         }
 
-        public bool IsUserInactive
-        {
-            get { return _isUserInactive; }
-            set
-            {
-                if (_isUserInactive != value)
-                {
-                    _isUserInactive = value;
-                    RaisePropertyChanged("IsUserInactive");
-                }
-            }
-        }
-
         public double RequestSeek
         {
-            get { return _requestSeek; }
+            get
+            {
+                return _requestSeek;
+            }
             set
             {
                 _requestSeek = value;
-                _player.Seek(TimeSpan.FromSeconds(value));
+
+                // depressing i know. quick and filthy workaround for a bug that comes first time accessing the now playing view. It seeks to 0
+                if (!_hackFirstTime)
+                {
+                    _player.Seek(TimeSpan.FromSeconds(value));
+                }
+                else
+                {
+                    _hackFirstTime = false;
+                }
             }
         }
 
@@ -146,6 +168,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _requestSeek = _player.DurationPlayed.TotalSeconds;
+            RaisePropertyChanged("RequestSeek");
+
             _appInactivityToken = _eventAggregator.GetEvent<ApplicationInactivityEvent>().Subscribe(
                 OnApplicationInactivity,
                 ThreadOption.PublisherThread,
@@ -157,15 +182,14 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
                 true);
 
             _navigationService = navigationContext.NavigationService;
-
-            if (_player.Playlist.Current != null)
-            {
-                GetBackdropForTrack(_player.Playlist.Current.Track);
-            }
-
             _player.Playlist.CurrentChanged += OnCurrentSongChanged;
 
-            RaisePropertyChanged("CurrentTrack");
+            CurrentTrack = _player.Playlist.Current;
+
+            if (CurrentTrack != null)
+            {
+                GetBackdropForTrack(CurrentTrack.Track);
+            }
         }
 
         private void DisplayBackgroundImage(ImageSource imageSource)
@@ -206,18 +230,25 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             {
                 Task.Factory.StartNew(() =>
                                         {
-                                            BitmapImage bitmapImage = new BitmapImage();
-                                            bitmapImage.BeginInit();
-                                            bitmapImage.DecodePixelHeight = 800;
-                                            bitmapImage.StreamSource = new FileStream(
-                                                backdropFile,
-                                                FileMode.Open,
-                                                FileAccess.Read);
-                                            bitmapImage.EndInit();
-                                            bitmapImage.Freeze();
+                                            try
+                                            {
+                                                BitmapImage bitmapImage = new BitmapImage();
+                                                bitmapImage.BeginInit();
+                                                bitmapImage.DecodePixelHeight = 800;
+                                                bitmapImage.StreamSource = new FileStream(
+                                                    backdropFile,
+                                                    FileMode.Open,
+                                                    FileAccess.Read);
+                                                bitmapImage.EndInit();
+                                                bitmapImage.Freeze();
 
-                                            _dispatcher.BeginInvoke(
-                                                new Action<ImageSource>(DisplayBackgroundImage), bitmapImage);
+                                                _dispatcher.BeginInvoke(
+                                                    new Action<ImageSource>(DisplayBackgroundImage), bitmapImage);
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                                            }
                                         });
             });
         }
@@ -229,14 +260,39 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private void OnCurrentSongChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged("CurrentTrack");
+            var previousTrack = CurrentTrack;
+            CurrentTrack = _player.Playlist.Current;
 
-            PlayerQueueItem currentPlaying = _player.Playlist.Current;
-
-            if (currentPlaying != null)
+            if (CurrentTrack != null)
             {
-                GetBackdropForTrack(currentPlaying.Track);
+                if (previousTrack != null)
+                {
+                    _backdropDelayDownloadTimer.Stop();
+
+                    // Only get a new backdrop if the current artist is different than the previous
+                    if (previousTrack.Track.Album.Artist.Name != CurrentTrack.Track.Album.Artist.Name)
+                    {
+                        // Start the timer. This is done to limit the amount of times we need to get a backdrop, if the user presses Next/Previous a alot
+                        _backdropDelayDownloadTimer.Tag = CurrentTrack.Track;
+                        _backdropDelayDownloadTimer.Start();
+                    }
+                }
+                else
+                {
+                    GetBackdropForTrack(CurrentTrack.Track);
+                }
             }
+            else
+            {
+                NavigateBackCommand.Execute();
+            }
+        }
+
+        private void OnDelayedBackdropFetchTimerElapsed(object sender, EventArgs eventArgs)
+        {
+            _backdropDelayDownloadTimer.Stop();
+            ITrack track = (ITrack) _backdropDelayDownloadTimer.Tag;
+            GetBackdropForTrack(track);
         }
 
         private void OnSystemInactivity(bool isInactive)
