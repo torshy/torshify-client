@@ -108,8 +108,8 @@
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
                                 <Image
-                                    Width="125"
-                                    Height="125"
+                                    Width="35"
+                                    Height="35"
                                     Source="{Binding Bitmap}" />
                             </DataTemplate>
                         </ContentControl.ContentTemplate>
