@@ -252,6 +252,11 @@ namespace Torshify.Client.Infrastructure.Models
             return _queue.Any(i => i.Track.ID == track.ID);
         }
 
+        public bool MoveCurrentTo(PlayerQueueItem item)
+        {
+            return true;
+        }
+
         public bool Next()
         {
             if (_dispatcher.CheckAccess())
@@ -401,7 +406,7 @@ namespace Torshify.Client.Infrastructure.Models
                 }
 
                 Update();
-
+                
                 _playlistTrackIndex = 0;
                 Current = _playlist[_playlistIndicies[_playlistTrackIndex]];
 

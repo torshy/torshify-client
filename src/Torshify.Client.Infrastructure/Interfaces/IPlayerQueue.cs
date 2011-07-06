@@ -81,6 +81,8 @@ namespace Torshify.Client.Infrastructure.Interfaces
 
         bool IsQueued(ITrack track);
 
+        bool MoveCurrentTo(PlayerQueueItem item);
+
         #endregion Methods
     }
 }

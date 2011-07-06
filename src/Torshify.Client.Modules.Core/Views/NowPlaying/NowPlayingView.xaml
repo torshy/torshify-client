@@ -210,12 +210,18 @@
                                 InDuration="0:0:0.1" />
                         </Interactivity:Interaction.Behaviors>
                         <ListBox
+                            Name="Lb"
                             Background="{x:Null}"
                             BorderThickness="0"
                             ItemsSource="{Binding Playlist}"
                             ItemTemplate="{StaticResource NowPlaying_TrackListItemTemplate}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             Width="350">
+                            <Interactivity:Interaction.Behaviors>
+                                <Behaviors:ListBoxItemActionBehavior
+                                    Command="{Binding JumpToTrackCommand}"
+                                    CommandParameter="{Binding SelectedItem, ElementName=Lb}" />
+                            </Interactivity:Interaction.Behaviors>
                             <ListBox.Resources>
                                 <SolidColorBrush
                                     x:Key="{x:Static SystemColors.HighlightBrushKey}"

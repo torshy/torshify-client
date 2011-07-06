@@ -103,6 +103,7 @@
                             </StackPanel>
 
                             <DataGrid
+                                Name="Dg"
                                 Style="{DynamicResource DataGrid_MinimalStyle}"
                                 ItemsSource="{Binding Info.Tracks, IsAsync=True}"
                                 IsReadOnly="True"
@@ -117,6 +118,9 @@
                                 <Interactivity:Interaction.Behaviors>
                                     <Behaviors:DataGridTriStateSortingBehavior />
                                     <Behaviors:IgnoreMouseWheelBehavior />
+                                    <Behaviors:DataGridRowActionBehavior
+                                        Command="{Binding DataContext.PlayArtistTrackCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneTime}"
+                                        CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
                                 </Interactivity:Interaction.Behaviors>
                                 <DataGrid.ContextMenu>
                                     <ContextMenu />

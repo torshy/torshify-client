@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -65,6 +64,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             _backdropDelayDownloadTimer.Interval = TimeSpan.FromSeconds(1);
             _backdropDelayDownloadTimer.Tick += OnDelayedBackdropFetchTimerElapsed;
             NavigateBackCommand = new StaticCommand(ExecuteNavigateBack);
+            JumpToTrackCommand = new StaticCommand<PlayerQueueItem>(ExecuteJumpToTrack);
         }
 
         #endregion Constructors
@@ -95,6 +95,12 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
                     RaisePropertyChanged("IsUserInactive");
                 }
             }
+        }
+
+        public ICommand JumpToTrackCommand
+        {
+            get;
+            private set;
         }
 
         public StaticCommand NavigateBackCommand
@@ -208,15 +214,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             region.Add(montage.UI, "KenBurnsBackground");
         }
 
-        private void RemoveKenBurnsEffect()
+        private void ExecuteJumpToTrack(PlayerQueueItem item)
         {
-            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = region.GetView("KenBurnsBackground");
-
-            if (kenBurnsView != null)
-            {
-                region.Remove(kenBurnsView);
-            }
+            _player.Playlist.MoveCurrentTo(item);
         }
 
         private void ExecuteNavigateBack()
@@ -315,6 +315,17 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private void OnSystemInactivity(bool isInactive)
         {
+        }
+
+        private void RemoveKenBurnsEffect()
+        {
+            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
+            var kenBurnsView = region.GetView("KenBurnsBackground");
+
+            if (kenBurnsView != null)
+            {
+                region.Remove(kenBurnsView);
+            }
         }
 
         #endregion Methods

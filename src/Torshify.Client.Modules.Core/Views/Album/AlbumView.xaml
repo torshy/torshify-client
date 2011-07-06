@@ -99,6 +99,7 @@
                             Height="Auto" />
                     </Grid.RowDefinitions>
                     <DataGrid
+                        Name="Dg"
                         Style="{DynamicResource DataGrid_MinimalStyle}"
                         ItemsSource="{Binding Album.Info.Tracks}"
                         IsReadOnly="True"
@@ -114,6 +115,9 @@
                         <Interactivity:Interaction.Behaviors>
                             <Behaviors:DataGridTriStateSortingBehavior />
                             <Behaviors:IgnoreMouseWheelBehavior />
+                            <Behaviors:DataGridRowActionBehavior
+                                Command="{Binding PlayAlbumTrackCommand}"
+                                CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
                         </Interactivity:Interaction.Behaviors>
                         <DataGrid.ContextMenu>
                             <ContextMenu />

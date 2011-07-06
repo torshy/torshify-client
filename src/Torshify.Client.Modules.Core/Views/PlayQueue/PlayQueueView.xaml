@@ -19,6 +19,7 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid
+            Name="Dg"
             ItemsSource="{Binding Tracks}"
             IsReadOnly="True"
             CanUserAddRows="False"
@@ -33,6 +34,9 @@
             RowStyle="{StaticResource DataGrid_EmphasizeCurrentlyPlayingSongRowStyle}">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:DataGridTriStateSortingBehavior />
+                <Behaviors:DataGridRowActionBehavior
+                    Command="{Binding JumpToTrackCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
             </Interactivity:Interaction.Behaviors>
             <DataGrid.ContextMenu>
                 <ContextMenu />

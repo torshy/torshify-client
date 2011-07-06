@@ -4,15 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Collections;
+using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
-using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 {
@@ -34,24 +36,12 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
         public OverviewTabItemViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            PlayArtistTrackCommand = new StaticCommand<ITrack>(ExecutePlayArtistTrack);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public IArtist Artist
-        {
-            get
-            {
-                return _artist;
-            }
-            private set
-            {
-                _artist = value;
-                RaisePropertyChanged("Artist");
-            }
-        }
 
         public ICollectionView Albums
         {
@@ -66,12 +56,31 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             }
         }
 
+        public IArtist Artist
+        {
+            get
+            {
+                return _artist;
+            }
+            private set
+            {
+                _artist = value;
+                RaisePropertyChanged("Artist");
+            }
+        }
+
         public string Header
         {
             get
             {
                 return "Overview";
             }
+        }
+
+        public ICommand PlayArtistTrackCommand
+        {
+            get;
+            private set;
         }
 
         public Visibility Visibility
@@ -123,16 +132,39 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             PrepareData();
         }
 
+        private void ExecutePlayArtistTrack(ITrack track)
+        {
+            IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(track);
+            CoreCommands.PlayTrackCommand.Execute(tracksToPlay);
+        }
+
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
+            IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(model.Track);
+
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+        }
+
+        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
+        {
             // This isn't working 100% because of the UI virtualization, and the caching/cleanup method i'm using for the album information.
-            // This will only queue up what the view has created, which probably is just a fraction of certain artists' tracks. 
+            // This will only queue up what the view has created, which probably is just a fraction of certain artists' tracks.
             // TODO : Figure it out
+
             List<ITrack> tracksToPlay = new List<ITrack>();
             bool addRest = false;
             foreach (var album in _albums)
             {
-                int index = album.Info.Tracks.IndexOf(model.Track);
+                int index = album.Info.Tracks.IndexOf(track);
 
                 if (index != -1 && addRest == false)
                 {
@@ -146,17 +178,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
                     tracksToPlay.AddRange(album.Info.Tracks);
                 }
             }
-
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
-        }
-
-        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
-        {
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+            return tracksToPlay;
         }
 
         private void PrepareData()

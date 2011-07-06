@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
+using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Modules.Core.Views.PlayQueue
 {
@@ -33,16 +35,23 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
             IRegionManager regionManager)
         {
             _player = player;
-            _player.Playlist.Changed += OnPlaylistChanged;
             _playQueue = player.Playlist;
 
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
+
+            JumpToTrackCommand = new StaticCommand<PlayerQueueItem>(ExecuteJumpToTrack);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public ICommand JumpToTrackCommand
+        {
+            get;
+            private set;
+        }
 
         public IPlayerQueue PlayQueue
         {
@@ -86,15 +95,12 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
             _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
         }
 
-        private void OnPlaylistChanged(object sender, EventArgs e)
-        {
-            //RaisePropertyChanged("Tracks");
-        }
-
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
+            var tracksToPlay = GetTracksToPlay(model.Track);
+
             model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
         }
 
@@ -103,6 +109,18 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+        }
+
+        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
+        {
+            int index = Tracks.IndexOf(t => t.Track == track);
+            var tracks = Tracks.Skip(index);
+            return tracks.Select(t => t.Track).ToList();
+        }
+
+        private void ExecuteJumpToTrack(PlayerQueueItem item)
+        {
+            _player.Playlist.MoveCurrentTo(item);
         }
 
         #endregion Methods
