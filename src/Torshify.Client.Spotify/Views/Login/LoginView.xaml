@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
-    mc:Ignorable="d"
+    xmlns:local="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure" xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -77,12 +76,26 @@
             <local:WatermarkTextBox
                 Watermark="Username"
                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
-                Margin="0,0,0,4" />
-            <PasswordBox
+                Margin="0,0,0,4">
+                <Interactivity:Interaction.Behaviors>
+                    <Behaviors:KeyboardBehavior
+                        Key="Enter"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=_passwordBox}" />
+                </Interactivity:Interaction.Behaviors>
+            </local:WatermarkTextBox>
+                <PasswordBox
                 x:FieldModifier="private"
                 Name="_passwordBox"
-                Margin="0,0,0,4" />
-            <TextBlock
+                Margin="0,0,0,4">
+                <Interactivity:Interaction.Behaviors>
+                    <Behaviors:KeyboardBehavior
+                        Key="Enter"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=_passwordBox}" />
+                </Interactivity:Interaction.Behaviors>
+            </PasswordBox>
+                <TextBlock
                 FontSize="10"
                 Foreground="{DynamicResource ControlTextBrush}"
                 ToolTip="{Binding ForgotPasswordUrl}">

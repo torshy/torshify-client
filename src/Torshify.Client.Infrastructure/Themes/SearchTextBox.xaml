@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls">
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors">
 
     <DataTemplate
         x:Key="DefaultWatermarkTemplate">
@@ -127,7 +129,14 @@
 
                         <ScrollViewer
                             x:Name="PART_ContentHost"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <Interactivity:Interaction.Behaviors>
+                                <Behaviors:KeyboardBehavior
+                                    Key="Enter"
+                                    Command="{Binding SearchCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                    CommandParameter="{Binding SearchCommandParameter, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Interactivity:Interaction.Behaviors>
+                        </ScrollViewer>
 
                         <ContentPresenter
                             x:Name="PART_WatermarkHost"
