@@ -88,6 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Controls\ImageMap.cs" />
     <Compile Include="Controls\ImageMapOverlay.cs" />
     <Compile Include="Controls\ImageMontage.cs" />
