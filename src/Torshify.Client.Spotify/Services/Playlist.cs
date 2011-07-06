@@ -20,6 +20,7 @@ namespace Torshify.Client.Spotify.Services
 
         private bool _isLoaded;
         private bool _isUpdating;
+        private object _lockObject = new object();
 
         #endregion Fields
 
@@ -122,11 +123,14 @@ namespace Torshify.Client.Spotify.Services
         {
             if (_dispatcher.CheckAccess())
             {
-                _tracks.Add(new PlaylistTrack(this, track, _dispatcher));
+                lock (_lockObject)
+                {
+                    _tracks.Add(new PlaylistTrack(this, track, _dispatcher));
+                }
             }
             else
             {
-                _dispatcher.BeginInvoke((Action<IPlaylistTrack>) Add, track);
+                _dispatcher.BeginInvoke((Action<IPlaylistTrack>)Add, track);
             }
         }
 
@@ -143,7 +147,10 @@ namespace Torshify.Client.Spotify.Services
         {
             if (_dispatcher.CheckAccess())
             {
-                _tracks.Insert(index, new PlaylistTrack(this, track, _dispatcher));
+                lock (_lockObject)
+                {
+                    _tracks.Insert(index, new PlaylistTrack(this, track, _dispatcher));
+                }
             }
             else
             {
@@ -155,7 +162,10 @@ namespace Torshify.Client.Spotify.Services
         {
             if (_dispatcher.CheckAccess())
             {
-                _tracks.Move(oldIndex, newIndex);
+                lock (_lockObject)
+                {
+                    _tracks.Move(oldIndex, newIndex);
+                }
             }
             else
             {
@@ -170,9 +180,12 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnMetadataChanged(object sender, EventArgs e)
         {
-            foreach (var playlistTrack in _tracks)
+            lock (_lockObject)
             {
-                playlistTrack.Refresh();
+                foreach (var playlistTrack in _tracks)
+                {
+                    playlistTrack.Refresh();
+                }
             }
         }
 
@@ -233,7 +246,10 @@ namespace Torshify.Client.Spotify.Services
             {
                 if (index >= 0 && index < _tracks.Count)
                 {
-                    _tracks.RemoveAt(index);
+                    lock (_lockObject)
+                    {
+                        _tracks.RemoveAt(index);
+                    }
                 }
             }
             else
