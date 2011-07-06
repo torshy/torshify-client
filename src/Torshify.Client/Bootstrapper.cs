@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -20,7 +19,6 @@ using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Services;
 using Torshify.Client.Log;
-using Torshify.Client.Mocks;
 using Torshify.Client.Modules.Core;
 using Torshify.Client.Spotify;
 using Torshify.Client.Unity;
@@ -69,14 +67,13 @@ namespace Torshify.Client
                                                    coreModule.AssemblyQualifiedName,
                                                    spotifyModule.Name));
 #else
-            Type mockModule = typeof(MockModule);
-            ModuleCatalog.AddModule(new ModuleInfo(mockModule.Name,
-                                                   mockModule.AssemblyQualifiedName));
+            ModuleCatalog.AddModule(new ModuleInfo("Mock",
+                                                   "Torshify.Client.Mocks.MockModule, Torshify.Client.Mocks"));
 
             Type coreModule = typeof (CoreModule);
             ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
                                                    coreModule.AssemblyQualifiedName,
-                                                   mockModule.Name));
+                                                   "Mock"));
 #endif
         }
 
