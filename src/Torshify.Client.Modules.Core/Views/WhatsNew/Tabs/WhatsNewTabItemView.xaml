@@ -15,86 +15,100 @@
             x:Key="ThumbnailCoverArtImageCacheConverter"
             DecodeHeight="125"
             DecodeWidth="125" />
+
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <ScrollViewer>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition
-                    Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
+    <Controls:LayeredPanel>
+        <ScrollViewer>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-            <Button
-                Content="More"
-                Command="{Binding GetMoreAlbumsCommand}"
-                HorizontalAlignment="Right" />
+                <Button
+                    Content="More"
+                    Command="{Binding GetMoreAlbumsCommand}"
+                    HorizontalAlignment="Right" />
 
-            <ItemsControl
-                Grid.Row="1"
-                ItemsSource="{Binding Albums}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Controls:AnimatingTilePanel
-                            ItemHeight="175"
-                            ItemWidth="150" />
-                        <!--<WrapPanel
+                <ItemsControl
+                    Grid.Row="1"
+                    ItemsSource="{Binding Albums}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Controls:AnimatingTilePanel
+                                ItemHeight="175"
+                                ItemWidth="150" />
+                            <!--<WrapPanel
                             ItemHeight="175"
                             ItemWidth="150" />-->
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel
-                            LastChildFill="True">
-                            <StackPanel
-                                Margin="8,0,8,0"
-                                DockPanel.Dock="Bottom">
-                                <TextBlock>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel
+                                LastChildFill="True">
+                                <StackPanel
+                                    Margin="8,0,8,0"
+                                    DockPanel.Dock="Bottom">
+                                    <TextBlock>
                                     <Hyperlink
-                                        Foreground="{DynamicResource ControlTextBrush}"
+                                            Foreground="{DynamicResource ControlTextBrush}"
+                                            Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
+                                            CommandParameter="{Binding}">
+                                         <TextBlock
+                                                Text="{Binding Name}"
+                                                TextTrimming="CharacterEllipsis" />
+                                    </Hyperlink>
+                                </TextBlock>
+                                    <TextBlock>
+                                    <Hyperlink
+                                            Foreground="{DynamicResource DisabledControlTextBrush}"
+                                            Command="{x:Static Core:CoreCommands+Views.GoToArtistCommand}"
+                                            CommandParameter="{Binding Artist}">
+                                         <TextBlock
+                                                Text="{Binding Artist.Name}"
+                                                TextTrimming="CharacterEllipsis" />
+                                    </Hyperlink>
+                                </TextBlock>
+                                </StackPanel>
+                                <Border
+                                    Margin="8,8,8,2"
+                                    Padding="4"
+                                    Background="{DynamicResource ControlTextBrush}"
+                                    VerticalAlignment="Top">
+                                    <Button
+                                        Style="{DynamicResource SuperSimpleButtonStyle}"
                                         Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
-                                        CommandParameter="{Binding}">
-                                         <TextBlock
-                                            Text="{Binding Name}"
-                                            TextTrimming="CharacterEllipsis" />
-                                    </Hyperlink>
-                                </TextBlock>
-                                <TextBlock>
-                                    <Hyperlink
-                                        Foreground="{DynamicResource DisabledControlTextBrush}"
-                                        Command="{x:Static Core:CoreCommands+Views.GoToArtistCommand}"
-                                        CommandParameter="{Binding Artist}">
-                                         <TextBlock
-                                            Text="{Binding Artist.Name}"
-                                            TextTrimming="CharacterEllipsis" />
-                                    </Hyperlink>
-                                </TextBlock>
-                            </StackPanel>
-                            <Border
-                                Margin="8,8,8,2"
-                                Padding="4"
-                                Background="{DynamicResource ControlTextBrush}"
-                                VerticalAlignment="Top">
-                                <Button
-                                    Style="{DynamicResource SuperSimpleButtonStyle}"
-                                    Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
-                                    CommandParameter="{Binding}"
-                                    Cursor="Hand"
-                                    Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
-                                    <ContentControl.ContentTemplate>
-                                        <DataTemplate>
-                                            <Image
-                                                Width="125"
-                                                Height="125"
-                                                Source="{Binding Bitmap}" />
-                                        </DataTemplate>
-                                    </ContentControl.ContentTemplate>
-                                </Button>
-                            </Border>
-                        </DockPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
-    </ScrollViewer>
+                                        CommandParameter="{Binding}"
+                                        Cursor="Hand"
+                                        Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                                        <ContentControl.ContentTemplate>
+                                            <DataTemplate>
+                                                <Image
+                                                    Width="125"
+                                                    Height="125"
+                                                    Source="{Binding Bitmap}" />
+                                            </DataTemplate>
+                                        </ContentControl.ContentTemplate>
+                                    </Button>
+                                </Border>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+        
+        <Controls:SprocketControl
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+            IsBusy="{Binding IsLoading}"
+            Width="48"
+            Height="48"
+            Interval="70" />
+        
+    </Controls:LayeredPanel>
+
 </UserControl>

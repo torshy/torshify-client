@@ -28,6 +28,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         private ICollectionView _albumsIcv;
         private Random _random;
         private List<ISearch> _searchList;
+        private bool _isLoading;
 
         #endregion Fields
 
@@ -82,6 +83,18 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             set;
         }
 
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    RaisePropertyChanged("IsLoading");
+                }
+            }
+        }
         #endregion Properties
 
         #region Methods
@@ -118,6 +131,8 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         private void GetMoreRandomAlbums()
         {
+            IsLoading = true;
+
             var search = _searchProvider.Search("tag:new", 0, 0, 0, 250, 0, 0);
 
             search.FinishedLoading += OnSearchFinishedLoading;
@@ -157,6 +172,8 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             }
 
             _searchList.Remove(search);
+
+            IsLoading = false;
         }
 
         #endregion Methods
