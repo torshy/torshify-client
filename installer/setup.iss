@@ -21,6 +21,7 @@ AllowNoIcons=yes
 OutputBaseFilename=setup
 Compression=lzma
 SolidCompression=yes
+PrivilegesRequired=poweruser
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

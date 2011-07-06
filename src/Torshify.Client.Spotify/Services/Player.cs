@@ -1,9 +1,7 @@
 using System;
 using System.Timers;
 using System.Windows.Threading;
-
-using log4net;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -15,8 +13,8 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
-        private readonly ILog _log = LogManager.GetLogger("Player");
         private readonly ISession _session;
+        private readonly ILoggerFacade _logger;
 
         private BassPlayer _bass;
         private bool _isPlaying;
@@ -30,11 +28,12 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        public Player(ISession session, Dispatcher dispatcher)
+        public Player(ISession session, Dispatcher dispatcher, ILoggerFacade logger)
         {
             _bass = new BassPlayer();
             _volume = 0.2f;
             _session = session;
+            _logger = logger;
             _session.EndOfTrack += OnSessionEndOfTrack;
             _session.MusicDeliver += OnSessionMusicDeliver;
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
@@ -126,7 +125,7 @@ namespace Torshify.Client.Spotify.Services
                 _session.PlayerPause();
                 IsPlaying = false;
 
-                _log.Info("Paused");
+                _logger.Log("Paused", Category.Info, Priority.Low);
             }
         }
 
@@ -149,7 +148,7 @@ namespace Torshify.Client.Spotify.Services
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)
             {
                 _session.PlayerPlay();
-                _log.Info("Playing");
+                _logger.Log("Playing", Category.Info, Priority.Low);
             }
         }
 
@@ -161,7 +160,7 @@ namespace Torshify.Client.Spotify.Services
                 _playLocation = timeSpan;
                 RaisePropertyChanged("DurationPlayed");
 
-                _log.Info("Seeking " + timeSpan);
+                _logger.Log("Seeking " + timeSpan, Category.Info, Priority.Low);
             }
         }
 
@@ -174,7 +173,7 @@ namespace Torshify.Client.Spotify.Services
                 _playLocation = TimeSpan.Zero;
                 RaisePropertyChanged("DurationPlayed");
 
-                _log.Info("Stop");
+                _logger.Log("Stop", Category.Info, Priority.Low);
             }
         }
 
@@ -207,12 +206,12 @@ namespace Torshify.Client.Spotify.Services
 
                     _playLocation = TimeSpan.Zero;
 
-                    _log.Info("Changing track to " + track.Name);
+                    _logger.Log("Changing track to " + track.Name, Category.Info, Priority.Low);
                 }
             }
             else
             {
-                _log.Info("No more tracks to play.");
+                _logger.Log("No more tracks to play.", Category.Info, Priority.Low);
 
                 Stop();
             }
@@ -247,12 +246,12 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnSessionStartPlayback(object sender, SessionEventArgs e)
         {
-            Console.WriteLine("Start playback");
+            _logger.Log("Session - Start playback recevied", Category.Info, Priority.Low);
         }
 
         private void OnSessionStopPlayback(object sender, SessionEventArgs e)
         {
-            Console.WriteLine("Stop playback");
+            _logger.Log("Session - Stop playback recevied", Category.Info, Priority.Low);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)

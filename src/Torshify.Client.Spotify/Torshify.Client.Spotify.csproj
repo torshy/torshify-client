@@ -52,9 +52,6 @@
     <Reference Include="Bass.Net">
       <HintPath>..\..\lib\BASS\Bass.Net.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\lib\Log4Net\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>

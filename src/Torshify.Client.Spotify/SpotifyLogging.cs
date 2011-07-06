@@ -1,4 +1,4 @@
-using log4net;
+using Microsoft.Practices.Prism.Logging;
 
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -9,16 +9,16 @@ namespace Torshify.Client.Spotify
         #region Fields
 
         private readonly ISession _session;
-
-        private ILog _log = LogManager.GetLogger("Spotify");
+        private readonly ILoggerFacade _logger;
 
         #endregion Fields
 
         #region Constructors
 
-        public SpotifyLogging(ISession session)
+        public SpotifyLogging(ISession session, ILoggerFacade logger)
         {
             _session = session;
+            _logger = logger;
         }
 
         #endregion Constructors
@@ -42,52 +42,52 @@ namespace Torshify.Client.Spotify
         {
             if (e.Status != Error.OK)
             {
-                _log.Error("Connection error " + e.Message + "[" + e.Status + "]");
+                _logger.Log("Connection error " + e.Message + "[" + e.Status + "]", Category.Exception, Priority.High);
             }
             else
             {
-                _log.Info("Connected");
+                _logger.Log("Connected", Category.Info, Priority.Low);
             }
         }
 
         private void OnEndOfTrack(object sender, SessionEventArgs e)
         {
-            _log.Info("End of track");
+            _logger.Log("End of track", Category.Info, Priority.Low);
         }
 
         private void OnException(object sender, SessionEventArgs e)
         {
-            _log.Error("Exception: " + e.Message);
+            _logger.Log(e.Message, Category.Exception, Priority.High);
         }
 
         private void OnLogInComplete(object sender, SessionEventArgs e)
         {
-            _log.Info("Logged in - " + e.Status + "[" + e.Status.GetMessage() + "]");
+            _logger.Log("Logged in - " + e.Status + "[" + e.Status.GetMessage() + "]", Category.Info, Priority.Low);
         }
 
         private void OnLogMessage(object sender, SessionEventArgs e)
         {
-            _log.Info(e.Message);
+            _logger.Log(e.Message, Category.Info, Priority.Medium);
         }
 
         private void OnLogoutComplete(object sender, SessionEventArgs e)
         {
-            _log.Info("Logged out");
+            _logger.Log("Logged out", Category.Info, Priority.Low);
         }
 
         private void OnMessageToUser(object sender, SessionEventArgs e)
         {
-            _log.Info(e.Message);
+            _logger.Log(e.Message, Category.Info, Priority.High);
         }
 
         private void OnPlayerTokenLost(object sender, SessionEventArgs e)
         {
-            _log.Info("Play token lost");
+            _logger.Log("Play token lost", Category.Info, Priority.High);
         }
 
         private void OnStreamingError(object sender, SessionEventArgs e)
         {
-            _log.Warn(e.Message + "[" + e.Status.GetMessage() + "]");
+            _logger.Log(e.Message + "[" + e.Status.GetMessage() + "]", Category.Warn, Priority.High);
         }
 
         #endregion Methods

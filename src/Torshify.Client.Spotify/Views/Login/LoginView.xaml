@@ -4,7 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure" xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure" xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" mc:Ignorable="d"
+    xmlns:local="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -29,14 +32,14 @@
                 Margin="-40,0,0,-10">
                 <TextBlock.Foreground>
                     <LinearGradientBrush
-                                StartPoint="0,0"
-                                EndPoint="0,1">
+                        StartPoint="0,0"
+                        EndPoint="0,1">
                     <GradientStop
-                                    Color="Orange"
-                                    Offset="0" />
+                            Color="Orange"
+                            Offset="0" />
                     <GradientStop
-                                    Color="OrangeRed"
-                                    Offset="1" />
+                            Color="OrangeRed"
+                            Offset="1" />
                     </LinearGradientBrush>
                 </TextBlock.Foreground>
             </TextBlock>
@@ -74,6 +77,8 @@
             </Border>
 
             <local:WatermarkTextBox
+                x:Name="UserNameTextBox"
+                TabIndex="0"
                 Watermark="Username"
                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
                 Margin="0,0,0,4">
@@ -84,8 +89,9 @@
                         CommandParameter="{Binding ElementName=_passwordBox}" />
                 </Interactivity:Interaction.Behaviors>
             </local:WatermarkTextBox>
-                <PasswordBox
+            <PasswordBox
                 x:FieldModifier="private"
+                TabIndex="1"
                 Name="_passwordBox"
                 Margin="0,0,0,4">
                 <Interactivity:Interaction.Behaviors>
@@ -95,7 +101,7 @@
                         CommandParameter="{Binding ElementName=_passwordBox}" />
                 </Interactivity:Interaction.Behaviors>
             </PasswordBox>
-                <TextBlock
+            <TextBlock
                 FontSize="10"
                 Foreground="{DynamicResource ControlTextBrush}"
                 ToolTip="{Binding ForgotPasswordUrl}">
