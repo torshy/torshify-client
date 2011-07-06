@@ -1,7 +1,9 @@
 using System;
 using System.Timers;
 using System.Windows.Threading;
+
 using log4net;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Interfaces;
@@ -33,6 +35,7 @@ namespace Torshify.Client.Spotify.Services
             _bass = new BassPlayer();
             _volume = 0.2f;
             _session = session;
+            _session.EndOfTrack += OnSessionEndOfTrack;
             _session.MusicDeliver += OnSessionMusicDeliver;
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
             _session.StopPlayback += OnSessionStopPlayback;
@@ -193,6 +196,8 @@ namespace Torshify.Client.Spotify.Services
 
                 if (track != null && track.InternalTrack.IsValid())
                 {
+                    _session.PlayerUnload();
+
                     track.InternalTrack.Load();
 
                     if (IsPlaying)
@@ -210,6 +215,14 @@ namespace Torshify.Client.Spotify.Services
                 _log.Info("No more tracks to play.");
 
                 Stop();
+            }
+        }
+
+        private void OnSessionEndOfTrack(object sender, SessionEventArgs e)
+        {
+            if (Playlist.CanGoNext)
+            {
+                Playlist.Next();
             }
         }
 

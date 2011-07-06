@@ -382,7 +382,9 @@ namespace Torshify.Client.Infrastructure.Models
             {
                 _playlist = new List<PlayerQueueItem>();
                 _left.Clear();
-
+                _playlistTrackIndex = -1;
+                _playlistIndicies = null;
+                
                 foreach (var track in tracks)
                 {
                     var item = new PlayerQueueItem(false, track);
@@ -400,7 +402,8 @@ namespace Torshify.Client.Infrastructure.Models
 
                 Update();
 
-                Current = _playlist[_playlistIndicies[0]];
+                _playlistTrackIndex = 0;
+                Current = _playlist[_playlistIndicies[_playlistTrackIndex]];
 
                 OnChanged();
             }

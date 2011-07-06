@@ -109,6 +109,25 @@ namespace Torshify.Client.Tests
         }
 
         [Test]
+        public void Set_StartNewPlaylist_PlaylistShouldBeTheLastSet()
+        {
+            _queue.Set(GetTracks(5));
+            _queue.Next();
+            _queue.Next();
+            _queue.Next();
+
+            _queue.Set(new []{GetTrack("Song1"), GetTrack("Song2"), GetTrack("Song3")});
+
+            Assert.AreEqual("Song1", _queue.Left.First().Track.Name);
+            Assert.AreEqual("Song1", _queue.Current.Track.Name);
+
+            _queue.Next();
+
+            Assert.AreEqual("Song2", _queue.Left.First().Track.Name);
+            Assert.AreEqual("Song2", _queue.Current.Track.Name);
+        }
+
+        [Test]
         public void Enqueue_OneTrack_CanGoNext()
         {
             var track = GetTrack();
