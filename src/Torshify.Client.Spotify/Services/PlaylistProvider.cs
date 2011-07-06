@@ -111,7 +111,7 @@ namespace Torshify.Client.Spotify.Services
         private void OnPlaylistContainerPlaylistAdded(object sender, PlaylistEventArgs e)
         {
             _logger.Log("Playlist added", Category.Info, Priority.Medium);
-            //InsertAt(e.Playlist, e.Position);
+            InsertAt(e.Playlist, e.Position);
         }
 
         private void OnPlaylistContainerLoaded(object sender, EventArgs e)
