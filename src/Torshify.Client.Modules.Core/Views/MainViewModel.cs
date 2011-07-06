@@ -87,6 +87,7 @@ namespace Torshify.Client.Modules.Core.Views
 
         public void Search(string text)
         {
+            InputFieldText = text;
             UriQuery query = new UriQuery();
             query.Add("Query", text);
             MusicViewRegion.RequestNavigate(new Uri(MusicRegionViewNames.SearchView + query, UriKind.Relative));

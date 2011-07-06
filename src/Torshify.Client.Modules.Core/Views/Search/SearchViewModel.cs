@@ -27,6 +27,7 @@ namespace Torshify.Client.Modules.Core.Views.Search
         private ISearch _currentSearch;
         private IList<ITrack> _searchResults;
         private ICollectionView _searchResultsIcv;
+        private string _didYouMean;
 
         #endregion Fields
 
@@ -59,6 +60,19 @@ namespace Torshify.Client.Modules.Core.Views.Search
             }
         }
 
+        public string DidYouMean
+        {
+            get { return _didYouMean; }
+            set
+            {
+                if (_didYouMean != value)
+                {
+                    _didYouMean = value;
+                    RaisePropertyChanged("DidYouMean");
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -72,6 +86,8 @@ namespace Torshify.Client.Modules.Core.Views.Search
         {
             _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
+            
+            DidYouMean = string.Empty;
 
             _currentSearch.FinishedLoading -= SearchFinishedLoading;
         }
@@ -80,6 +96,8 @@ namespace Torshify.Client.Modules.Core.Views.Search
         {
             _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
             _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+
+            DidYouMean = string.Empty;
 
             string query = navigationContext.Parameters["Query"];
             _currentSearch = _searchProvider.Search(query, 0, int.MaxValue, 0, 10, 0, 10);
@@ -90,6 +108,8 @@ namespace Torshify.Client.Modules.Core.Views.Search
         {
             ISearch search = (ISearch)sender;
             search.FinishedLoading -= SearchFinishedLoading;
+
+            DidYouMean = search.DidYouMean;
 
             _searchResults = new SearchResultsLoader(search.Query, search.Tracks, _searchProvider);
             SearchResults = new ListCollectionView((IList)_searchResults);

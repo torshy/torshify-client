@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -18,7 +19,30 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Visibility="{Binding DidYouMean, Converter={StaticResource StringEmptyToVisibilityConverter}}"
+            Orientation="Horizontal"
+            Margin="4,2,0,2">
+            <TextBlock
+                Text="Did you mean"
+                Foreground="{DynamicResource DisabledControlTextBrush}" />
+            <TextBlock>
+                <Hyperlink
+                        Command="{x:Static Core:CoreCommands.SearchCommand}"
+                        CommandParameter="{Binding DidYouMean}">
+                    <TextBlock
+                            Text="{Binding DidYouMean, StringFormat={} {0}?}"
+                            Foreground="Orange" />
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
         <DataGrid
+            Grid.Row="1"
             ItemsSource="{Binding SearchResults}"
             IsReadOnly="True"
             CanUserAddRows="False"
