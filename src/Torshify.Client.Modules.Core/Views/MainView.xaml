@@ -115,58 +115,65 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel
+        <DockPanel
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            Orientation="Horizontal"
-            Margin="4,4,0,0">
-            <Button
-                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
-                Style="{StaticResource NavigationButtonStyle}"
-                Command="{Binding GoBackCommand}"
-                Margin="0,0,2,0">
-                <Path
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
-                    Fill="#FFF4F4F5"
-                    Margin="0"
-                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                    StrokeThickness="2"
-                    StrokeStartLineCap="Round" />
-            </Button>
-            <Button
-                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
-                Style="{StaticResource NavigationButtonStyle}"
-                Command="{Binding GoForwardCommand}"
-                Margin="0,0,8,0">
-                <Path
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
-                    Fill="#FFF4F4F5"
-                    Margin="0"
-                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                    StrokeThickness="2"
-                    RenderTransformOrigin="0.5,0.5"
-                    StrokeStartLineCap="Round"
-                    StrokeEndLineCap="Square">
-                    <Path.RenderTransform>
-                        <ScaleTransform
-                            ScaleX="-1" />
-                    </Path.RenderTransform>
-                </Path>
-            </Button>
-            <Controls:SearchTextBox
-                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
-                Name="_searchInputField"
-                Width="150"
-                Watermark="Search"
-                Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}"
-                SearchCommand="{Binding SearchCommand}"
-                SearchCommandParameter="{Binding Text, ElementName=_searchInputField}"
-                Margin="0,0,2,0" />
-        </StackPanel>
+            Margin="4,4,0,0"
+            LastChildFill="True">
+            <StackPanel
+                DockPanel.Dock="Left"
+                Orientation="Horizontal">
+                <Button
+                    Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                    Style="{StaticResource NavigationButtonStyle}"
+                    Command="{Binding GoBackCommand}"
+                    Margin="0,0,2,0">
+                    <Path
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
+                        Fill="#FFF4F4F5"
+                        Margin="0"
+                        Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                        StrokeThickness="2"
+                        StrokeStartLineCap="Round" />
+                </Button>
+                <Button
+                    Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                    Style="{StaticResource NavigationButtonStyle}"
+                    Command="{Binding GoForwardCommand}"
+                    Margin="0,0,8,0">
+                    <Path
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M0,4 L4,0 M0,4 L4,8 M0,4 L9,4"
+                        Fill="#FFF4F4F5"
+                        Margin="0"
+                        Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                        StrokeThickness="2"
+                        RenderTransformOrigin="0.5,0.5"
+                        StrokeStartLineCap="Round"
+                        StrokeEndLineCap="Square">
+                        <Path.RenderTransform>
+                            <ScaleTransform
+                                ScaleX="-1" />
+                        </Path.RenderTransform>
+                    </Path>
+                </Button>
+                <Controls:SearchTextBox
+                    Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                    Name="_searchInputField"
+                    Width="150"
+                    Watermark="Search"
+                    Text="{Binding InputFieldText, UpdateSourceTrigger=PropertyChanged}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding Text, ElementName=_searchInputField}"
+                    Margin="0,0,2,0" />
+            </StackPanel>
+            <ContentControl
+                prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.TopMusicRegion}"
+                Margin="4,0,0,0" />
+        </DockPanel>
 
         <ContentControl
             Grid.Column="0"

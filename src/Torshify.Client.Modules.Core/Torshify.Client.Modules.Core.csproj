@@ -178,6 +178,10 @@
     <Compile Include="Views\Navigation\PlayQueueNavigationItem.cs" />
     <Compile Include="Views\Navigation\RadioNavigationItem.cs" />
     <Compile Include="Views\Navigation\WhatsNewNavigationItem.cs" />
+    <Compile Include="Views\Notifications\NotificationsView.xaml.cs">
+      <DependentUpon>NotificationsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Notifications\NotificationsViewModel.cs" />
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
     </Compile>
@@ -296,6 +300,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Navigation\NavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Notifications\NotificationsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,6 +5,7 @@ namespace Torshify.Client.Modules.Core
         public const string MainMusicRegion = "MainMusicViewRegion";
         public const string BottomMusicRegion = "BottomMusicViewRegion";
         public const string LeftMusicRegion = "LeftMusicViewRegion";
+        public const string TopMusicRegion = "TopMusicViewRegion";
     }
 
     public static class MusicRegionViewNames

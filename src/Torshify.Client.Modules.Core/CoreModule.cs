@@ -9,6 +9,7 @@ using Torshify.Client.Modules.Core.Views;
 using Torshify.Client.Modules.Core.Views.Album;
 using Torshify.Client.Modules.Core.Views.Artist;
 using Torshify.Client.Modules.Core.Views.Navigation;
+using Torshify.Client.Modules.Core.Views.Notifications;
 using Torshify.Client.Modules.Core.Views.NowPlaying;
 using Torshify.Client.Modules.Core.Views.Player;
 using Torshify.Client.Modules.Core.Views.Playlist;
@@ -45,6 +46,7 @@ namespace Torshify.Client.Modules.Core
         {
             _container.RegisterType<MainView>("MainView");
             _container.RegisterType<PlayerView>("PlayerView");
+            _container.RegisterType<NotificationsView>("NotificationsView");
             _container.RegisterType<PlaylistView>(MusicRegionViewNames.PlaylistView);
             _container.RegisterType<PlayQueueView>(MusicRegionViewNames.PlayQueueView);
             _container.RegisterType<NowPlayingView>(MusicRegionViewNames.NowPlayingView);
@@ -57,6 +59,7 @@ namespace Torshify.Client.Modules.Core
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.BottomMusicRegion, typeof(PlayerView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.LeftMusicRegion, typeof(NavigationView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.TopMusicRegion, typeof (NotificationsView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlaylistView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(PlayQueueView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(ArtistView));

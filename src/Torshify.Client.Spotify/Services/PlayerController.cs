@@ -1,9 +1,10 @@
 using System;
 using System.Timers;
 using System.Windows.Threading;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 
@@ -15,6 +16,7 @@ namespace Torshify.Client.Spotify.Services
 
         private readonly ISession _session;
         private readonly ILoggerFacade _logger;
+        private readonly IEventAggregator _eventAggregator;
 
         private IPlayer _player;
         private bool _isPlaying;
@@ -32,12 +34,14 @@ namespace Torshify.Client.Spotify.Services
             ISession session, 
             IPlayer player,
             Dispatcher dispatcher, 
-            ILoggerFacade logger)
+            ILoggerFacade logger,
+            IEventAggregator eventAggregator)
         {
             _player = player;
             _volume = 0.2f;
             _session = session;
             _logger = logger;
+            _eventAggregator = eventAggregator;
             _session.EndOfTrack += OnSessionEndOfTrack;
             _session.MusicDeliver += OnSessionMusicDeliver;
             _session.PlayTokenLost += OnSessionPlayerTokenLost;
@@ -88,6 +92,8 @@ namespace Torshify.Client.Spotify.Services
                     if (_isPlaying)
                     {
                         _timer.Start();
+
+                        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationMessage(string.Empty));
                     }
                     else
                     {
@@ -255,7 +261,11 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnSessionPlayerTokenLost(object sender, SessionEventArgs e)
         {
-            IsPlaying = false;
+            Pause();
+
+            _eventAggregator
+                .GetEvent<NotificationEvent>()
+                .Publish(new NotificationMessage("torshify has been paused because your account is used somewhere else"));
         }
 
         private void OnSessionStartPlayback(object sender, SessionEventArgs e)

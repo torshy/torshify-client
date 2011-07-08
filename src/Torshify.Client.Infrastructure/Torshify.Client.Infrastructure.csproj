@@ -165,7 +165,9 @@
     <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Converters\EqualInstanceToBooleanConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Events\NotificationEvent.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\vNextPlayerQueue.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
