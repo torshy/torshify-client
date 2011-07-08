@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Client.Infrastructure;
@@ -16,14 +16,16 @@ namespace Torshify.Client.Modules.Core
         #region Fields
 
         private readonly IRegionManager _regionManager;
+        private readonly ILoggerFacade _logger;
 
         #endregion Fields
 
         #region Constructors
 
-        public CoreCommandsHandler(IRegionManager regionManager)
+        public CoreCommandsHandler(IRegionManager regionManager, ILoggerFacade logger)
         {
             _regionManager = regionManager;
+            _logger = logger;
         }
 
         #endregion Constructors
@@ -53,6 +55,13 @@ namespace Torshify.Client.Modules.Core
                     Gesture = new KeyGesture(Key.D0, ModifierKeys.Alt)
                 });
 
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = new StaticCommand(ExecuteGarbageCollection),
+                    Gesture = new KeyGesture(Key.OemPlus, ModifierKeys.Alt)
+                });
+
             CoreCommands.Debug
                 .ToggleDebugWindowCommand.RegisterCommand(new StaticCommand(ExecuteToggleDebugWindowCommand));
             CoreCommands.Views
@@ -76,6 +85,15 @@ namespace Torshify.Client.Modules.Core
         private bool CanExecuteToggleTrackIsStarred(ITrack track)
         {
             return track != null && track.IsAvailable;
+        }
+
+        private void ExecuteGarbageCollection()
+        {
+            _logger.Log("Requesting Garabage Collecton", Category.Info, Priority.Low);
+            
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         private void ExecuteGoToAlbum(IAlbum album)
