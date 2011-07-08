@@ -44,8 +44,15 @@ namespace Torshify.Client.Spotify
         {
             if (_waveOut != null)
             {
-                _waveOut.Stop();
-                _waveOut.Dispose();
+                try
+                {
+                    _waveOut.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
                 _waveOut = null;
             }
 
