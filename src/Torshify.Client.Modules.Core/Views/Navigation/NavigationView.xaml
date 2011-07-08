@@ -56,6 +56,7 @@
             x:Key="NavigationItemTemplate">
             <Button
                 Name="NavButton"
+                ClickMode="Press"
                 Style="{StaticResource NonStyleButton}"
                 Command="{Binding DataContext.NavigateToItemCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                 CommandParameter="{Binding}"
