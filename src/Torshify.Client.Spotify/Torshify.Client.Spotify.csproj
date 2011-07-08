@@ -58,6 +58,9 @@
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\lib\Unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\..\lib\NAudio\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -84,13 +87,14 @@
     </Compile>
     <Compile Include="BassPlayer.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="NAudioPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Album.cs" />
     <Compile Include="Services\AlbumInformation.cs" />
     <Compile Include="Services\Artist.cs" />
     <Compile Include="Services\ArtistInformation.cs" />
     <Compile Include="Services\Image.cs" />
-    <Compile Include="Services\Player.cs" />
+    <Compile Include="Services\PlayerController.cs" />
     <Compile Include="Services\Playlist.cs" />
     <Compile Include="Services\PlaylistProvider.cs" />
     <Compile Include="Services\PlaylistTrack.cs" />

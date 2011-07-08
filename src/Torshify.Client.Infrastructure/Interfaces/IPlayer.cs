@@ -1,50 +1,19 @@
-using System;
+﻿using System;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {
-    public interface IPlayer
+    public interface IPlayer : IDisposable
     {
-        #region Events
+        int EnqueueSamples(int channels, int rate, byte[] samples, int frames);
 
-        event EventHandler IsPlayingChanged;
-
-        #endregion Events
-
-        #region Properties
-
-        bool IsPlaying
-        {
-            get;
-        }
-
-        TimeSpan DurationPlayed
-        {
-            get;
-        }
-
-        IPlayerQueue Playlist
-        {
-            get;
-        }
-
-        float Volume
-        {
-            get; 
-            set;
-        }
-
-        #endregion Properties
-
-        #region Methods
+        void ClearBuffers();
 
         void Pause();
 
         void Play();
 
-        void Seek(TimeSpan timeSpan);
+        void Seek();
 
-        void Stop();
-
-        #endregion Methods
+        float Volume { get; set; }
     }
 }

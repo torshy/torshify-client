@@ -9,14 +9,14 @@ using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Spotify.Services
 {
-    public class Player : NotificationObject, IPlayer
+    public class PlayerController : NotificationObject, IPlayerController
     {
         #region Fields
 
         private readonly ISession _session;
         private readonly ILoggerFacade _logger;
 
-        private BassPlayer _bass;
+        private IPlayer _player;
         private bool _isPlaying;
         private Error? _lastLoadStatus;
         private IPlayerQueue _playlist;
@@ -28,9 +28,13 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        public Player(ISession session, Dispatcher dispatcher, ILoggerFacade logger)
+        public PlayerController(
+            ISession session, 
+            IPlayer player,
+            Dispatcher dispatcher, 
+            ILoggerFacade logger)
         {
-            _bass = new BassPlayer();
+            _player = player;
             _volume = 0.2f;
             _session = session;
             _logger = logger;
@@ -109,7 +113,7 @@ namespace Torshify.Client.Spotify.Services
             set
             {
                 _volume = value;
-                _bass.Volume = value;
+                _player.Volume = value;
                 RaisePropertyChanged("Volume");
             }
         }
@@ -123,6 +127,8 @@ namespace Torshify.Client.Spotify.Services
             if (_lastLoadStatus == Error.OK)
             {
                 _session.PlayerPause();
+                _player.Pause();
+
                 IsPlaying = false;
 
                 _logger.Log("Paused", Category.Info, Priority.Low);
@@ -148,7 +154,10 @@ namespace Torshify.Client.Spotify.Services
             if (_lastLoadStatus.HasValue && _lastLoadStatus == Error.OK)
             {
                 _session.PlayerPlay();
+                _player.Play();
                 _logger.Log("Playing", Category.Info, Priority.Low);
+
+                IsPlaying = true;
             }
         }
 
@@ -157,6 +166,8 @@ namespace Torshify.Client.Spotify.Services
             if (_isPlaying)
             {
                 _session.PlayerSeek(timeSpan);
+                _player.Seek();
+
                 _playLocation = timeSpan;
                 RaisePropertyChanged("DurationPlayed");
 
@@ -169,7 +180,7 @@ namespace Torshify.Client.Spotify.Services
             if (_isPlaying)
             {
                 _session.PlayerUnload();
-                _bass.Dispose();
+                _player.Dispose();
 
                 IsPlaying = false;
                 _playLocation = TimeSpan.Zero;
@@ -198,6 +209,7 @@ namespace Torshify.Client.Spotify.Services
                 if (track != null && track.InternalTrack.IsValid())
                 {
                     _session.PlayerUnload();
+                    _player.ClearBuffers();
 
                     track.InternalTrack.Load();
 
@@ -231,7 +243,7 @@ namespace Torshify.Client.Spotify.Services
         {
             if (e.Samples.Length > 0)
             {
-                e.ConsumedFrames = _bass.EnqueueSamples(e.Channels, e.Rate, e.Samples, e.Frames);
+                e.ConsumedFrames = _player.EnqueueSamples(e.Channels, e.Rate, e.Samples, e.Frames);
                 IsPlaying = true;
             }
             else
@@ -264,7 +276,6 @@ namespace Torshify.Client.Spotify.Services
                 {
                     if (Playlist.CanGoNext)
                     {
-                        _bass.Stop();
                         Playlist.Next();
                     }
                 }

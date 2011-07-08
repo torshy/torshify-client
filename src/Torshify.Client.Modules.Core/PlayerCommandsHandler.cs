@@ -14,14 +14,14 @@ namespace Torshify.Client.Modules.Core
     {
         #region Fields
 
-        private readonly IPlayer _player;
+        private readonly IPlayerController _player;
         private readonly IRegionManager _regionManager;
 
         #endregion Fields
 
         #region Constructors
 
-        public PlayerCommandsHandler(IPlayer player, IRegionManager regionManager)
+        public PlayerCommandsHandler(IPlayerController player, IRegionManager regionManager)
         {
             _player = player;
             _regionManager = regionManager;

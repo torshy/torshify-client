@@ -27,7 +27,7 @@ namespace Torshify.Client.Mocks
         public void Initialize()
         {
             _container.RegisterType<IPlaylistProvider, PlaylistProvider>(new ContainerControlledLifetimeManager(), new InjectionMethod("Initialize"));
-            _container.RegisterType<IPlayer, Player>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IPlayerController, Player>(new ContainerControlledLifetimeManager());
             _container.RegisterType<ISearchProvider, SearchProvider>(new ContainerControlledLifetimeManager());
         }
 

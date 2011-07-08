@@ -10,14 +10,14 @@ namespace Torshify.Client.Modules.Core.Views.Player
     {
         #region Fields
 
-        private readonly IPlayer _player;
+        private readonly IPlayerController _player;
         private double _requestSeek;
 
         #endregion Fields
 
         #region Constructors
 
-        public PlayerViewModel(IPlayer player)
+        public PlayerViewModel(IPlayerController player)
         {
             _player = player;
         }
@@ -26,7 +26,7 @@ namespace Torshify.Client.Modules.Core.Views.Player
 
         #region Properties
 
-        public IPlayer Player
+        public IPlayerController Player
         {
             get
             {

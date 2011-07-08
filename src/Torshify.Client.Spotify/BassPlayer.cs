@@ -1,10 +1,10 @@
 ﻿using System;
-
+using Torshify.Client.Infrastructure.Interfaces;
 using Un4seen.Bass;
 
 namespace Torshify.Client.Spotify
 {
-    public class BassPlayer : IDisposable
+    public class BassPlayer : IPlayer
     {
         #region Fields
 
@@ -16,6 +16,14 @@ namespace Torshify.Client.Spotify
         #endregion Fields
 
         #region Properties
+
+        public void Seek()
+        {
+            if (_bassBuffer != null)
+            {
+                _bassBuffer.Clear();
+            }
+        }
 
         public float Volume
         {
@@ -77,10 +85,23 @@ namespace Torshify.Client.Spotify
             return consumed;
         }
 
-        public void Stop()
+        public void ClearBuffers()
         {
             // In real world usage you must remember to free the BASS stream if not reusing it!
-            _bassBuffer.Clear();
+            if (_bassBuffer != null)
+            {
+                _bassBuffer.Clear();
+            }
+        }
+
+        public void Pause()
+        {
+            Bass.BASS_Pause();
+        }
+
+        public void Play()
+        {
+            Bass.BASS_Start();
         }
 
         private int Reader(int handle, IntPtr buffer, int length, IntPtr user)

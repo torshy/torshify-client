@@ -165,6 +165,7 @@
     <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Converters\EqualInstanceToBooleanConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Models\vNextPlayerQueue.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="Interfaces\IArtist.cs" />
     <Compile Include="Interfaces\ICommandBar.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
-    <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Interfaces\IPlayerController.cs" />
     <Compile Include="Interfaces\IPlayerQueue.cs" />
     <Compile Include="Interfaces\IPlaylist.cs" />
     <Compile Include="Interfaces\IPlaylistProvider.cs" />

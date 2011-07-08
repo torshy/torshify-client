@@ -30,7 +30,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private readonly Dispatcher _dispatcher;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILoggerFacade _logger;
-        private readonly IPlayer _player;
+        private readonly IPlayerController _player;
         private readonly IRegionManager _regionManager;
 
         private SubscriptionToken _appInactivityToken;
@@ -48,7 +48,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         public NowPlayingViewModel(
             IRegionManager regionManager,
-            IPlayer player,
+            IPlayerController player,
             IBackdropService backdropService,
             IEventAggregator eventAggregator,
             ILoggerFacade logger,
@@ -109,7 +109,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             private set;
         }
 
-        public IPlayer Player
+        public IPlayerController Player
         {
             get
             {

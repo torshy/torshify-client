@@ -18,7 +18,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         #region Fields
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly IPlayer _player;
+        private readonly IPlayerController _player;
         private readonly IRegionManager _regionManager;
 
         private IPlayerQueue _playQueue;
@@ -30,7 +30,7 @@ namespace Torshify.Client.Modules.Core.Views.PlayQueue
         #region Constructors
 
         public PlayQueueViewModel(
-            IPlayer player,
+            IPlayerController player,
             IEventAggregator eventAggregator,
             IRegionManager regionManager)
         {

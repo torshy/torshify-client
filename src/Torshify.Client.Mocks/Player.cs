@@ -5,7 +5,7 @@ using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Mocks
 {
-    public class Player : IPlayer
+    public class Player : IPlayerController
     {
         #region Fields
 
