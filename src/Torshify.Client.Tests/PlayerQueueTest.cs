@@ -210,6 +210,17 @@ namespace Torshify.Client.Tests
             Assert.AreEqual("Track1", _queue.Current.Track.Name);
         }
 
+        [Test]
+        public void MoveCurrentTo_CurrentIsTheExpected()
+        {
+            _queue.Set(GetTracks(20));
+            var expected = _queue.Left.Skip(10).FirstOrDefault();
+            bool result = _queue.MoveCurrentTo(expected);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(expected, _queue.Current);
+        }
+
         private ITrack GetTrack(string name = "TrackName")
         {
             Mock<ITrack> trackMock = new Mock<ITrack>();

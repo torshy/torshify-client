@@ -4,11 +4,11 @@ using Un4seen.Bass;
 
 namespace Torshify.Client.Spotify
 {
-    public class BassPlayer
+    public class BassPlayer : IDisposable
     {
         #region Fields
 
-        private BASSBuffer _basbuffer = null;
+        private BASSBuffer _bassBuffer = null;
         private bool _lazyVolumeSet;
         private float _lazyVolumeValue;
         private STREAMPROC _streamproc = null;
@@ -37,13 +37,24 @@ namespace Torshify.Client.Spotify
 
         #region Methods
 
+        public void Dispose()
+        {
+            if (_bassBuffer != null)
+            {
+                _bassBuffer.Dispose();
+                _bassBuffer = null;
+            }
+
+            Bass.BASS_Free();
+        }
+
         public int EnqueueSamples(int channels, int rate, byte[] samples, int frames)
         {
             int consumed = 0;
-            if (_basbuffer == null)
+            if (_bassBuffer == null)
             {
                 Bass.BASS_Init(-1, rate, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
-                _basbuffer = new BASSBuffer(0.5f, rate, channels, 2);
+                _bassBuffer = new BASSBuffer(0.5f, rate, channels, 2);
                 _streamproc = new STREAMPROC(Reader);
 
                 if (_lazyVolumeSet)
@@ -57,9 +68,9 @@ namespace Torshify.Client.Spotify
                     );
             }
 
-            if (_basbuffer.Space(0) > samples.Length)
+            if (_bassBuffer.Space(0) > samples.Length)
             {
-                _basbuffer.Write(samples, samples.Length);
+                _bassBuffer.Write(samples, samples.Length);
                 consumed = frames;
             }
 
@@ -69,12 +80,12 @@ namespace Torshify.Client.Spotify
         public void Stop()
         {
             // In real world usage you must remember to free the BASS stream if not reusing it!
-            _basbuffer.Clear();
+            _bassBuffer.Clear();
         }
 
         private int Reader(int handle, IntPtr buffer, int length, IntPtr user)
         {
-            return _basbuffer.Read(buffer, length, user.ToInt32());
+            return _bassBuffer.Read(buffer, length, user.ToInt32());
         }
 
         #endregion Methods

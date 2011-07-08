@@ -165,6 +165,7 @@
     <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Converters\EqualInstanceToBooleanConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Models\vNextPlayerQueue.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />

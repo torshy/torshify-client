@@ -50,11 +50,6 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get; set;
         }
 
-        IEnumerable<PlayerQueueItem> All
-        {
-            get;
-        }
-
         IEnumerable<PlayerQueueItem> Left
         {
             get;

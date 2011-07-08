@@ -146,29 +146,32 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
             int maxValue = search.Albums.Count;
 
-            List<IAlbum> toAdd = new List<IAlbum>();
-            for (int i = 0; i < NumberToFetchPerBatch; i++)
+            if (maxValue > 0)
             {
-                int randomIndex = _random.Next(0, maxValue);
-                var random = search.Albums[randomIndex];
-                Func<IAlbum, bool> predicate = a => a.Name.Equals(random.Name);
-
-                if (toAdd.Any(predicate) || _albums.Any(predicate))
+                List<IAlbum> toAdd = new List<IAlbum>();
+                for (int i = 0; i < NumberToFetchPerBatch; i++)
                 {
-                    i--;
-                }
-                else
-                {
-                    toAdd.Add(random);
-                }
-            }
+                    int randomIndex = _random.Next(0, maxValue);
+                    var random = search.Albums[randomIndex];
+                    Func<IAlbum, bool> predicate = a => a.Name.Equals(random.Name);
 
-            foreach (var album in toAdd)
-            {
-                _dispatcher.BeginInvoke(
-                    (Action<IAlbum>)_albums.Add,
-                    DispatcherPriority.Background,
-                    album);
+                    if (toAdd.Any(predicate) || _albums.Any(predicate))
+                    {
+                        i--;
+                    }
+                    else
+                    {
+                        toAdd.Add(random);
+                    }
+                }
+
+                foreach (var album in toAdd)
+                {
+                    _dispatcher.BeginInvoke(
+                        (Action<IAlbum>) _albums.Add,
+                        DispatcherPriority.Background,
+                        album);
+                }
             }
 
             _searchList.Remove(search);

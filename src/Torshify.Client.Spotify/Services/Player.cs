@@ -169,6 +169,8 @@ namespace Torshify.Client.Spotify.Services
             if (_isPlaying)
             {
                 _session.PlayerUnload();
+                _bass.Dispose();
+
                 IsPlaying = false;
                 _playLocation = TimeSpan.Zero;
                 RaisePropertyChanged("DurationPlayed");
@@ -262,6 +264,7 @@ namespace Torshify.Client.Spotify.Services
                 {
                     if (Playlist.CanGoNext)
                     {
+                        _bass.Stop();
                         Playlist.Next();
                     }
                 }

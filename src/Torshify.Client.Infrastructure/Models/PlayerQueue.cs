@@ -54,29 +54,6 @@ namespace Torshify.Client.Infrastructure.Models
 
         #region Properties
 
-        public IEnumerable<PlayerQueueItem> All
-        {
-            get
-            {
-                if (Current != null)
-                {
-                    yield return Current;
-                }
-
-                foreach (var track in _queue.ToArray())
-                {
-                    if (track != Current)
-                        yield return track;
-                }
-
-                foreach (var track in _playlist.ToArray())
-                {
-                    if (track != Current)
-                        yield return track;
-                }
-            }
-        }
-
         public bool CanGoNext
         {
             get
@@ -254,6 +231,16 @@ namespace Torshify.Client.Infrastructure.Models
 
         public bool MoveCurrentTo(PlayerQueueItem item)
         {
+            int index = _left.IndexOf(item);
+
+            if (index > _playlistTrackIndex)
+            {
+                while(Current != item)
+                {
+                    Next();
+                }
+            }
+
             return true;
         }
 
