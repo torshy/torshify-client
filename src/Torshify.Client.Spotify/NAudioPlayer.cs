@@ -74,11 +74,11 @@ namespace Torshify.Client.Spotify
         {
             int consumed = 0;
 
-            if (_waveProvider == null)
+            if (_waveProvider == null || frames == 0)
             {
                 _waveOut = new WaveOut();
                 _waveProvider = new BufferedWaveProvider(new WaveFormat(rate, channels));
-                _waveProvider.BufferDuration = TimeSpan.FromSeconds(5);
+                _waveProvider.BufferDuration = TimeSpan.FromSeconds(1);
                 _waveOut.Init(_waveProvider);
                 _waveOut.Play();
             }
