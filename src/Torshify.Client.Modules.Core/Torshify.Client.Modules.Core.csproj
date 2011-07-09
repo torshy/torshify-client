@@ -186,6 +186,9 @@
       <DependentUpon>NotificationsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Notifications\NotificationsViewModel.cs" />
+    <Compile Include="Views\NowPlaying\ColorOverlayBackgroundEffect.cs" />
+    <Compile Include="Views\NowPlaying\IBackgroundEffect.cs" />
+    <Compile Include="Views\NowPlaying\KenBurnsBackgroundEffect.cs" />
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
     </Compile>

@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
+using Torshify.Client.Infrastructure.Input;
 
 namespace Torshify.Client.Modules.Core.Views.NowPlaying
 {
@@ -10,6 +12,12 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         {
             InitializeComponent();
             Model = viewModel;
+            InputBindings.Add(
+                new ExtendedMouseBinding
+                {
+                    Command = viewModel.NavigateBackCommand,
+                    Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
+                });
         }
 
         #endregion Constructors

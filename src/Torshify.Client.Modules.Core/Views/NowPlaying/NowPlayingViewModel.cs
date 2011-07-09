@@ -1,24 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Events;
-using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 
-using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
-using Torshify.Client.Infrastructure.Input;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
-using Torshify.Client.Modules.Core.Controls;
 
 namespace Torshify.Client.Modules.Core.Views.NowPlaying
 {
@@ -26,15 +19,10 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
     {
         #region Fields
 
-        private readonly IBackdropService _backdropService;
-        private readonly Dispatcher _dispatcher;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ILoggerFacade _logger;
         private readonly IPlayerController _player;
-        private readonly IRegionManager _regionManager;
 
         private SubscriptionToken _appInactivityToken;
-        private DispatcherTimer _backdropDelayDownloadTimer;
         private PlayerQueueItem _currentTrack;
         private bool _hackFirstTime = true;
         private bool _isUserInactive;
@@ -42,27 +30,23 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private double _requestSeek;
         private SubscriptionToken _sysInactivityToken;
 
+        private List<IBackgroundEffect> _backgroundEffects;
+
         #endregion Fields
 
         #region Constructors
 
         public NowPlayingViewModel(
-            IRegionManager regionManager,
             IPlayerController player,
-            IBackdropService backdropService,
-            IEventAggregator eventAggregator,
-            ILoggerFacade logger,
-            Dispatcher dispatcher)
+            IEventAggregator eventAggregator)
         {
-            _regionManager = regionManager;
             _player = player;
-            _backdropService = backdropService;
             _eventAggregator = eventAggregator;
-            _logger = logger;
-            _dispatcher = dispatcher;
-            _backdropDelayDownloadTimer = new DispatcherTimer();
-            _backdropDelayDownloadTimer.Interval = TimeSpan.FromSeconds(1);
-            _backdropDelayDownloadTimer.Tick += OnDelayedBackdropFetchTimerElapsed;
+            
+            _backgroundEffects = new List<IBackgroundEffect>();
+            _backgroundEffects.Add(ServiceLocator.Current.TryResolve<KenBurnsBackgroundEffect>());
+            _backgroundEffects.Add(ServiceLocator.Current.TryResolve<ColorOverlayBackgroundEffect>());
+
             NavigateBackCommand = new StaticCommand(ExecuteNavigateBack);
             JumpToTrackCommand = new StaticCommand<PlayerQueueItem>(ExecuteJumpToTrack);
         }
@@ -163,20 +147,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             _player.Playlist.CurrentChanged -= OnCurrentSongChanged;
 
-            IRegion backgroundRegion = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = backgroundRegion.GetView("KenBurnsBackground");
-
-            if (kenBurnsView != null)
+            foreach (var backgroundEffect in _backgroundEffects)
             {
-                backgroundRegion.Remove(kenBurnsView);
-            }
-
-            IRegion backgroundOverlayRegion = _regionManager.Regions[RegionNames.BackgroundOverlayRegion];
-            var colorOverlayView = backgroundOverlayRegion.GetView("ColorOverlay");
-
-            if (colorOverlayView != null)
-            {
-                backgroundOverlayRegion.Remove(colorOverlayView);
+                backgroundEffect.NavigatedFrom();
             }
         }
 
@@ -200,40 +173,11 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             CurrentTrack = _player.Playlist.Current;
 
-            if (CurrentTrack != null)
+            foreach (var backgroundEffect in _backgroundEffects)
             {
-                GetBackdropForTrack(CurrentTrack.Track);
+                backgroundEffect.NavigatedTo();
+                backgroundEffect.OnTrackChanged(null, CurrentTrack != null ? CurrentTrack.Track : null);
             }
-
-            IRegion backgroundOverlayRegion = _regionManager.Regions[RegionNames.BackgroundOverlayRegion];
-            var colorOverlayView = backgroundOverlayRegion.GetView("ColorOverlay");
-
-            if (colorOverlayView == null)
-            {
-                backgroundOverlayRegion.Add(new ColorOverlayFrame(), "ColorOverlay");
-            }
-        }
-
-        private void DisplayBackgroundImage(ImageSource imageSource)
-        {
-            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-
-            KenBurnsPhotoFrame frame = region.GetView("KenBurnsBackground") as KenBurnsPhotoFrame;
-
-            if (frame == null)
-            {
-                frame = new KenBurnsPhotoFrame();
-                frame.InputBindings.Add(
-                    new ExtendedMouseBinding
-                    {
-                        Command = NavigateBackCommand,
-                        Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
-                    });
-
-                region.Add(frame, "KenBurnsBackground");
-            }
-
-            frame.SetImageSource(imageSource);
         }
 
         private void ExecuteJumpToTrack(PlayerQueueItem item)
@@ -249,48 +193,11 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
         }
 
-        private void GetBackdropForTrack(ITrack track)
-        {
-            if (track == null || track.Album == null || track.Album.Artist == null)
-                return;
-
-            _backdropService.GetBackdrop(
-                track.Album.Artist.Name,
-                backdropFile =>
-                {
-                    Task.Factory.StartNew(() =>
-                                            {
-                                                try
-                                                {
-                                                    BitmapImage bitmapImage = new BitmapImage();
-                                                    bitmapImage.BeginInit();
-                                                    bitmapImage.DecodePixelHeight = 800;
-                                                    bitmapImage.StreamSource = new FileStream(
-                                                        backdropFile,
-                                                        FileMode.Open,
-                                                        FileAccess.Read);
-                                                    bitmapImage.EndInit();
-                                                    bitmapImage.Freeze();
-
-                                                    _dispatcher.BeginInvoke(
-                                                        new Action<ImageSource>(DisplayBackgroundImage), bitmapImage);
-                                                }
-                                                catch (Exception e)
-                                                {
-                                                    _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
-                                                }
-                                            });
-                },
-                didNotFindBackdrop: () => _dispatcher.BeginInvoke((Action)RemoveKenBurnsEffect,
-                                                                DispatcherPriority.Background));
-        }
-
         private void OnApplicationInactivity(bool isInactive)
         {
             IsUserInactive = isInactive;
         }
 
-        // TODO : Refactor this method when bothered. Awful stuff
         private void OnCurrentSongChanged(object sender, EventArgs e)
         {
             var previous = CurrentTrack;
@@ -298,28 +205,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             if (CurrentTrack != null)
             {
-                ITrack currentTrack = CurrentTrack.Track;
-
-                if (previous != null)
+                foreach (var backgroundEffect in _backgroundEffects)
                 {
-                    _backdropDelayDownloadTimer.Stop();
-
-                    // Only get a new backdrop if the current artist is different than the previous
-                    ITrack previousTrack = previous.Track;
-
-                    if (previousTrack.Album != null && currentTrack.Album != null)
-                    {
-                        if (previousTrack.Album.Artist.Name != currentTrack.Album.Artist.Name)
-                        {
-                            // Start the timer. This is done to limit the amount of times we need to get a backdrop, if the user presses Next/Previous a alot
-                            _backdropDelayDownloadTimer.Tag = currentTrack;
-                            _backdropDelayDownloadTimer.Start();
-                        }
-                    }
-                }
-                else
-                {
-                    GetBackdropForTrack(currentTrack);
+                    backgroundEffect.OnTrackChanged(previous.Track, CurrentTrack.Track);
                 }
             }
             else
@@ -328,26 +216,9 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             }
         }
 
-        private void OnDelayedBackdropFetchTimerElapsed(object sender, EventArgs eventArgs)
-        {
-            _backdropDelayDownloadTimer.Stop();
-            ITrack track = (ITrack)_backdropDelayDownloadTimer.Tag;
-            GetBackdropForTrack(track);
-        }
-
         private void OnSystemInactivity(bool isInactive)
         {
-        }
 
-        private void RemoveKenBurnsEffect()
-        {
-            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = region.GetView("KenBurnsBackground");
-
-            if (kenBurnsView != null)
-            {
-                region.Remove(kenBurnsView);
-            }
         }
 
         #endregion Methods
