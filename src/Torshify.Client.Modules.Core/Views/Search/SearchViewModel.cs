@@ -89,7 +89,10 @@ namespace Torshify.Client.Modules.Core.Views.Search
             
             DidYouMean = string.Empty;
 
-            _currentSearch.FinishedLoading -= SearchFinishedLoading;
+            if (_currentSearch != null)
+            {
+                _currentSearch.FinishedLoading -= SearchFinishedLoading;
+            }
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

@@ -34,9 +34,17 @@
             RowStyle="{StaticResource DataGrid_EmphasizeCurrentlyPlayingSongRowStyle}">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:DataGridTriStateSortingBehavior />
-                <Behaviors:DataGridRowActionBehavior
+                <Behaviors:MouseDoubleClickBehavior
                     Command="{Binding JumpToTrackCommand}"
                     CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
+                <Behaviors:KeyboardBehavior
+                    Key="Enter"
+                    Command="{Binding JumpToTrackCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
+                <Behaviors:KeyboardBehavior
+                    Key="Delete"
+                    Command="{Binding DeleteTracksCommand}"
+                    CommandParameter="{Binding SelectedItems, ElementName=Dg}" />
             </Interactivity:Interaction.Behaviors>
             <DataGrid.ContextMenu>
                 <ContextMenu />

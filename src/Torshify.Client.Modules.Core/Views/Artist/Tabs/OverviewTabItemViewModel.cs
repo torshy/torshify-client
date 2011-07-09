@@ -98,8 +98,12 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
 
             Albums = null;
-            Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
-            Artist = null;
+            
+            if (Artist != null)
+            {
+                Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
+                Artist = null;
+            }
 
             if (_albums != null)
             {
