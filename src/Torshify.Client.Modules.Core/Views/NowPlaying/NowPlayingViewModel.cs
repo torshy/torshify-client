@@ -200,18 +200,24 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
         private void DisplayBackgroundImage(ImageSource imageSource)
         {
-            RemoveKenBurnsEffect();
-
             IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            ImageMontage montage = new ImageMontage();
-            montage.Initialize(imageSource);
-            montage.UI.InputBindings.Add(
-                new ExtendedMouseBinding
-                {
-                    Command = NavigateBackCommand,
-                    Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
-                });
-            region.Add(montage.UI, "KenBurnsBackground");
+
+            KenBurnsPhotoFrame frame = region.GetView("KenBurnsBackground") as KenBurnsPhotoFrame;
+
+            if (frame == null)
+            {
+                frame = new KenBurnsPhotoFrame();
+                frame.InputBindings.Add(
+                    new ExtendedMouseBinding
+                    {
+                        Command = NavigateBackCommand,
+                        Gesture = new ExtendedMouseGesture(MouseButton.XButton1)
+                    });
+
+                region.Add(frame, "KenBurnsBackground");
+            }
+
+            frame.SetImageSource(imageSource);
         }
 
         private void ExecuteJumpToTrack(PlayerQueueItem item)

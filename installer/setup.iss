@@ -32,22 +32,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\bass.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Bass.Net.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\libspotify.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\log4net.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Microsoft.Practices.Prism.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Microsoft.Practices.Prism.UnityExtensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Microsoft.Practices.ServiceLocation.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Microsoft.Practices.Unity.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\System.Windows.Interactivity.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.Infrastructure.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.Modules.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.Client.Spotify.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\Torshify.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Client\bin\Release\WpfShaderEffects.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\Torshify.Client\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
