@@ -163,12 +163,20 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             _player.Playlist.CurrentChanged -= OnCurrentSongChanged;
 
-            IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var kenBurnsView = region.GetView("KenBurnsBackground");
+            IRegion backgroundRegion = _regionManager.Regions[RegionNames.BackgroundRegion];
+            var kenBurnsView = backgroundRegion.GetView("KenBurnsBackground");
 
             if (kenBurnsView != null)
             {
-                region.Remove(kenBurnsView);
+                backgroundRegion.Remove(kenBurnsView);
+            }
+
+            IRegion backgroundOverlayRegion = _regionManager.Regions[RegionNames.BackgroundOverlayRegion];
+            var colorOverlayView = backgroundOverlayRegion.GetView("ColorOverlay");
+
+            if (colorOverlayView != null)
+            {
+                backgroundOverlayRegion.Remove(colorOverlayView);
             }
         }
 
@@ -195,6 +203,14 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             if (CurrentTrack != null)
             {
                 GetBackdropForTrack(CurrentTrack.Track);
+            }
+
+            IRegion backgroundOverlayRegion = _regionManager.Regions[RegionNames.BackgroundOverlayRegion];
+            var colorOverlayView = backgroundOverlayRegion.GetView("ColorOverlay");
+
+            if (colorOverlayView == null)
+            {
+                backgroundOverlayRegion.Add(new ColorOverlayFrame(), "ColorOverlay");
             }
         }
 
