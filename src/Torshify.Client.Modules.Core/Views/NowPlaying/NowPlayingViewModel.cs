@@ -44,7 +44,8 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             _eventAggregator = eventAggregator;
             
             _backgroundEffects = new List<IBackgroundEffect>();
-            _backgroundEffects.Add(ServiceLocator.Current.TryResolve<KenBurnsBackgroundEffect>());
+            //_backgroundEffects.Add(ServiceLocator.Current.TryResolve<KenBurnsBackgroundEffect>());
+            _backgroundEffects.Add(ServiceLocator.Current.TryResolve<ImageMapBackgroundEffect>());
             _backgroundEffects.Add(ServiceLocator.Current.TryResolve<ColorOverlayBackgroundEffect>());
 
             NavigateBackCommand = new StaticCommand(ExecuteNavigateBack);

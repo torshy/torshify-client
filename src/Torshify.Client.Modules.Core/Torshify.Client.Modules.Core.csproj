@@ -94,7 +94,9 @@
     <Compile Include="Controls\ColorOverlayFrame.xaml.cs">
       <DependentUpon>ColorOverlayFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ImageMap.cs" />
+    <Compile Include="Controls\ImageMapFrame.xaml.cs">
+      <DependentUpon>ImageMapFrame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\KenBurnsPhotoFrame.xaml.cs">
       <DependentUpon>KenBurnsPhotoFrame.xaml</DependentUpon>
     </Compile>
@@ -188,6 +190,7 @@
     <Compile Include="Views\Notifications\NotificationsViewModel.cs" />
     <Compile Include="Views\NowPlaying\ColorOverlayBackgroundEffect.cs" />
     <Compile Include="Views\NowPlaying\IBackgroundEffect.cs" />
+    <Compile Include="Views\NowPlaying\ImageMapBackgroundEffect.cs" />
     <Compile Include="Views\NowPlaying\KenBurnsBackgroundEffect.cs" />
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
@@ -235,6 +238,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\ColorOverlayFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ImageMapFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
