@@ -173,6 +173,7 @@
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="Events\NotificationEvent.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Controls\LayeredStackPanel.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\vNextPlayerQueue.cs" />
     <Compile Include="Util.cs" />

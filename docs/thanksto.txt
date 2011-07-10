@@ -2,3 +2,4 @@ JoeCastro (FishBowl/WPF Shell Integration)
 http://softcollections.codeplex.com
 Sacha Barber
 https://github.com/thinkpixellab/bot
+http://wpf.nickthuesen.com/?p=29
