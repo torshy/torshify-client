@@ -8,6 +8,7 @@
     xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
     xmlns:Playlist="clr-namespace:Torshify.Client.Modules.Core.Views.Playlist"
     xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
+    xmlns:Interfaces="clr-namespace:Torshify.Client.Infrastructure.Interfaces;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -32,6 +33,31 @@
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <Interactivity:Interaction.Behaviors>
+                <Behaviors:ItemsControlDragDropBehavior
+                    MoveItemCommand="{Binding MoveItemCommand}"
+                    ItemType="{x:Type Interfaces:ITrack}">
+                    <Behaviors:ItemsControlDragDropBehavior.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Background="White"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                Padding="4">
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding
+                                            StringFormat="{}{0} by {1}">
+                                            <Binding
+                                                Path="Name" />
+                                            <Binding
+                                                Path="Album.Artist.Name" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Border>
+                        </DataTemplate>
+                    </Behaviors:ItemsControlDragDropBehavior.ItemTemplate>
+                </Behaviors:ItemsControlDragDropBehavior>
                 <Behaviors:DataGridTriStateSortingBehavior />
                 <Behaviors:DataGridRowActionBehavior
                     Command="{x:Static Core:CoreCommands.PlayTrackCommand}"

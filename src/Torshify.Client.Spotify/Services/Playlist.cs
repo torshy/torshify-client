@@ -5,6 +5,9 @@ using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
 
+using Torshify.Client.Infrastructure.Collections;
+using Torshify.Client.Infrastructure.Interfaces;
+
 using ITorshifyPlaylist = Torshify.Client.Infrastructure.Interfaces.IPlaylist;
 
 using ITorshifyPlaylistTrack = Torshify.Client.Infrastructure.Interfaces.IPlaylistTrack;
@@ -16,7 +19,7 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly Dispatcher _dispatcher;
-        private readonly ObservableCollection<PlaylistTrack> _tracks;
+        private readonly NotifyCollection<PlaylistTrack> _tracks;
 
         private bool _isLoaded;
         private bool _isUpdating;
@@ -29,7 +32,7 @@ namespace Torshify.Client.Spotify.Services
         public Playlist(IPlaylist playlist, Dispatcher dispatcher)
         {
             _dispatcher = dispatcher;
-            _tracks = new ObservableCollection<PlaylistTrack>();
+            _tracks = new NotifyCollection<PlaylistTrack>();
 
             InternalPlaylist = playlist;
             InternalPlaylist.DescriptionChanged += OnDescriptionChanged;
@@ -107,7 +110,7 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        public IEnumerable<ITorshifyPlaylistTrack> Tracks
+        public INotifyEnumerable<ITorshifyPlaylistTrack> Tracks
         {
             get
             {
@@ -118,6 +121,22 @@ namespace Torshify.Client.Spotify.Services
         #endregion Properties
 
         #region Methods
+
+        public void MoveTrack(int oldIndex, int newIndex)
+        {
+            if (InternalPlaylist.IsValid())
+            {
+                InternalPlaylist.Tracks.Move(oldIndex, newIndex);
+            }
+        }
+
+        public void MoveTracks(int[] indices, int newIndex)
+        {
+            if (InternalPlaylist.IsValid())
+            {
+                InternalPlaylist.Tracks.Move(indices, newIndex);
+            }
+        }
 
         private void Add(IPlaylistTrack track)
         {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Mocks
@@ -9,6 +8,17 @@ namespace Torshify.Client.Mocks
         public string Description { get; set; }
         public bool IsCollaborative { get; set; }
         public bool IsUpdating { get; set; }
-        public IEnumerable<IPlaylistTrack> Tracks { get; set; }
+
+        public void MoveTrack(int oldIndex, int newIndex)
+        {
+            
+        }
+
+        public void MoveTracks(int[] indices, int newIndex)
+        {
+
+        }
+
+        public INotifyEnumerable<IPlaylistTrack> Tracks { get; set; }
     }
 }

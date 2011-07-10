@@ -144,9 +144,9 @@ namespace Torshify.Client.Mocks
 
         #region Private Methods
 
-        private IEnumerable<IPlaylistTrack> GetTracks(IPlaylist parentPlaylist)
+        private INotifyEnumerable<IPlaylistTrack> GetTracks(IPlaylist parentPlaylist)
         {
-            return Builder<PlaylistTrack>
+            return new NotifyCollection<IPlaylistTrack>(Builder<PlaylistTrack>
                 .CreateListOfSize(_random.Next(6, 35))
                 .WhereAll()
                 .Has(t => t.Playlist = parentPlaylist)
@@ -157,7 +157,7 @@ namespace Torshify.Client.Mocks
                 .WhereRandom(6)
                 .Has(t => ((Album)t.Album).IsAvailable = false)
                 .Has(t => t.IsAvailable = false)
-                .Build();
+                .Build());
         }
 
         private IEnumerable<ITrack> GetTracks(IAlbum album)

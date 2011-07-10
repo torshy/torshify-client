@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Torshify.Client.Infrastructure.Interfaces
+﻿namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface IPlaylist
     {
@@ -26,9 +24,13 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        IEnumerable<IPlaylistTrack> Tracks
+        INotifyEnumerable<IPlaylistTrack> Tracks
         {
             get;
         }
+
+        void MoveTrack(int oldIndex, int newIndex);
+
+        void MoveTracks(int[] indices, int newIndex);
     }
 }

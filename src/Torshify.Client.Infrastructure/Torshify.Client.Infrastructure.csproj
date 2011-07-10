@@ -84,6 +84,7 @@
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />
+    <Compile Include="Behaviors\ItemsControlDragDropBehavior.cs" />
     <Compile Include="Behaviors\KeyboardBehavior.cs" />
     <Compile Include="Behaviors\ListBoxItemActionBehavior.cs" />
     <Compile Include="Behaviors\MouseDoubleClickBehavior.cs" />

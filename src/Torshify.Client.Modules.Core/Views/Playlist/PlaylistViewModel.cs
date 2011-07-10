@@ -20,7 +20,6 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         #region Fields
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly IRegionManager _regionManager;
 
         private IPlaylist _playlist;
         private SubscriptionToken _trackMenuBarToken;
@@ -31,15 +30,21 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         #region Constructors
 
-        public PlaylistViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
+        public PlaylistViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _regionManager = regionManager;
+            MoveItemCommand = new AutomaticCommand<Tuple<int, int>>(ExecuteMoveItem, CanExecuteMoveItem);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public AutomaticCommand<Tuple<int, int>> MoveItemCommand
+        {
+            get;
+            private set;
+        }
 
         public IPlaylist Playlist
         {
@@ -71,12 +76,12 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         #region Methods
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
+        bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
         }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
+        void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
             _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
@@ -95,7 +100,7 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
             }
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
             _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
             _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
@@ -122,6 +127,21 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
                     }
                 }
             }
+        }
+
+        public void Move(int oldIndex, int newIndex)
+        {
+            Playlist.MoveTrack(oldIndex, newIndex);
+        }
+
+        private bool CanExecuteMoveItem(Tuple<int, int> arg)
+        {
+            return arg != null && arg.Item1 != arg.Item2;
+        }
+
+        private void ExecuteMoveItem(Tuple<int, int> oldAndNewIndex)
+        {
+            Move(oldAndNewIndex.Item1, oldAndNewIndex.Item2);
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)

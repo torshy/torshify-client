@@ -97,8 +97,10 @@
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid
                             Name="ContentGrid">
-                            <ContentPresenter
-                                Content="{TemplateBinding Content}" />
+                            <AdornerDecorator>
+                                <ContentPresenter
+                                    Content="{TemplateBinding Content}" />
+                            </AdornerDecorator>
                             <StackPanel
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right"
