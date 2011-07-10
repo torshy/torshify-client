@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -34,6 +35,9 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         {
             _eventAggregator = eventAggregator;
             MoveItemCommand = new AutomaticCommand<Tuple<int, int>>(ExecuteMoveItem, CanExecuteMoveItem);
+            RemoveItemCommand = new AutomaticCommand<IPlaylistTrack>(ExecuteRemoveItem, CanExecuteRemoveItem);
+            RemoveItemsCommand = new AutomaticCommand<IEnumerable<IPlaylistTrack>>(ExecuteRemoveItems,
+                                                                                   CanExecuteRemoveItems);
         }
 
         #endregion Constructors
@@ -57,6 +61,17 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
                 _playlist = value;
                 RaisePropertyChanged("Playlist");
             }
+        }
+
+        public AutomaticCommand<IPlaylistTrack> RemoveItemCommand
+        {
+            get;
+            private set;
+        }
+
+        public AutomaticCommand<IEnumerable<IPlaylistTrack>> RemoveItemsCommand
+        {
+            get; private set;
         }
 
         public ICollectionView Tracks
@@ -139,23 +154,50 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
             return arg != null && arg.Item1 != arg.Item2;
         }
 
+        private bool CanExecuteRemoveItem(IPlaylistTrack track)
+        {
+            return track != null && Playlist.Tracks.Contains(track);
+        }
+
+        private bool CanExecuteRemoveItems(IEnumerable<IPlaylistTrack> tracks)
+        {
+            return tracks != null;
+        }
+
         private void ExecuteMoveItem(Tuple<int, int> oldAndNewIndex)
         {
             Move(oldAndNewIndex.Item1, oldAndNewIndex.Item2);
+        }
+
+        private void ExecuteRemoveItem(IPlaylistTrack track)
+        {
+            Playlist.RemoveTrack(track);
+        }
+
+        private void ExecuteRemoveItems(IEnumerable<IPlaylistTrack> tracks)
+        {
+            foreach (var playlistTrack in tracks)
+            {
+                Playlist.RemoveTrack(playlistTrack);
+            }
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Track)
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track)
+                .AddSeparator()
+                .AddCommand("Delete", RemoveItemCommand, model.Track);
         }
 
         private void OnTracksMenuBarEvent(TracksCommandBarModel model)
         {
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks)
+                .AddSeparator()
+                .AddCommand("Delete", RemoveItemsCommand, model.Tracks);
         }
 
         #endregion Methods

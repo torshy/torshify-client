@@ -32,5 +32,7 @@
         void MoveTrack(int oldIndex, int newIndex);
 
         void MoveTracks(int[] indices, int newIndex);
+
+        void RemoveTrack(IPlaylistTrack track);
     }
 }

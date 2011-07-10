@@ -138,6 +138,15 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
+        public void RemoveTrack(ITorshifyPlaylistTrack track)
+        {
+            PlaylistTrack myTrack = track as PlaylistTrack;
+            if (InternalPlaylist.IsValid() && myTrack != null)
+            {
+                InternalPlaylist.Tracks.Remove((IPlaylistTrack)myTrack.InternalTrack);
+            }
+        }
+
         private void Add(IPlaylistTrack track)
         {
             if (_dispatcher.CheckAccess())

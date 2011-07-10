@@ -1,3 +1,4 @@
+using System;
 using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Mocks
@@ -17,6 +18,11 @@ namespace Torshify.Client.Mocks
         public void MoveTracks(int[] indices, int newIndex)
         {
 
+        }
+
+        public void RemoveTrack(IPlaylistTrack track)
+        {
+            
         }
 
         public INotifyEnumerable<IPlaylistTrack> Tracks { get; set; }
