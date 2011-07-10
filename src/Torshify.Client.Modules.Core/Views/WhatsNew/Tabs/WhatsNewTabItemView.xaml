@@ -19,20 +19,20 @@
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <Controls:LayeredPanel>
-        <ScrollViewer>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <Button
-                    Content="More"
-                    Command="{Binding GetMoreAlbumsCommand}"
-                    HorizontalAlignment="Right" />
-
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Button
+            Margin="4"
+            Content="More"
+            Command="{Binding GetMoreAlbumsCommand}"
+            HorizontalAlignment="Right" />
+        <Controls:LayeredPanel
+            Grid.Row="1">
+            <ScrollViewer>
                 <ItemsControl
                     Grid.Row="1"
                     ItemsSource="{Binding Albums}">
@@ -99,16 +99,16 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </Grid>
-        </ScrollViewer>
-        
-        <Controls:SprocketControl
-            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
-            IsBusy="{Binding IsLoading}"
-            Width="48"
-            Height="48"
-            Interval="70" />
-        
-    </Controls:LayeredPanel>
 
+            </ScrollViewer>
+
+            <Controls:SprocketControl
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsBusy="{Binding IsLoading}"
+                Width="48"
+                Height="48"
+                Interval="70" />
+
+        </Controls:LayeredPanel>
+    </Grid>
 </UserControl>
