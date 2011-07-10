@@ -39,6 +39,9 @@
                 Property="Padding"
                 Value="2" />
             <Setter
+                Property="Cursor"
+                Value="Hand" />
+            <Setter
                 Property="Template">
                 <Setter.Value>
                     <ControlTemplate
@@ -61,7 +64,7 @@
                                 <Setter
                                     TargetName="OverlayRect"
                                     Property="Fill"
-                                    Value="#30FFFFFF" />
+                                    Value="#70000000" />
                             </Trigger>
                             <Trigger
                                 Property="IsPressed"
