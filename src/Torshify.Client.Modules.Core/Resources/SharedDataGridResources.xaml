@@ -55,7 +55,7 @@
                 </DataTrigger.Binding>
                 <Setter
                     Property="Background"
-                    Value="#FF1A5F76" />
+                    Value="#FF3D0054" />
                 <Setter
                     Property="Foreground"
                     Value="White" />
