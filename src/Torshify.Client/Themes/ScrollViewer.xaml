@@ -357,7 +357,6 @@
             <RepeatButton
                 Grid.Row="0"
                 Style="{StaticResource ScrollBarLineButton}"
-                Height="18"
                 Command="ScrollBar.LineUpCommand"
                 Content="M 0 4 L 8 4 L 4 0 Z" />
             <Track
@@ -383,7 +382,6 @@
             <RepeatButton
                 Grid.Row="3"
                 Style="{StaticResource ScrollBarLineButton}"
-                Height="18"
                 Command="ScrollBar.LineDownCommand"
                 Content="M 0 0 L 4 4 L 8 0 Z" />
         </Grid>
@@ -408,7 +406,6 @@
             <RepeatButton
                 Grid.Column="0"
                 Style="{StaticResource ScrollBarLineButton}"
-                Width="18"
                 Command="ScrollBar.LineLeftCommand"
                 Content="M 4 0 L 4 8 L 0 4 Z" />
             <Track
@@ -434,7 +431,6 @@
             <RepeatButton
                 Grid.Column="3"
                 Style="{StaticResource ScrollBarLineButton}"
-                Width="18"
                 Command="ScrollBar.LineRightCommand"
                 Content="M 0 0 L 4 4 L 0 8 Z" />
         </Grid>
@@ -458,7 +454,7 @@
                     Value="Auto" />
                 <Setter
                     Property="Height"
-                    Value="18" />
+                    Value="14" />
                 <Setter
                     Property="Template"
                     Value="{StaticResource HorizontalScrollBar}" />
@@ -468,7 +464,7 @@
                 Value="Vertical">
                 <Setter
                     Property="Width"
-                    Value="18" />
+                    Value="14" />
                 <Setter
                     Property="Height"
                     Value="Auto" />
