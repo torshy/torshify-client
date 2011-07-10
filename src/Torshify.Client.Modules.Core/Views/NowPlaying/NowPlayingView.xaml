@@ -182,7 +182,7 @@
 
                         <StackPanel
                             Grid.Row="1"
-                            VerticalAlignment="Bottom">
+                            VerticalAlignment="Center">
                             <TextBlock
                                 Foreground="{DynamicResource ControlTextBrush}"
                                 Text="{Binding CurrentTrack.Track.Name}"

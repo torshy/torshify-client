@@ -1,0 +1,70 @@
+﻿<UserControl
+    x:Class="Torshify.Client.Modules.Core.Views.Starred.StarredView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="..\..\Resources\SharedDataGridResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid
+            Name="Dg"
+            ItemsSource="{Binding Tracks}"
+            IsReadOnly="True"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserResizeRows="False"
+            AutoGenerateColumns="False"
+            ContextMenuOpening="DataGridContextMenuOpening"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <Interactivity:Interaction.Behaviors>
+                <Behaviors:DataGridTriStateSortingBehavior />
+                <Behaviors:DataGridRowActionBehavior
+                    Command="{x:Static Core:CoreCommands.PlayTrackCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
+            </Interactivity:Interaction.Behaviors>
+            <DataGrid.ContextMenu>
+                <ContextMenu />
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn
+                    Width="Auto"
+                    CellTemplate="{StaticResource DataGrid_Track_StarredTemplate}" />
+                <DataGridTemplateColumn
+                    Header="Track"
+                    Width="200"
+                    CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}"
+                    SortMemberPath="Name" />
+                <DataGridTemplateColumn
+                    Header="Artist"
+                    Width="175"
+                    CellTemplate="{StaticResource DataGrid_Track_ArtistTemplate}"
+                    SortMemberPath="Album.Artist.Name" />
+                <DataGridTemplateColumn
+                    Header="Time"
+                    Width="75"
+                    SortMemberPath="Duration"
+                    HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
+                    CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
+                <DataGridTemplateColumn
+                    Header="Album"
+                    Width="175"
+                    CellTemplate="{StaticResource DataGrid_Track_AlbumTemplate}"
+                    SortMemberPath="Album.Name" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

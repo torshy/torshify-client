@@ -6,6 +6,21 @@
     xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons">
 
     <DataTemplate
+        x:Key="{x:Type Navigation:StarredNavigationItem}">
+        <DockPanel
+            LastChildFill="True">
+            <Icons:StarIcon
+                Foreground="{DynamicResource Star_PressedFillBrush}"
+                BorderBrush="{DynamicResource Star_PressedStrokeBrush}"/>
+            <TextBlock
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                Text="Starred"
+                TextTrimming="CharacterEllipsis" />
+        </DockPanel>
+    </DataTemplate>
+    
+    <DataTemplate
         x:Key="{x:Type Navigation:WhatsNewNavigationItem}">
         <DockPanel
             LastChildFill="True">

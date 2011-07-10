@@ -29,6 +29,7 @@ namespace Torshify.Client.Modules.Core.Views.Navigation
             _items = new ObservableCollection<INavigationItem>();
             _items.Add(new WhatsNewNavigationItem(RegionManager));
             _items.Add(new PlayQueueNavigationItem(RegionManager));
+            _items.Add(new StarredNavigationItem(RegionManager));
         }
 
         #endregion Constructors

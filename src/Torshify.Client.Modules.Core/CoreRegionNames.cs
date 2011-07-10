@@ -17,5 +17,6 @@ namespace Torshify.Client.Modules.Core
         public const string ArtistView = "ArtistView";
         public const string SearchView = "SearchView";
         public const string PlayQueueView = "PlayQueueView";
+        public const string StarredView = "StarredView";
     }
 }
