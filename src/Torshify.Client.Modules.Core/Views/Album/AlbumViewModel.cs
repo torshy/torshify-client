@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
-using Torshify.Client.Infrastructure;
 
 namespace Torshify.Client.Modules.Core.Views.Album
 {
@@ -26,10 +28,11 @@ namespace Torshify.Client.Modules.Core.Views.Album
 
         #region Constructors
 
-        public AlbumViewModel(IEventAggregator eventAggregator)
+        public AlbumViewModel(IEventAggregator eventAggregator, IPlayerController player)
         {
             _eventAggregator = eventAggregator;
 
+            Player = player;
             PlayAlbumTrackCommand = new StaticCommand<ITrack>(ExecutePlayAlbumTrack);
         }
 
@@ -55,8 +58,13 @@ namespace Torshify.Client.Modules.Core.Views.Album
 
         public ICommand PlayAlbumTrackCommand
         {
-            get; 
+            get;
             private set;
+        }
+
+        public IPlayerController Player
+        {
+            get; private set;
         }
 
         #endregion Properties
@@ -89,6 +97,14 @@ namespace Torshify.Client.Modules.Core.Views.Album
             CoreCommands.PlayTrackCommand.Execute(tracks);
         }
 
+        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
+        {
+            var tracks = Album.Info.Tracks;
+            int index = tracks.IndexOf(track);
+            tracks = tracks.Skip(index);
+            return tracks;
+        }
+
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
         {
             // Get the rest of the tracks from the album, including the one selected.
@@ -104,14 +120,6 @@ namespace Torshify.Client.Modules.Core.Views.Album
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
-        }
-
-        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
-        {
-            var tracks = Album.Info.Tracks;
-            int index = tracks.IndexOf(track);
-            tracks = tracks.Skip(index);
-            return tracks;
         }
 
         #endregion Methods

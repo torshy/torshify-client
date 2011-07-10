@@ -19,6 +19,9 @@
     <Converters:StringEmptyToVisibilityConverter
         x:Key="StringEmptyToVisibilityConverter" />
 
+    <Converters:EqualInstanceToBooleanConverter
+        x:Key="EqualInstanceToBooleanConverter" />
+
     <Converters:ImageCacheConverter
         x:Key="ThumbnailCoverArtImageCacheConverter"
         DecodeHeight="125"
@@ -33,16 +36,83 @@
             Value="Right" />
     </Style>
 
+    <Style
+        x:Key="DataGrid_HighlightCurrentlyPlayingRowStyle"
+        TargetType="{x:Type DataGridRow}"
+        BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <Style.Triggers>
+            <DataTrigger
+                Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding
+                        Converter="{StaticResource EqualInstanceToBooleanConverter}">
+                        <Binding
+                            Path="." />
+                        <Binding
+                            Path="DataContext.Player.Playlist.Current.Track"
+                            RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <Setter
+                    Property="Background"
+                    Value="#FF1A5F76" />
+                <Setter
+                    Property="Foreground"
+                    Value="White" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
     <DataTemplate
         x:Key="DataGrid_Track_StarredTemplate">
-        <Button
-            Style="{DynamicResource SuperSimpleButtonStyle}"
-            Command="{x:Static Core:CoreCommands.ToggleTrackIsStarredCommand}"
-            CommandParameter="{Binding}">
-            <Icons:StarIcon
-                x:Name="Star" />
-        </Button>
+        <Controls:LayeredPanel
+            x:Name="RootPanel">
+            <Button
+                x:Name="StarButton"
+                Style="{DynamicResource SuperSimpleButtonStyle}"
+                Command="{x:Static Core:CoreCommands.ToggleTrackIsStarredCommand}"
+                CommandParameter="{Binding}">
+                <Icons:StarIcon
+                    x:Name="Star" />
+            </Button>
+            <Icons:NowPlayingIcon
+                x:Name="NowPlayingIcon"
+                Visibility="Collapsed" />
+        </Controls:LayeredPanel>
         <DataTemplate.Triggers>
+            <DataTrigger
+                Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding
+                        Converter="{StaticResource EqualInstanceToBooleanConverter}">
+                        <Binding
+                            Path="." />
+                        <Binding
+                            Path="DataContext.Player.Playlist.Current.Track"
+                            RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <Setter
+                    TargetName="NowPlayingIcon"
+                    Property="Visibility"
+                    Value="Visible" />
+                <Setter
+                    TargetName="StarButton"
+                    Property="Visibility"
+                    Value="Collapsed" />
+            </DataTrigger>
+            <Trigger
+                SourceName="RootPanel"
+                Property="IsMouseOver"
+                Value="True">
+                <Setter
+                    TargetName="NowPlayingIcon"
+                    Property="Visibility"
+                    Value="Collapsed" />
+                <Setter
+                    TargetName="StarButton"
+                    Property="Visibility"
+                    Value="Visible" />
+            </Trigger>
             <DataTrigger
                 Binding="{Binding IsStarred}"
                 Value="False">

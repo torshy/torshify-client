@@ -30,7 +30,8 @@
             AutoGenerateColumns="False"
             ContextMenuOpening="DataGridContextMenuOpening"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            RowStyle="{StaticResource DataGrid_HighlightCurrentlyPlayingRowStyle}">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:ItemsControlDragDropBehavior
                     MoveItemCommand="{Binding MoveItemCommand}"

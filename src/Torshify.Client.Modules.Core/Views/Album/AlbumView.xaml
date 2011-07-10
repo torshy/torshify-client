@@ -111,7 +111,8 @@
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         VirtualizingStackPanel.IsVirtualizing="True"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"
-                        HeadersVisibility="None">
+                        HeadersVisibility="None"
+                        RowStyle="{StaticResource DataGrid_HighlightCurrentlyPlayingRowStyle}">
                         <Interactivity:Interaction.Behaviors>
                             <Behaviors:DataGridTriStateSortingBehavior />
                             <Behaviors:IgnoreMouseWheelBehavior />

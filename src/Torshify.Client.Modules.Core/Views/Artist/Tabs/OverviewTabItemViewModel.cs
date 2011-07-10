@@ -33,9 +33,11 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 
         #region Constructors
 
-        public OverviewTabItemViewModel(IEventAggregator eventAggregator)
+        public OverviewTabItemViewModel(IEventAggregator eventAggregator, IPlayerController player)
         {
             _eventAggregator = eventAggregator;
+
+            Player = player;
             PlayArtistTrackCommand = new StaticCommand<ITrack>(ExecutePlayArtistTrack);
         }
 
@@ -83,6 +85,11 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             private set;
         }
 
+        public IPlayerController Player
+        {
+            get; private set;
+        }
+
         public Visibility Visibility
         {
             get { return Visibility.Visible; }
@@ -98,7 +105,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
 
             Albums = null;
-            
+
             if (Artist != null)
             {
                 Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
@@ -131,31 +138,10 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             }
         }
 
-        private void OnInfoFinishedLoading(object sender, EventArgs e)
-        {
-            PrepareData();
-        }
-
         private void ExecutePlayArtistTrack(ITrack track)
         {
             IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(track);
             CoreCommands.PlayTrackCommand.Execute(tracksToPlay);
-        }
-
-        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
-        {
-            IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(model.Track);
-
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
-        }
-
-        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
-        {
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
@@ -183,6 +169,27 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
                 }
             }
             return tracksToPlay;
+        }
+
+        private void OnInfoFinishedLoading(object sender, EventArgs e)
+        {
+            PrepareData();
+        }
+
+        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
+        {
+            IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(model.Track);
+
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracksToPlay)
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
+        }
+
+        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
+        {
+            model.CommandBar
+                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
+                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
         private void PrepareData()

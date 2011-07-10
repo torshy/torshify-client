@@ -393,9 +393,12 @@ namespace Torshify.Client.Infrastructure.Models
                 }
 
                 Update();
-                
-                _playlistTrackIndex = 0;
-                Current = _playlist[_playlistIndicies[_playlistTrackIndex]];
+
+                if (_playlist.Count > 0)
+                {
+                    _playlistTrackIndex = 0;
+                    Current = _playlist[_playlistIndicies[_playlistTrackIndex]];
+                }
 
                 OnChanged();
             }

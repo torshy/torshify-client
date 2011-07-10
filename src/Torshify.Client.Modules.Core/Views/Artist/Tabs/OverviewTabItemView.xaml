@@ -114,7 +114,8 @@
                                 SelectionChanged="DataGridSelectionChanged"
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                HeadersVisibility="None">
+                                HeadersVisibility="None"
+                                RowStyle="{StaticResource DataGrid_HighlightCurrentlyPlayingRowStyle}">
                                 <Interactivity:Interaction.Behaviors>
                                     <Behaviors:DataGridTriStateSortingBehavior />
                                     <Behaviors:IgnoreMouseWheelBehavior />

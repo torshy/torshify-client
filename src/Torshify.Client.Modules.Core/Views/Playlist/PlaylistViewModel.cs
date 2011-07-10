@@ -31,8 +31,9 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
 
         #region Constructors
 
-        public PlaylistViewModel(IEventAggregator eventAggregator)
+        public PlaylistViewModel(IPlayerController player, IEventAggregator eventAggregator)
         {
+            Player = player;
             _eventAggregator = eventAggregator;
             MoveItemCommand = new AutomaticCommand<Tuple<int, int>>(ExecuteMoveItem, CanExecuteMoveItem);
             RemoveItemCommand = new AutomaticCommand<IPlaylistTrack>(ExecuteRemoveItem, CanExecuteRemoveItem);
@@ -48,6 +49,11 @@ namespace Torshify.Client.Modules.Core.Views.Playlist
         {
             get;
             private set;
+        }
+
+        public IPlayerController Player
+        {
+            get; private set;
         }
 
         public IPlaylist Playlist

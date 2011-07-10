@@ -74,7 +74,7 @@ namespace Torshify.Client.Infrastructure.Behaviors
         {
             var element = e.OriginalSource as DependencyObject;
 
-            if (element != null)
+            if (element != null && e.ChangedButton == MouseButton.Left)
             {
                 var row = element.FindVisualAncestorByType<DataGridRow>();
 
