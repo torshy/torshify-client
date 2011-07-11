@@ -172,30 +172,38 @@ namespace Torshify.Client.Spotify.Services
 
         private void LoadSearchData(ISearch search)
         {
-            using (search)
+            try
             {
-                TotalAlbums = search.TotalAlbums;
-                TotalTracks = search.TotalTracks;
-                TotalArtists = search.TotalArtists;
-                Query = search.Query;
-                DidYouMean = search.DidYouMean;
-
-                foreach (var spotifyAlbum in search.Albums)
+                using (search)
                 {
-                    _albums.Add(new Album(spotifyAlbum, _dispatcher));
-                }
+                    TotalAlbums = search.TotalAlbums;
+                    TotalTracks = search.TotalTracks;
+                    TotalArtists = search.TotalArtists;
+                    Query = search.Query;
+                    DidYouMean = search.DidYouMean;
 
-                foreach (var spotifyTrack in search.Tracks)
-                {
-                    _tracks.Add(new Track(spotifyTrack, _dispatcher));
-                }
+                    foreach (var spotifyAlbum in search.Albums)
+                    {
+                        _albums.Add(new Album(spotifyAlbum, _dispatcher));
+                    }
 
-                foreach (var spotifyArtist in search.Artists)
-                {
-                    _artists.Add(new Artist(spotifyArtist, _dispatcher));
+                    foreach (var spotifyTrack in search.Tracks)
+                    {
+                        _tracks.Add(new Track(spotifyTrack, _dispatcher));
+                    }
+
+                    foreach (var spotifyArtist in search.Artists)
+                    {
+                        _artists.Add(new Artist(spotifyArtist, _dispatcher));
+                    }
                 }
+                search.Completed -= OnSearchCompleted;
             }
-            search.Completed -= OnSearchCompleted;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             IsLoading = false;
             RaiseFinishedLoading();
         }

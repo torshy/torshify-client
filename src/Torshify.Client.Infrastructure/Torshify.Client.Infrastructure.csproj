@@ -132,6 +132,7 @@
     <Compile Include="Controls\Html2Flow\HtmlToFlowDocumentConverter.cs" />
     <Compile Include="Controls\Html2Flow\HtmlTokenType.cs" />
     <Compile Include="Controls\Html2Flow\HtmlToXamlConverter.cs" />
+    <Compile Include="Controls\IconTreeView.cs" />
     <Compile Include="Controls\LayeredPanel.cs" />
     <Compile Include="Controls\DeferredValueSlider.cs" />
     <Compile Include="Controls\PasswordBoxMonitor.cs" />
@@ -171,11 +172,47 @@
     <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Converters\EqualInstanceToBooleanConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="CoreRegionNames.cs" />
     <Compile Include="Events\NotificationEvent.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Controls\LayeredStackPanel.cs" />
+    <Compile Include="Models\NavigationItem.cs" />
+    <Compile Include="Models\NavigationViewModelBase.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\vNextPlayerQueue.cs" />
+    <Compile Include="Resources\Icons\NextSongIcon.xaml.cs">
+      <DependentUpon>NextSongIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\NowPlayingIcon.xaml.cs">
+      <DependentUpon>NowPlayingIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PauseIcon.xaml.cs">
+      <DependentUpon>PauseIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PlayIcon.xaml.cs">
+      <DependentUpon>PlayIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PlaylistIcon.xaml.cs">
+      <DependentUpon>PlaylistIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PlayQueueIcon.xaml.cs">
+      <DependentUpon>PlayQueueIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\PreviousSongIcon.xaml.cs">
+      <DependentUpon>PreviousSongIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\RadioIcon.xaml.cs">
+      <DependentUpon>RadioIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\RepeatIcon.xaml.cs">
+      <DependentUpon>RepeatIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\ShuffleIcon.xaml.cs">
+      <DependentUpon>ShuffleIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Icons\StarIcon.xaml.cs">
+      <DependentUpon>StarIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="Controls\WatermarkTextBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
@@ -259,6 +296,50 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\Icons\NextSongIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\NowPlayingIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\PauseIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\PlayIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\PlaylistIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\PlayQueueIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\PreviousSongIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\RadioIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\RepeatIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\ShuffleIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons\StarIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\BorderlessWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -276,6 +357,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\IconTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

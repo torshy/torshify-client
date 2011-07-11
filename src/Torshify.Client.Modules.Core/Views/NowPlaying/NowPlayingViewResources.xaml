@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
-    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
-    xmlns:Player="clr-namespace:Torshify.Client.Modules.Core.Views.Player">
+    xmlns:Player="clr-namespace:Torshify.Client.Modules.Core.Views.Player"
+    xmlns:Icons="clr-namespace:Torshify.Client.Infrastructure.Resources.Icons;assembly=Torshify.Client.Infrastructure">
 
     <BooleanToVisibilityConverter
         x:Key="BooleanToVisibilityConverter" />
@@ -21,7 +21,7 @@
 
     <Converters:TimeSpanToTextConverter
         x:Key="TimeSpanToTextConverter" />
-    
+
     <Player:TimeSpanLeftConverter
         x:Key="TimeSpanLeftConverter" />
 

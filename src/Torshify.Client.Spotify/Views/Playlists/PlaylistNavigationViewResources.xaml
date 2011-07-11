@@ -1,0 +1,42 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Playlists="clr-namespace:Torshify.Client.Spotify.Views.Playlists"
+    xmlns:Icons="clr-namespace:Torshify.Client.Infrastructure.Resources.Icons;assembly=Torshify.Client.Infrastructure">
+
+    <DataTemplate
+        DataType="{x:Type Playlists:PlaylistSeparatorNavigationItem}">
+        <Separator />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type Playlists:PlaylistNavigationItem}">
+        <TextBlock
+            Text="{Binding Playlist.Name}" />
+    </DataTemplate>
+
+    <HierarchicalDataTemplate
+        DataType="{x:Type Playlists:FolderPlaylistNavigationItem}"
+        ItemsSource="{Binding Children}">
+        <TextBlock
+            Text="{Binding Playlist.Name}" />
+    </HierarchicalDataTemplate>
+
+    <Playlists:PlaylistNavigationItemTemplateSelector
+        x:Key="IconTemplateSelector">
+        <Playlists:PlaylistNavigationItemTemplateSelector.Playlist>
+            <DataTemplate>
+                <Icons:PlaylistIcon />
+            </DataTemplate>
+        </Playlists:PlaylistNavigationItemTemplateSelector.Playlist>
+        <Playlists:PlaylistNavigationItemTemplateSelector.Folder>
+            <DataTemplate>
+            </DataTemplate>
+        </Playlists:PlaylistNavigationItemTemplateSelector.Folder>
+        <Playlists:PlaylistNavigationItemTemplateSelector.Separator>
+            <DataTemplate>
+            </DataTemplate>
+        </Playlists:PlaylistNavigationItemTemplateSelector.Separator>
+    </Playlists:PlaylistNavigationItemTemplateSelector>
+
+</ResourceDictionary>

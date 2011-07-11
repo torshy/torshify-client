@@ -4,8 +4,8 @@
     xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
     xmlns:conv="clr-namespace:Torshify.Client.Infrastructure.Controls.Html2Flow;assembly=Torshify.Client.Infrastructure"
     xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
-    xmlns:Icons="clr-namespace:Torshify.Client.Modules.Core.Resources.Icons"
-    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure">
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Icons="clr-namespace:Torshify.Client.Infrastructure.Resources.Icons;assembly=Torshify.Client.Infrastructure">
 
     <Converters:TimeSpanToTextConverter
         x:Key="TimeSpanToTextConverter" />

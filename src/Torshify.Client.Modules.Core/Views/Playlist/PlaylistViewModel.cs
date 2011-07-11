@@ -9,7 +9,7 @@ using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;

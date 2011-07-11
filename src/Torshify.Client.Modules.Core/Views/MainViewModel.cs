@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 
 namespace Torshify.Client.Modules.Core.Views

@@ -1,5 +1,6 @@
+using System;
 using System.Windows;
-
+using System.Windows.Controls;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
@@ -8,6 +9,7 @@ using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Spotify.Services;
 using Torshify.Client.Spotify.Views.Login;
+using Torshify.Client.Spotify.Views.Playlists;
 
 namespace Torshify.Client.Spotify
 {
@@ -54,7 +56,14 @@ namespace Torshify.Client.Spotify
             {
                 if (Session != null)
                 {
-                    Session.Dispose();
+                    try
+                    {
+                        Session.Dispose();
+                    }
+                    catch
+                    {
+                        
+                    }
                 }
             };
         }
@@ -71,8 +80,9 @@ namespace Torshify.Client.Spotify
             _container.RegisterType<ISearchProvider, SearchProvider>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IPlayer, NAudioPlayer>(new ContainerControlledLifetimeManager());
             _container.RegisterType<LoginView>("LoginView");
+            _container.RegisterType<PlaylistNavigationView>("SpotifyPlaylistNavigation");
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
-
+            _regionManager.RegisterViewWithRegion("Navigation", typeof(PlaylistNavigationView));
             _container.Resolve<SpotifyLogging>().Initialize();
         }
 

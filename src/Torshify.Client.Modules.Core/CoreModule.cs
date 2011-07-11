@@ -56,6 +56,7 @@ namespace Torshify.Client.Modules.Core
             _container.RegisterType<SearchView>(MusicRegionViewNames.SearchView);
             _container.RegisterType<WhatsNewView>(MusicRegionViewNames.WhatsNew);
             _container.RegisterType<WhatsNewView>(MusicRegionViewNames.StarredView);
+            _container.RegisterType<DefaultNavigationView>("DefaultNavigationView");
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));
@@ -69,7 +70,7 @@ namespace Torshify.Client.Modules.Core
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(SearchView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(WhatsNewView));
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(StarredView));
-
+            _regionManager.RegisterViewWithRegion("Navigation", typeof(DefaultNavigationView));
 #if MockEnabled
             _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri("MainView", UriKind.Relative));
 #else

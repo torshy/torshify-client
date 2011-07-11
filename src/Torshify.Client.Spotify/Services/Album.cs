@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Runtime.Caching;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
@@ -11,8 +9,6 @@ using Torshify.Client.Infrastructure.Interfaces;
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
-
-using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
 
 using ITorshifyImage = Torshify.Client.Infrastructure.Interfaces.IImage;
 
@@ -54,13 +50,26 @@ namespace Torshify.Client.Spotify.Services
 
         public ITorshifyArtist Artist
         {
-            get { return _artist.Value; }
+            get
+            {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return null;
+                }
+
+                return _artist.Value;
+            }
         }
 
         public ITorshifyImage CoverArt
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return null;
+                }
+
                 if (_image == null)
                 {
                     _image = new Image(InternalAlbum.Session, InternalAlbum.CoverId);
@@ -74,6 +83,11 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return null;
+                }
+
                 var albumInfo = MemoryCache.Default.Get("Torshify_AlbumInfo_" + InternalAlbum.GetHashCode()) as Lazy<AlbumInformation>;
 
                 lock (_lockObject)
@@ -85,7 +99,7 @@ namespace Torshify.Client.Spotify.Services
                         MemoryCache.Default.Add(
                             "Torshify_AlbumInfo_" + InternalAlbum.GetHashCode(),
                             albumInfo,
-                            new CacheItemPolicy {SlidingExpiration = TimeSpan.FromSeconds(45)});
+                            new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(45) });
                     }
                 }
 
@@ -103,6 +117,11 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return false;
+                }
+
                 return InternalAlbum.IsAvailable;
             }
         }
@@ -111,6 +130,11 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return string.Empty;
+                }
+
                 return _name.Value;
             }
         }
@@ -119,6 +143,11 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return TorshifyAlbumType.Unknown;
+                }
+
                 return _albumType.Value;
             }
         }
@@ -127,6 +156,11 @@ namespace Torshify.Client.Spotify.Services
         {
             get
             {
+                if (InternalAlbum == null || !InternalAlbum.IsValid())
+                {
+                    return 0;
+                }
+
                 return _year.Value;
             }
         }

@@ -55,6 +55,9 @@
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\lib\Prism\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Unity\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\lib\Unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
@@ -108,6 +111,15 @@
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Login\LoginViewModel.cs" />
+    <Compile Include="Views\Playlists\FolderPlaylistNavigationItem.cs" />
+    <Compile Include="Views\Playlists\PlaylistNavigationItem.cs" />
+    <Compile Include="Views\Playlists\PlaylistNavigationItemTemplateSelector.cs" />
+    <Compile Include="Views\Playlists\PlaylistNavigationView.xaml.cs">
+      <DependentUpon>PlaylistNavigationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Playlists\PlaylistNavigationViewModel.cs" />
+    <Compile Include="Views\Playlists\PlaylistSeparatorNavigationItem.cs" />
+    <Compile Include="Views\Playlists\UnknownPlaylistNavigationItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Torshify.Client.Infrastructure\Torshify.Client.Infrastructure.csproj">
@@ -117,6 +129,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Login\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Playlists\PlaylistNavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Playlists\PlaylistNavigationViewResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using System.Linq;

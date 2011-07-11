@@ -4,93 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
     MinWidth="50">
-    <UserControl.Resources>
-
-        <Style
-            x:Key="NoAlternationColorListBoxItem"
-            TargetType="{x:Type ListBoxItem}">
-            <Setter
-                Property="Background"
-                Value="Transparent" />
-            <Style.Triggers>
-                <Trigger
-                    Property="IsSelected"
-                    Value="True">
-                    <Setter
-                        Property="Foreground"
-                        Value="Black" />
-                    <Setter
-                        Property="FontWeight"
-                        Value="Medium" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style
-            x:Key="NonStyleButton"
-            TargetType="{x:Type Button}">
-            <Setter
-                Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="{x:Type Button}">
-                        <ContentPresenter
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <DataTemplate
-            x:Key="DefaultNavigationItemContentTemplate">
-            <TextBlock
-                Text="????" />
-        </DataTemplate>
-
-        <DataTemplate
-            x:Key="NavigationItemTemplate">
-            <Button
-                Name="NavButton"
-                ClickMode="Press"
-                Style="{StaticResource NonStyleButton}"
-                Command="{Binding DataContext.NavigateToItemCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                CommandParameter="{Binding}"
-                Content="{Binding}"
-                ContentTemplate="{Binding DataTemplate}" />
-            <DataTemplate.Triggers>
-                <DataTrigger
-                    Binding="{Binding DataTemplate}"
-                    Value="{x:Null}">
-                    <Setter
-                        TargetName="NavButton"
-                        Property="ContentTemplate"
-                        Value="{StaticResource DefaultNavigationItemContentTemplate}" />
-                </DataTrigger>
-            </DataTemplate.Triggers>
-        </DataTemplate>
-    </UserControl.Resources>
-    <ListBox
+    <ItemsControl
         Margin="4,0,4,0"
+        Regions:RegionManager.RegionName="Navigation"
         Grid.IsSharedSizeScope="True"
-        ItemsSource="{Binding NavigationItems}"
-        ItemContainerStyle="{StaticResource NoAlternationColorListBoxItem}"
-        ItemTemplate="{StaticResource NavigationItemTemplate}"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-        IsSynchronizedWithCurrentItem="True"
         HorizontalContentAlignment="Stretch"
-        AlternationCount="0">
-        <ListBox.Resources>
-            <SolidColorBrush
-                x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                Color="Orange" />
-            <SolidColorBrush
-                x:Key="{x:Static SystemColors.ControlBrushKey}"
-                Color="#99FFFFFF" />
-        </ListBox.Resources>
-    </ListBox>
+        AlternationCount="0" />
 </UserControl>

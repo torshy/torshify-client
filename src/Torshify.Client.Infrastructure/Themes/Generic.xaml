@@ -14,5 +14,7 @@
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/SearchTextBox.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/DeferredValueSlider.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Client.Infrastructure;component/Themes/IconTreeView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,0 +1,32 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Models="clr-namespace:Torshify.Client.Infrastructure.Models;assembly=Torshify.Client.Infrastructure"
+    xmlns:Navigation="clr-namespace:Torshify.Client.Modules.Core.Views.Navigation"
+    xmlns:Icons="clr-namespace:Torshify.Client.Infrastructure.Resources.Icons;assembly=Torshify.Client.Infrastructure">
+
+    <DataTemplate
+        DataType="{x:Type Models:HeaderedNavigationItem}">
+        <TextBlock
+            Text="{Binding Header}" />
+    </DataTemplate>
+
+    <Navigation:DefaultNavigationViewIconTemplateSelector
+        x:Key="IconTemplateSelector">
+        <Navigation:DefaultNavigationViewIconTemplateSelector.WhatsNew>
+            <DataTemplate>
+                <Icons:RadioIcon />
+            </DataTemplate>
+        </Navigation:DefaultNavigationViewIconTemplateSelector.WhatsNew>
+        <Navigation:DefaultNavigationViewIconTemplateSelector.PlayQueue>
+            <DataTemplate>
+                <Icons:PlayQueueIcon />
+            </DataTemplate>
+        </Navigation:DefaultNavigationViewIconTemplateSelector.PlayQueue>
+        <Navigation:DefaultNavigationViewIconTemplateSelector.Starred>
+            <DataTemplate>
+                <Icons:StarIcon />
+            </DataTemplate>
+        </Navigation:DefaultNavigationViewIconTemplateSelector.Starred>
+    </Navigation:DefaultNavigationViewIconTemplateSelector>
+</ResourceDictionary>

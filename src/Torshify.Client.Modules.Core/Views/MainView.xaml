@@ -5,8 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
-    xmlns:local="clr-namespace:Torshify.Client.Modules.Core"
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Infrastructure="clr-namespace:Torshify.Client.Infrastructure;assembly=Torshify.Client.Infrastructure"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -171,14 +171,14 @@
                     Margin="0,0,2,0" />
             </StackPanel>
             <ContentControl
-                prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.TopMusicRegion}"
+                prism:RegionManager.RegionName="{x:Static Infrastructure:CoreRegionNames.TopMusicRegion}"
                 Margin="4,0,0,0" />
         </DockPanel>
 
-        <ContentControl
+        <ItemsControl
             Grid.Column="0"
             Grid.Row="1"
-            prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.LeftMusicRegion}"
+            prism:RegionManager.RegionName="{x:Static Infrastructure:CoreRegionNames.LeftMusicRegion}"
             Margin="0,4,4,0" />
 
         <GridSplitter
@@ -191,11 +191,11 @@
         <ContentControl
             Grid.Column="1"
             Grid.Row="1"
-            prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.MainMusicRegion}"
+            prism:RegionManager.RegionName="{x:Static Infrastructure:CoreRegionNames.MainMusicRegion}"
             Margin="0,4,4,0" />
 
         <ContentControl
-            prism:RegionManager.RegionName="{x:Static local:CoreRegionNames.BottomMusicRegion}"
+            prism:RegionManager.RegionName="{x:Static Infrastructure:CoreRegionNames.BottomMusicRegion}"
             Grid.Row="2"
             Grid.ColumnSpan="2"
             HorizontalContentAlignment="Stretch"

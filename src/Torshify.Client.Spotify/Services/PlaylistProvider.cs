@@ -97,15 +97,23 @@ namespace Torshify.Client.Spotify.Services
         private void OnPlaylistContainerPlaylistMoved(object sender, PlaylistMovedEventArgs e)
         {
             _logger.Log("Playlist moved", Category.Info, Priority.Medium);
-            ITorshifyPlaylist p = _playlists[e.OldIndex];
-            OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
+            
+            if (e.OldIndex < _playlists.Count)
+            {
+                ITorshifyPlaylist p = _playlists[e.OldIndex];
+                OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
+            }
         }
 
         private void OnPlaylistContainerPlaylistRemoved(object sender, PlaylistEventArgs e)
         {
             _logger.Log("Playlist removed", Category.Info, Priority.Medium);
-            ITorshifyPlaylist p = _playlists[e.Position];
-            OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
+            
+            if (e.Position < _playlists.Count)
+            {
+                ITorshifyPlaylist p = _playlists[e.Position];
+                OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
+            }
         }
 
         private void OnPlaylistContainerPlaylistAdded(object sender, PlaylistEventArgs e)
