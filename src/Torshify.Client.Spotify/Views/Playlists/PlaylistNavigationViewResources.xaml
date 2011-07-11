@@ -4,6 +4,9 @@
     xmlns:Playlists="clr-namespace:Torshify.Client.Spotify.Views.Playlists"
     xmlns:Icons="clr-namespace:Torshify.Client.Infrastructure.Resources.Icons;assembly=Torshify.Client.Infrastructure">
 
+    <BooleanToVisibilityConverter
+        x:Key="BooleanToVisibilityConverter" />
+
     <DataTemplate
         DataType="{x:Type Playlists:PlaylistSeparatorNavigationItem}">
         <Separator />
@@ -11,22 +14,61 @@
 
     <DataTemplate
         DataType="{x:Type Playlists:PlaylistNavigationItem}">
-        <TextBlock
-            Text="{Binding Playlist.Name}" />
+        <DockPanel
+            LastChildFill="True">
+            <Icons:NowPlayingIcon
+                DockPanel.Dock="Right"
+                Visibility="{Binding HasTrackPlaying, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBlock
+                Text="{Binding Playlist.Name}"
+                TextTrimming="CharacterEllipsis" />
+        </DockPanel>
     </DataTemplate>
 
     <HierarchicalDataTemplate
         DataType="{x:Type Playlists:FolderPlaylistNavigationItem}"
         ItemsSource="{Binding Children}">
-        <TextBlock
-            Text="{Binding Playlist.Name}" />
+        <DockPanel
+            LastChildFill="True">
+            <Icons:NowPlayingIcon
+                DockPanel.Dock="Right"
+                Visibility="{Binding HasTrackPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock
+                Text="{Binding Playlist.Name}"
+                TextTrimming="CharacterEllipsis" />
+        </DockPanel>
     </HierarchicalDataTemplate>
 
     <Playlists:PlaylistNavigationItemTemplateSelector
         x:Key="IconTemplateSelector">
         <Playlists:PlaylistNavigationItemTemplateSelector.Playlist>
             <DataTemplate>
-                <Icons:PlaylistIcon />
+                <Icons:PlaylistIcon
+                    x:Name="Icon" />
+                <DataTemplate.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Playlist.IsCollaborative}"
+                        Value="True">
+                        <Setter
+                            TargetName="Icon"
+                            Property="Foreground">
+                            <Setter.Value>
+                                <LinearGradientBrush
+                                    EndPoint="1.133,0.5"
+                                    StartPoint="-0.133,0.5">
+                                    <GradientStop
+                                        Color="#FFA0006E" />
+                                    <GradientStop
+                                        Color="#FFAC0076"
+                                        Offset="1" />
+                                    <GradientStop
+                                        Color="#FFFF5AEC"
+                                        Offset="0.517" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
         </Playlists:PlaylistNavigationItemTemplateSelector.Playlist>
         <Playlists:PlaylistNavigationItemTemplateSelector.Folder>

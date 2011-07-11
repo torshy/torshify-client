@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Windows.Data;
 
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Spotify.Services;
+using System.Linq;
 
 namespace Torshify.Client.Spotify.Views.Playlists
 {
@@ -15,17 +17,25 @@ namespace Torshify.Client.Spotify.Views.Playlists
     {
         #region Fields
 
+        private readonly IPlayerController _playerController;
         private readonly IPlaylistProvider _playlistProvider;
 
         #endregion Fields
 
         #region Constructors
 
-        public PlaylistNavigationViewModel(IPlaylistProvider playlistProvider, IRegionManager regionManager)
+        public PlaylistNavigationViewModel(
+            IPlaylistProvider playlistProvider,
+            IRegionManager regionManager,
+            IPlayerController playerController)
             : base(regionManager)
         {
             _playlistProvider = playlistProvider;
-
+            _playerController = playerController;
+            _playerController.Playlist.CurrentChanged += OnCurrentSongChanged;
+            _playlistProvider.PlaylistAdded += OnPlaylistAdded;
+            _playlistProvider.PlaylistMoved += OnPlaylistMoved;
+            _playlistProvider.PlaylistRemoved += OnPlaylistRemoved;
             Playlists = new ListCollectionView(NavigationItems);
             InitializeNavigationItems();
         }
@@ -105,6 +115,40 @@ namespace Torshify.Client.Spotify.Views.Playlists
                         break;
                 }
             }
+        }
+
+        private void OnCurrentSongChanged(object sender, EventArgs e)
+        {
+            var current = _playerController.Playlist.Current;
+
+            if (current != null)
+            {
+                var playlistTrack = current.Track as Infrastructure.Interfaces.IPlaylistTrack;
+
+                foreach (var item in NavigationItems)
+                {
+                    if (playlistTrack != null)
+                    {
+                        item.HasTrackPlaying = item.Playlist == playlistTrack.Playlist;
+                    }
+                    else
+                    {
+                        item.HasTrackPlaying = false;
+                    }
+                }
+            }
+        }
+
+        private void OnPlaylistAdded(object sender, Infrastructure.Interfaces.PlaylistEventArgs e)
+        {
+        }
+
+        private void OnPlaylistMoved(object sender, Infrastructure.Interfaces.PlaylistMovedEventArgs e)
+        {
+        }
+
+        private void OnPlaylistRemoved(object sender, Infrastructure.Interfaces.PlaylistEventArgs e)
+        {
         }
 
         #endregion Methods

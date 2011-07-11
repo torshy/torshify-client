@@ -8,6 +8,7 @@ namespace Torshify.Client.Spotify.Views.Playlists
         #region Fields
 
         private readonly Infrastructure.Interfaces.IPlaylist _containerPlaylist;
+        private bool _hasTrackPlaying;
 
         #endregion Fields
 
@@ -27,6 +28,19 @@ namespace Torshify.Client.Spotify.Views.Playlists
             get
             {
                 return _containerPlaylist;
+            }
+        }
+
+        public bool HasTrackPlaying
+        {
+            get { return _hasTrackPlaying; }
+            set
+            {
+                if (_hasTrackPlaying != value)
+                {
+                    _hasTrackPlaying = value;
+                    RaisePropertyChanged("HasTrackPlaying");
+                }
             }
         }
 

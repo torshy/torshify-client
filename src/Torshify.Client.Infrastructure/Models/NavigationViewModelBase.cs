@@ -54,7 +54,7 @@ namespace Torshify.Client.Infrastructure.Models
 
         public virtual void SelectedItemChanged(T oldItem, T newItem)
         {
-            if (newItem == null && !CanNavigateToItem(newItem))
+            if (newItem == null || !CanNavigateToItem(newItem))
             {
                 return;
             }
