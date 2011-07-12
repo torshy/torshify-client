@@ -15,17 +15,20 @@
         x:Key="IconTemplateSelector">
         <Navigation:DefaultNavigationViewIconTemplateSelector.WhatsNew>
             <DataTemplate>
-                <Icons:RadioIcon />
+                <Icons:RadioIcon
+                    Foreground="{DynamicResource ControlTextBrush}"/>
             </DataTemplate>
         </Navigation:DefaultNavigationViewIconTemplateSelector.WhatsNew>
         <Navigation:DefaultNavigationViewIconTemplateSelector.PlayQueue>
             <DataTemplate>
-                <Icons:PlayQueueIcon />
+                <Icons:PlayQueueIcon
+                    Foreground="{DynamicResource ControlTextBrush}"/>
             </DataTemplate>
         </Navigation:DefaultNavigationViewIconTemplateSelector.PlayQueue>
         <Navigation:DefaultNavigationViewIconTemplateSelector.Starred>
             <DataTemplate>
-                <Icons:StarIcon />
+                <Icons:StarIcon
+                    Foreground="{DynamicResource ControlTextBrush}"/>
             </DataTemplate>
         </Navigation:DefaultNavigationViewIconTemplateSelector.Starred>
     </Navigation:DefaultNavigationViewIconTemplateSelector>

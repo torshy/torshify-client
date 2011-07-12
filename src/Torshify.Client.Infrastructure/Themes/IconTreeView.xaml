@@ -248,6 +248,13 @@
                                 Property="MinHeight"
                                 Value="19" />
                         </MultiTrigger>
+                        <Trigger
+                            Property="IsSelected"
+                            Value="True">
+                            <Setter
+                                Property="Foreground"
+                                Value="Black" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
