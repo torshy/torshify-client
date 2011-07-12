@@ -51,6 +51,27 @@ namespace Torshify.Client.Modules.Core
             Application.Current.MainWindow.InputBindings.Add(
                 new KeyBinding
                 {
+                    Command = CoreCommands.NavigateBackCommand,
+                    Gesture = new KeyGesture(Key.Back)
+                });
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.NavigateBackCommand,
+                    Gesture = new KeyGesture(Key.Left, ModifierKeys.Alt)
+                });
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.NavigateForwardCommand,
+                    Gesture = new KeyGesture(Key.Right, ModifierKeys.Alt)
+                });
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
                     Command = CoreCommands.Debug.ToggleDebugWindowCommand,
                     Gesture = new KeyGesture(Key.D0, ModifierKeys.Alt)
                 });
