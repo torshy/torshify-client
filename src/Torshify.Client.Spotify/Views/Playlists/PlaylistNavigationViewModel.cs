@@ -95,6 +95,14 @@ namespace Torshify.Client.Spotify.Views.Playlists
             return item.Playlist == entry.Tag && parts[0] == item.NavigationUrl.OriginalString;
         }
 
+        protected override void UpdateIsSelected(IRegionNavigationJournalEntry entry)
+        {
+            ForEach(NavigationItems, item=>
+                                         {
+                                             item.IsSelected = IsFromThisItem(entry, item);
+                                         });
+        }
+
         private bool CanExecuteMoveItem(Tuple<int, int> item)
         {
             return true;

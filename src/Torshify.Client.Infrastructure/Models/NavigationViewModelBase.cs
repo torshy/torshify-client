@@ -82,7 +82,7 @@ namespace Torshify.Client.Infrastructure.Models
             return parts[0] == item.NavigationUrl.OriginalString;
         }
 
-        void OnRegionsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnRegionsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (_regionManager.Regions.ContainsRegionWithName(CoreRegionNames.MainMusicRegion))
             {
@@ -98,12 +98,17 @@ namespace Torshify.Client.Infrastructure.Models
 
             IRegionNavigationJournalEntry entry = e.NavigationContext.NavigationService.Journal.CurrentEntry;
 
+            UpdateIsSelected(entry);
+
+            _disregardNavigation = false;
+        }
+
+        protected virtual void UpdateIsSelected(IRegionNavigationJournalEntry entry)
+        {
             foreach (var navigationItem in _navigationItems)
             {
                 navigationItem.IsSelected = IsFromThisItem(entry, navigationItem);
             }
-
-            _disregardNavigation = false;
         }
 
         #endregion Methods
