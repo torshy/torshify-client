@@ -5,6 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Playlists="clr-namespace:Torshify.Client.Spotify.Views.Playlists"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -20,6 +23,25 @@
     <Controls:IconTreeView
         ItemsSource="{Binding Playlists}"
         IconTemplateSelector="{StaticResource IconTemplateSelector}"
-        SelectedItemChanged="TreeViewSelectedItemChanged" />
+        SelectedItemChanged="TreeViewSelectedItemChanged">
+        <Interactivity:Interaction.Behaviors>
+            <Behaviors:ItemsControlDragDropBehavior
+                MoveItemCommand="{Binding MoveItemCommand}"
+                ItemType="{x:Type Playlists:PlaylistNavigationItem}">
+                <Behaviors:ItemsControlDragDropBehavior.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Background="White"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            Padding="4">
+                            <TextBlock
+                                Text="{Binding Playlist.Name}" />
+                        </Border>
+                    </DataTemplate>
+                </Behaviors:ItemsControlDragDropBehavior.ItemTemplate>
+            </Behaviors:ItemsControlDragDropBehavior>
+        </Interactivity:Interaction.Behaviors>
+    </Controls:IconTreeView>
 
 </UserControl>

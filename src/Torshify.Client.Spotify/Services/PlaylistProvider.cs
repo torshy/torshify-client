@@ -73,6 +73,30 @@ namespace Torshify.Client.Spotify.Services
 
         #endregion Properties
 
+        #region Methods
+
+        public void Move(int oldIndex, int newIndex)
+        {
+            if (_session.PlaylistContainer.IsValid())
+            {
+                _session.PlaylistContainer.Playlists.Move(oldIndex, newIndex);
+            }
+        }
+
+        public void Remove(int index)
+        {
+            if (_session.PlaylistContainer.IsValid())
+            {
+                if (index >= 0 && index < _session.PlaylistContainer.Playlists.Count)
+                {
+                    var containerPlaylist = _session.PlaylistContainer.Playlists[index];
+                    _session.PlaylistContainer.Playlists.Remove(containerPlaylist);
+                }
+            }
+        }
+
+        #endregion Methods
+
         #region Private Methods
 
         private void InitializePlaylistContainer()
@@ -97,10 +121,11 @@ namespace Torshify.Client.Spotify.Services
         private void OnPlaylistContainerPlaylistMoved(object sender, PlaylistMovedEventArgs e)
         {
             _logger.Log("Playlist moved", Category.Info, Priority.Medium);
-            
+
             if (e.OldIndex < _playlists.Count)
             {
-                ITorshifyPlaylist p = _playlists[e.OldIndex];
+                _dispatcher.Invoke((Action<int, int>)_playlists.Move, e.OldIndex, e.NewIndex);
+                ITorshifyPlaylist p = _playlists[e.NewIndex];
                 OnPlaylistMoved(new Infrastructure.Interfaces.PlaylistMovedEventArgs(p, e.OldIndex, e.NewIndex));
             }
         }
@@ -112,6 +137,7 @@ namespace Torshify.Client.Spotify.Services
             if (e.Position < _playlists.Count)
             {
                 ITorshifyPlaylist p = _playlists[e.Position];
+                _dispatcher.Invoke((Action<int>)_playlists.RemoveAt, e.Position);
                 OnPlaylistRemoved(new Infrastructure.Interfaces.PlaylistEventArgs(p, e.Position));
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Torshify.Client.Infrastructure;
 using Torshify.Client.Infrastructure.Models;
 
 namespace Torshify.Client.Spotify.Views.Playlists
@@ -14,7 +15,8 @@ namespace Torshify.Client.Spotify.Views.Playlists
 
         #region Constructors
 
-        public PlaylistNavigationItem(Infrastructure.Interfaces.IPlaylist playlist, Uri navigationUri) : base(navigationUri)
+        public PlaylistNavigationItem(Infrastructure.Interfaces.IPlaylist playlist)
+            : base(new Uri(MusicRegionViewNames.PlaylistView, UriKind.Relative))
         {
             _containerPlaylist = playlist;
         }

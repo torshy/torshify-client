@@ -38,7 +38,10 @@ namespace Torshify.Client.Spotify.Views.Playlists
 
         private void TreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Model.SelectedItemChanged((PlaylistNavigationItem) e.OldValue, (PlaylistNavigationItem) e.NewValue);
+            var oldValue = e.OldValue as PlaylistNavigationItem;
+            var newValue = e.NewValue as PlaylistNavigationItem;
+            
+            Model.SelectedItemChanged(oldValue, newValue);
         }
 
         #endregion Methods

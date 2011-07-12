@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Media.Imaging;
 using FizzWare.NBuilder;
 using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Interfaces;
@@ -129,6 +128,16 @@ namespace Torshify.Client.Mocks
         #endregion Properties
 
         #region Public Methods
+
+        public void Move(int oldIndex, int newIndex)
+        {
+
+        }
+
+        public void Remove(int index)
+        {
+
+        }
 
         public void Initialize()
         {

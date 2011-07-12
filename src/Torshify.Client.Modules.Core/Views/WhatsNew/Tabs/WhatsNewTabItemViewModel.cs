@@ -102,7 +102,24 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         public void Deinitialize(NavigationContext navContext)
         {
             Albums = null;
-            _searchList.Clear();
+
+            var deadSearches = new List<ISearch>();
+
+            if (!IsLoading)
+            {
+                for (int i = 0; i < _searchList.Count; i++)
+                {
+                    if (!_searchList[i].IsLoading)
+                    {
+                        deadSearches.Add(_searchList[i]);
+                    }
+                }
+
+                foreach (var deadSearch in deadSearches)
+                {
+                    _searchList.Remove(deadSearch);
+                }
+            }
         }
 
         public void Initialize(NavigationContext navContext)
@@ -131,12 +148,15 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         private void GetMoreRandomAlbums()
         {
-            IsLoading = true;
+            if (!IsLoading)
+            {
+                IsLoading = true;
 
-            var search = _searchProvider.Search("tag:new", 0, 0, 0, 250, 0, 0);
+                var search = _searchProvider.Search("tag:new", 0, 0, 0, 250, 0, 0);
 
-            search.FinishedLoading += OnSearchFinishedLoading;
-            _searchList.Add(search);
+                search.FinishedLoading += OnSearchFinishedLoading;
+                _searchList.Add(search);
+            }
         }
 
         private void OnSearchFinishedLoading(object sender, EventArgs e)

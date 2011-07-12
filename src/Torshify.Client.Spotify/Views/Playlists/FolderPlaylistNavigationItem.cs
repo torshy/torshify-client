@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Torshify.Client.Spotify.Views.Playlists
 {
@@ -7,8 +6,8 @@ namespace Torshify.Client.Spotify.Views.Playlists
     {
         #region Constructors
 
-        public FolderPlaylistNavigationItem(Infrastructure.Interfaces.IPlaylist playlist, Uri navigationUri)
-            : base(playlist, navigationUri)
+        public FolderPlaylistNavigationItem(Infrastructure.Interfaces.IPlaylist playlist)
+            : base(playlist)
         {
 
         }
@@ -24,5 +23,14 @@ namespace Torshify.Client.Spotify.Views.Playlists
         }
 
         #endregion Properties
+    }
+
+    public class EndFolderPlaylistNavigationItem : PlaylistNavigationItem
+    {
+        public EndFolderPlaylistNavigationItem(Infrastructure.Interfaces.IPlaylist playlist)
+            : base(playlist)
+        {
+
+        }
     }
 }
