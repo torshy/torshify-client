@@ -55,11 +55,6 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        IEnumerable<PlayerQueueItem> Queued
-        {
-            get;
-        }
-
         #endregion Properties
 
         #region Methods

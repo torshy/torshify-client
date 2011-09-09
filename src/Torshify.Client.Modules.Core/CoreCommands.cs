@@ -8,6 +8,7 @@ namespace Torshify.Client.Modules.Core
         {
             public static readonly CompositeCommand PauseCommand = new CompositeCommand();
             public static readonly CompositeCommand PlayCommand = new CompositeCommand();
+            public static readonly CompositeCommand PlayPauseCommand = new CompositeCommand();
             public static readonly CompositeCommand NextCommand = new CompositeCommand();
             public static readonly CompositeCommand PreviousCommand = new CompositeCommand();
             public static readonly CompositeCommand SeekCommand = new CompositeCommand();

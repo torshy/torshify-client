@@ -21,6 +21,7 @@ namespace Torshify.Client.Spotify.Views.Login
         private bool _hasLoginError;
         private bool _isLoggingIn;
         private string _loginError;
+        private bool _rememberMe;
         private string _userName;
 
         #endregion Fields
@@ -30,10 +31,18 @@ namespace Torshify.Client.Spotify.Views.Login
         public LoginViewModel(ISession session, IRegionManager regionManager, Dispatcher dispatcher)
         {
             _session = session;
+            _session.LoginComplete += OnLoginComplete;
+            _rememberMe = !string.IsNullOrEmpty(_session.GetRememberedUser());
             _regionManager = regionManager;
             _dispatcher = dispatcher;
-            _session.LoginComplete += OnLoginComplete;
+
             LoginCommand = new AutomaticCommand<PasswordBox>(ExecuteLogin, CanExecuteLogin);
+            IsLoggingIn = false;
+
+            if (RememberMe)
+            {
+                _session.Relogin();
+            }
         }
 
         #endregion Constructors
@@ -92,6 +101,19 @@ namespace Torshify.Client.Spotify.Views.Login
             }
         }
 
+        public bool RememberMe
+        {
+            get
+            {
+                return _rememberMe;
+            }
+            set
+            {
+                _rememberMe = value;
+                RaisePropertyChanged("RememberMe");
+            }
+        }
+
         public string UserName
         {
             get
@@ -130,7 +152,13 @@ namespace Torshify.Client.Spotify.Views.Login
         private void ExecuteLogin(PasswordBox pbox)
         {
             IsLoggingIn = true;
-            _session.Login(UserName, pbox.Password);
+            
+            if (!string.IsNullOrEmpty(_session.GetRememberedUser()) && !RememberMe)
+            {
+                _session.ForgetStoredLogin();
+            }
+
+            _session.Login(UserName, pbox.Password, RememberMe);
         }
 
         private void OnLoginComplete(object sender, SessionEventArgs e)

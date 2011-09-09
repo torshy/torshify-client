@@ -55,10 +55,10 @@
                 </DataTrigger.Binding>
                 <Setter
                     Property="Background"
-                    Value="#FF3D0054" />
+                    Value="#FF1F1F1F" />
                 <Setter
                     Property="Foreground"
-                    Value="White" />
+                    Value="Orange" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -219,6 +219,7 @@
         <TextBlock>
             <Hyperlink
                 Name="Link"
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
                 Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
                 CommandParameter="{Binding Album}">
                 <TextBlock
@@ -226,16 +227,6 @@
                     TextTrimming="CharacterEllipsis" />
              </Hyperlink>
         </TextBlock>
-        <DataTemplate.Triggers>
-            <DataTrigger
-                Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                Value="True">
-                <Setter
-                    TargetName="Link"
-                    Property="Foreground"
-                    Value="Black" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate

@@ -133,14 +133,6 @@ namespace Torshify.Client.Infrastructure.Models
             }
         }
 
-        public IEnumerable<PlayerQueueItem> Queued
-        {
-            get
-            {
-                return _queue.ToArray();
-            }
-        }
-
         public bool Repeat
         {
             get { return _repeat; }

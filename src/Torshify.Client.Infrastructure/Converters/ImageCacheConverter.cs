@@ -43,6 +43,11 @@ namespace Torshify.Client.Infrastructure.Converters
             {
                 var imageCacheService = ServiceLocator.Current.TryResolve<IImageCacheService>();
 
+                if (imageCacheService == null)
+                {
+                    throw new ArgumentNullException("imageCacheService");
+                }
+
                 return imageCacheService.GetImage((IImage) value, DecodeWidth, DecodeHeight);
             }
 

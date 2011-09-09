@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 using Microsoft.Practices.Prism.Regions;
 
@@ -29,7 +31,7 @@ namespace Torshify.Client.Modules.Core
 
         #endregion Constructors
 
-        #region Public Methods
+        #region Methods
 
         public void Initialize()
         {
@@ -54,6 +56,10 @@ namespace Torshify.Client.Modules.Core
                 .RegisterCommand(new AutomaticCommand(ExecutePause, CanExecutePause));
 
             CoreCommands.Player
+                .PlayPauseCommand
+                .RegisterCommand(new AutomaticCommand(ExecutePlayPause, CanExecutePlayPause));
+
+            CoreCommands.Player
                 .NextCommand
                 .RegisterCommand(new AutomaticCommand(ExecuteNext, CanExecuteNext));
 
@@ -72,30 +78,41 @@ namespace Torshify.Client.Modules.Core
             CoreCommands.Player
                 .ToggleShuffleCommand
                 .RegisterCommand(new AutomaticCommand(ExecuteToggleShuffle, CanExecuteToggleShuffle));
-        }
 
-        #endregion Public Methods
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Player.PlayCommand,
+                    Gesture = new KeyGesture(Key.Play)
+                });
 
-        #region Private Methods
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Player.PauseCommand,
+                    Gesture = new KeyGesture(Key.Pause)
+                });
 
-        private bool CanExecuteToggleShuffle()
-        {
-            return true;
-        }
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Player.PlayPauseCommand,
+                    Gesture = new KeyGesture(Key.MediaPlayPause)
+                });
 
-        private void ExecuteToggleShuffle()
-        {
-            _player.Playlist.Shuffle = !_player.Playlist.Shuffle;
-        }
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Player.NextCommand,
+                    Gesture = new KeyGesture(Key.MediaNextTrack)
+                });
 
-        private bool CanExecuteToggleRepeat()
-        {
-            return true;
-        }
-
-        private void ExecuteToggleRepeat()
-        {
-            _player.Playlist.Repeat = !_player.Playlist.Repeat;
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding
+                {
+                    Command = CoreCommands.Player.PreviousCommand,
+                    Gesture = new KeyGesture(Key.MediaPreviousTrack)
+                });
         }
 
         private bool CanExecuteGoToNowPlaying()
@@ -103,39 +120,9 @@ namespace Torshify.Client.Modules.Core
             return true;
         }
 
-        private void ExecuteGoToNowPlaying()
-        {
-            _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri(MusicRegionViewNames.NowPlayingView, UriKind.Relative));
-        }
-
-        private bool CanExecuteSeek(TimeSpan timeSpan)
-        {
-            return true;
-        }
-
-        private void ExecuteSeek(TimeSpan timeSpan)
-        {
-            _player.Seek(timeSpan);
-        }
-
-        private bool CanExecutePrevious()
-        {
-            return _player.Playlist.CanGoPrevious;
-        }
-
-        private void ExecutePrevious()
-        {
-            _player.Playlist.Previous();
-        }
-
         private bool CanExecuteNext()
         {
             return _player.Playlist.CanGoNext;
-        }
-
-        private void ExecuteNext()
-        {
-            _player.Playlist.Next();
         }
 
         private bool CanExecutePause()
@@ -143,19 +130,36 @@ namespace Torshify.Client.Modules.Core
             return _player.IsPlaying;
         }
 
-        private void ExecutePause()
-        {
-            _player.Pause();
-        }
-
         private bool CanExecutePlay()
         {
             return !_player.IsPlaying;
         }
 
-        private void ExecutePlay()
+        private bool CanExecutePlayPause()
         {
-            _player.Play();
+            return _player.Playlist.Current != null;
+        }
+
+        private bool CanExecutePlayTrack(object parameter)
+        {
+            ITrack track = parameter as ITrack;
+            if (track != null)
+            {
+                return track.IsAvailable;
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CanExecutePrevious()
+        {
+            return _player.Playlist.CanGoPrevious;
         }
 
         private bool CanExecuteQueueTrack(object parameter)
@@ -175,36 +179,51 @@ namespace Torshify.Client.Modules.Core
             return false;
         }
 
-        private void ExecuteQueueTrack(object parameter)
+        private bool CanExecuteSeek(TimeSpan timeSpan)
         {
-            ITrack track = parameter as ITrack;
-            if (track != null)
-            {
-                _player.Playlist.Enqueue(track);
-            }
-
-            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
-            if (tracks != null)
-            {
-                _player.Playlist.Enqueue(tracks);
-            }
+            return true;
         }
 
-        private bool CanExecutePlayTrack(object parameter)
+        private bool CanExecuteToggleRepeat()
         {
-            ITrack track = parameter as ITrack;
-            if (track != null)
-            {
-                return track.IsAvailable;
-            }
+            return true;
+        }
 
-            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
-            if (tracks != null)
-            {
-                return true;
-            }
+        private bool CanExecuteToggleShuffle()
+        {
+            return true;
+        }
 
-            return false;
+        private void ExecuteGoToNowPlaying()
+        {
+            _regionManager.RequestNavigate(RegionNames.MainRegion, new Uri(MusicRegionViewNames.NowPlayingView, UriKind.Relative));
+        }
+
+        private void ExecuteNext()
+        {
+            _player.Playlist.Next();
+        }
+
+        private void ExecutePause()
+        {
+            _player.Pause();
+        }
+
+        private void ExecutePlay()
+        {
+            _player.Play();
+        }
+
+        private void ExecutePlayPause()
+        {
+            if (_player.IsPlaying)
+            {
+                _player.Pause();
+            }
+            else
+            {
+                _player.Play();
+            }
         }
 
         private void ExecutePlayTrack(object parameter)
@@ -251,6 +270,41 @@ namespace Torshify.Client.Modules.Core
             }
         }
 
-        #endregion Private Methods
+        private void ExecutePrevious()
+        {
+            _player.Playlist.Previous();
+        }
+
+        private void ExecuteQueueTrack(object parameter)
+        {
+            ITrack track = parameter as ITrack;
+            if (track != null)
+            {
+                _player.Playlist.Enqueue(track);
+            }
+
+            IEnumerable<ITrack> tracks = parameter as IEnumerable<ITrack>;
+            if (tracks != null)
+            {
+                _player.Playlist.Enqueue(tracks);
+            }
+        }
+
+        private void ExecuteSeek(TimeSpan timeSpan)
+        {
+            _player.Seek(timeSpan);
+        }
+
+        private void ExecuteToggleRepeat()
+        {
+            _player.Playlist.Repeat = !_player.Playlist.Repeat;
+        }
+
+        private void ExecuteToggleShuffle()
+        {
+            _player.Playlist.Shuffle = !_player.Playlist.Shuffle;
+        }
+
+        #endregion Methods
     }
 }

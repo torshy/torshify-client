@@ -79,7 +79,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Torshify, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Torshify, Version=9.1.45.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />

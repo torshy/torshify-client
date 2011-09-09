@@ -116,7 +116,8 @@
                 Margin="0,4,0,0">
                 <CheckBox
                     DockPanel.Dock="Left"
-                    Content="Remember me" />
+                    Content="Remember me"
+                    IsChecked="{Binding RememberMe}"/>
                 <Button
                     Content="Sign in"
                     Command="{Binding LoginCommand}"

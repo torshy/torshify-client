@@ -1,5 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+
 using Torshify.Client.Infrastructure.Input;
 
 namespace Torshify.Client.Modules.Core.Views.NowPlaying
@@ -31,5 +33,10 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         }
 
         #endregion Properties
+
+        private void OnRequestSeek(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Model.RequestSeek = e.NewValue;
+        }
     }
 }

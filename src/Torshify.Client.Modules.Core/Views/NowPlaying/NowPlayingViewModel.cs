@@ -28,7 +28,6 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         private bool _isUserInactive;
         private IRegionNavigationService _navigationService;
         private double _requestSeek;
-        private SubscriptionToken _sysInactivityToken;
 
         private List<IBackgroundEffect> _backgroundEffects;
 
@@ -114,7 +113,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         {
             get
             {
-                return _requestSeek;
+                return _player.DurationPlayed.TotalSeconds;
             }
             set
             {
@@ -144,7 +143,6 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             _eventAggregator.GetEvent<ApplicationInactivityEvent>().Unsubscribe(_appInactivityToken);
-            _eventAggregator.GetEvent<SystemInactivityEvent>().Unsubscribe(_sysInactivityToken);
 
             _player.Playlist.CurrentChanged -= OnCurrentSongChanged;
 
@@ -161,11 +159,6 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             _appInactivityToken = _eventAggregator.GetEvent<ApplicationInactivityEvent>().Subscribe(
                 OnApplicationInactivity,
-                ThreadOption.PublisherThread,
-                true);
-
-            _sysInactivityToken = _eventAggregator.GetEvent<SystemInactivityEvent>().Subscribe(
-                OnSystemInactivity,
                 ThreadOption.PublisherThread,
                 true);
 
@@ -215,11 +208,6 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
             {
                 NavigateBackCommand.Execute();
             }
-        }
-
-        private void OnSystemInactivity(bool isInactive)
-        {
-
         }
 
         #endregion Methods

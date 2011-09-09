@@ -264,7 +264,7 @@
                         Minimum="0"
                         Maximum="{Binding CurrentTrack.Track.Duration.TotalSeconds, Mode=OneWay}"
                         Value="{Binding Player.DurationPlayed.TotalSeconds, Mode=OneWay}"
-                        RequestValue="{Binding RequestSeek, Mode=OneWayToSource}" />
+                        RequestValueChanged="OnRequestSeek"/>
 
                     <Grid
                         Grid.Row="2"
