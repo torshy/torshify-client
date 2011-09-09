@@ -179,6 +179,7 @@
     <Compile Include="Models\NavigationItem.cs" />
     <Compile Include="Models\NavigationViewModelBase.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
+    <Compile Include="Models\ResourcedNavigationItemTemplateSelector.cs" />
     <Compile Include="Models\vNextPlayerQueue.cs" />
     <Compile Include="Resources\Icons\NextSongIcon.xaml.cs">
       <DependentUpon>NextSongIcon.xaml</DependentUpon>

@@ -20,6 +20,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Services;
 using Torshify.Client.Log;
 using Torshify.Client.Modules.Core;
+using Torshify.Client.Modules.EchoNest;
 using Torshify.Client.Spotify;
 using Torshify.Client.Unity;
 
@@ -62,10 +63,16 @@ namespace Torshify.Client
             Type spotifyModule = typeof(SpotifyModule);
             ModuleCatalog.AddModule(new ModuleInfo(spotifyModule.Name,
                                                    spotifyModule.AssemblyQualifiedName));
+
             Type coreModule = typeof(CoreModule);
             ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
                                                    coreModule.AssemblyQualifiedName,
                                                    spotifyModule.Name));
+
+            Type echoNestModule = typeof(EchoNestModule);
+            ModuleCatalog.AddModule(new ModuleInfo(echoNestModule.Name,
+                                                   echoNestModule.AssemblyQualifiedName,
+                                                   coreModule.Name));
 #else
             ModuleCatalog.AddModule(new ModuleInfo("Mock",
                                                    "Torshify.Client.Mocks.MockModule, Torshify.Client.Mocks"));
@@ -74,6 +81,11 @@ namespace Torshify.Client
             ModuleCatalog.AddModule(new ModuleInfo(coreModule.Name,
                                                    coreModule.AssemblyQualifiedName,
                                                    "Mock"));
+
+            Type echoNestModule = typeof(EchoNestModule);
+            ModuleCatalog.AddModule(new ModuleInfo(echoNestModule.Name,
+                                                   echoNestModule.AssemblyQualifiedName,
+                                                   coreModule.Name));
 #endif
         }
 

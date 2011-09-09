@@ -190,6 +190,10 @@
       <Project>{09AE80A9-E096-4D81-9086-A14C9898B34D}</Project>
       <Name>Torshify.Client.Modules.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Torshify.Client.Modules.EchoNest\Torshify.Client.Modules.EchoNest.csproj">
+      <Project>{9655031B-2DB3-4564-BF67-E8C81B51537B}</Project>
+      <Name>Torshify.Client.Modules.EchoNest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Torshify.Client.Spotify\Torshify.Client.Spotify.csproj">
       <Project>{9E6A309E-BCA4-4197-A19F-AD1D4EC57A38}</Project>
       <Name>Torshify.Client.Spotify</Name>

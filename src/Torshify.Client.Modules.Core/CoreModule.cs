@@ -55,8 +55,7 @@ namespace Torshify.Client.Modules.Core
             _container.RegisterType<ArtistView>(MusicRegionViewNames.ArtistView);
             _container.RegisterType<SearchView>(MusicRegionViewNames.SearchView);
             _container.RegisterType<WhatsNewView>(MusicRegionViewNames.WhatsNew);
-            _container.RegisterType<WhatsNewView>(MusicRegionViewNames.StarredView);
-            _container.RegisterType<DefaultNavigationView>("DefaultNavigationView");
+            _container.RegisterType<StarredView>(MusicRegionViewNames.StarredView);
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(MainView));
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NowPlayingView));

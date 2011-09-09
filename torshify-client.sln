@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\GlobalAssemblyInfo.cs = src\GlobalAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Client.Modules.EchoNest", "src\Torshify.Client.Modules.EchoNest\Torshify.Client.Modules.EchoNest.csproj", "{9655031B-2DB3-4564-BF67-E8C81B51537B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,26 @@ Global
 		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1F453121-2886-4C3D-8252-3D7122F5B3AD}.Release|x86.ActiveCfg = Release|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugMockEnabled|Any CPU.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugMockEnabled|Any CPU.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugMockEnabled|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugMockEnabled|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugMockEnabled|x86.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugVerbose|Any CPU.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugVerbose|Any CPU.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugVerbose|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugVerbose|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.DebugVerbose|x86.ActiveCfg = Debug|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9655031B-2DB3-4564-BF67-E8C81B51537B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

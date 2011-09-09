@@ -12,12 +12,12 @@ namespace Torshify.Client.Tests
     [TestFixture]
     public class PlayerQueueTest
     {
-        private PlayerQueue _queue;
+        private IPlayerQueue _queue;
 
         [SetUp]
         public void Setup()
         {
-            _queue = new PlayerQueue(Dispatcher.CurrentDispatcher);
+            _queue = new vNextPlayerQueue(Dispatcher.CurrentDispatcher);
         }
 
         [Test]
