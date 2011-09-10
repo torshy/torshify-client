@@ -1,0 +1,179 @@
+﻿<UserControl
+    x:Class="Torshify.Client.Modules.EchoNest.Views.Similar.SimilarArtistView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:local="clr-namespace:Torshify.Client.Modules.EchoNest.Controls"
+    xmlns:Similar="clr-namespace:Torshify.Client.Modules.EchoNest.Views.Similar"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Similar:HotttnesssToBrushConverter
+            x:Key="HotttnesssToBrushConverter" />
+
+        <Style
+            x:Key="SquareButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition
+                Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal">
+            <Controls:WatermarkTextBox
+                x:Name="ArtistNameTextBox"
+                x:FieldModifier="private"
+                Watermark="Enter an artist you like" />
+            <Button
+                Content="Go!"
+                Command="{Binding StartTrailCommand}"
+                CommandParameter="{Binding Text, ElementName=ArtistNameTextBox}" />
+        </StackPanel>
+
+        <Viewbox
+            Grid.Row="1">
+            <local:Graph
+                x:Name="_graph"
+                x:FieldModifier="private"
+                NodesBindingPath="ChildNodes"
+                RenderTransformOrigin="0.5, 0.5"
+                Width="800"
+                Height="500">
+                <local:Graph.NodeTemplate>
+                    <DataTemplate>
+                        <DockPanel
+                            Name="Panel"
+                            UseLayoutRounding="True"
+                            LastChildFill="True"
+                            RenderTransformOrigin="0.5,0.5">
+                            <DockPanel.RenderTransform>
+                                <ScaleTransform
+                                    ScaleX="{Binding Item.Familiarity}"
+                                    ScaleY="{Binding Item.Familiarity}" />
+                            </DockPanel.RenderTransform>
+                            <DockPanel.Effect>
+                                <DropShadowEffect
+                                    ShadowDepth="0"
+                                    BlurRadius="40" />
+                            </DockPanel.Effect>
+                            <Button
+                                Style="{StaticResource SquareButtonStyle}"
+                                Width="Auto"
+                                x:Name="_button"
+                                Command="{Binding DataContext.ChangeCenterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding}"
+                                Padding="0"
+                                Background="Black"
+                                BorderBrush="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}">
+                                <DockPanel
+                                    LastChildFill="True">
+                                    <Border
+                                        DockPanel.Dock="Left"
+                                        Width="20"
+                                        Background="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}" />
+                                    <Label
+                                        DockPanel.Dock="Bottom"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Content="{Binding Item.Name}" />
+                                </DockPanel>
+                            </Button>
+                        </DockPanel>
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsMouseOver"
+                                Value="True"
+                                SourceName="Panel">
+                                <Setter
+                                    Property="BorderBrush"
+                                    Value="White"
+                                    TargetName="_button" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </local:Graph.NodeTemplate>
+            </local:Graph>
+        </Viewbox>
+
+        <Grid
+            Grid.RowSpan="2"
+            Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition />
+                <RowDefinition 
+                    Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock
+                Text="Hot"
+                Foreground="{DynamicResource DisabledControlTextBrush}"
+                FontSize="10"
+                Grid.Row="0" />
+            <TextBlock
+                Text="Not"
+                Foreground="{DynamicResource DisabledControlTextBrush}"
+                FontSize="10"
+                Grid.Row="2" />
+            <ItemsControl
+                Grid.Row="1"
+                Width="5"
+                HorizontalAlignment="Right">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid
+                            Columns="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle
+                            Fill="{Binding ., Converter={StaticResource HotttnesssToBrushConverter}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <System:Double>1.0</System:Double>
+                <System:Double>0.9</System:Double>
+                <System:Double>0.8</System:Double>
+                <System:Double>0.7</System:Double>
+                <System:Double>0.6</System:Double>
+                <System:Double>0.5</System:Double>
+                <System:Double>0.4</System:Double>
+                <System:Double>0.3</System:Double>
+                <System:Double>0.2</System:Double>
+                <System:Double>0.1</System:Double>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>

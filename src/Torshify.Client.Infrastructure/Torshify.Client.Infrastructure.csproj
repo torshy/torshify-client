@@ -88,6 +88,7 @@
     <Compile Include="Behaviors\KeyboardBehavior.cs" />
     <Compile Include="Behaviors\ListBoxItemActionBehavior.cs" />
     <Compile Include="Behaviors\MouseDoubleClickBehavior.cs" />
+    <Compile Include="Collections\ObservableCollectionPlus.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="Controls\BlockBarBase.cs" />
     <Compile Include="Controls\BlockBarRect.cs" />

@@ -4,6 +4,7 @@ using Microsoft.Practices.Unity;
 using Torshify.Client.Infrastructure;
 using Torshify.Client.Modules.EchoNest.Views;
 using Torshify.Client.Modules.EchoNest.Views.Discover;
+using Torshify.Client.Modules.EchoNest.Views.Similar;
 
 namespace Torshify.Client.Modules.EchoNest
 {
@@ -33,9 +34,11 @@ namespace Torshify.Client.Modules.EchoNest
         public void Initialize()
         {
             _container.RegisterType<DiscoverView>(EchoNestViews.DiscoverMusicView);
+            _container.RegisterType<SimilarArtistView>(EchoNestViews.SimilarArtistView);
             _container.RegisterType<EchoNestNavigationView>("EchoNestNavigationView");
 
             _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(DiscoverView));
+            _regionManager.RegisterViewWithRegion(CoreRegionNames.MainMusicRegion, typeof(SimilarArtistView));
 
             _regionManager.RegisterViewWithRegion("Navigation", typeof(EchoNestNavigationView));
         }

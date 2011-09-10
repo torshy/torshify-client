@@ -1,7 +1,8 @@
 using System;
+using System.Security.Authentication;
 using System.Windows.Controls;
 using System.Windows.Threading;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -16,6 +17,7 @@ namespace Torshify.Client.Spotify.Views.Login
 
         private readonly Dispatcher _dispatcher;
         private readonly IRegionManager _regionManager;
+        private readonly ILoggerFacade _logger;
         private readonly ISession _session;
 
         private bool _hasLoginError;
@@ -28,8 +30,13 @@ namespace Torshify.Client.Spotify.Views.Login
 
         #region Constructors
 
-        public LoginViewModel(ISession session, IRegionManager regionManager, Dispatcher dispatcher)
+        public LoginViewModel(
+            ISession session,
+            IRegionManager regionManager,
+            ILoggerFacade logger,
+            Dispatcher dispatcher)
         {
+            _logger = logger;
             _session = session;
             _session.LoginComplete += OnLoginComplete;
             _rememberMe = !string.IsNullOrEmpty(_session.GetRememberedUser());
@@ -41,7 +48,18 @@ namespace Torshify.Client.Spotify.Views.Login
 
             if (RememberMe)
             {
-                _session.Relogin();
+                try
+                {
+                    _session.Relogin();
+                }
+                catch (AuthenticationException ae)
+                {
+                    _logger.Log(ae.Message, Category.Warn, Priority.Medium);
+                }
+                catch(Exception ex)
+                {
+                    _logger.Log(ex.ToString(), Category.Exception, Priority.High);
+                }
             }
         }
 

@@ -36,7 +36,7 @@
                         <Label
                             Foreground="White"
                             Margin="4"
-                            Content="{Binding}" />
+                            Content="{Binding Name}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -60,10 +60,18 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Label
-                            Foreground="White"
-                            Margin="4"
-                            Content="{Binding}" />
+                        <DockPanel>
+                            <Label
+                                Name="TermNameLabel"
+                                Foreground="White"
+                                Margin="4"
+                                Content="{Binding Name}" />
+                            <Popup
+                                IsOpen="{Binding IsMouseOver, Mode=OneWay, ElementName=TermNameLabel}">
+                                <Button
+                                    Content="Biff" />
+                            </Popup>
+                        </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

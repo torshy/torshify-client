@@ -20,6 +20,11 @@
                     <Icons:RadioIcon
                         Foreground="{DynamicResource ControlTextBrush}" />
                 </DataTemplate>
+                <DataTemplate
+                    x:Key="{x:Static EchoNest:EchoNestViews.SimilarArtistView}">
+                    <Icons:RadioIcon
+                        Foreground="{DynamicResource ControlTextBrush}" />
+                </DataTemplate>
             </ResourceDictionary>
         </Models:ResourcedNavigationItemTemplateSelector.Templates>
     </Models:ResourcedNavigationItemTemplateSelector>

@@ -16,6 +16,7 @@ namespace Torshify.Client.Modules.EchoNest.Views
             : base(regionManager)
         {
             NavigationItems.Add(new HeaderedNavigationItem(new Uri(EchoNestViews.DiscoverMusicView, UriKind.Relative), "Discover music"));
+            NavigationItems.Add(new HeaderedNavigationItem(new Uri(EchoNestViews.SimilarArtistView, UriKind.Relative), "Follow the trail"));
             Items = new ListCollectionView(NavigationItems);
         }
 

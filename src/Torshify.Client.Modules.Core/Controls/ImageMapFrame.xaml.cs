@@ -180,7 +180,7 @@ namespace Torshify.Client.Modules.Core.Controls
             rectangle.RenderTransformOrigin = new Point(0.5, 0.5);
             rectangle.Loaded += delegate
             {
-                var animationDuration = new Duration(TimeSpan.FromMilliseconds(1000));
+                var animationDuration = new Duration(TimeSpan.FromMilliseconds(700));
 
                 DoubleAnimation opacityAnimation = new DoubleAnimation();
                 opacityAnimation.To = 1.0;
@@ -208,7 +208,7 @@ namespace Torshify.Client.Modules.Core.Controls
                 Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.ScaleY"));
 
                 Storyboard s = new Storyboard();
-                s.BeginTime = TimeSpan.FromMilliseconds(_random.Next(0, 1000));
+                s.BeginTime = TimeSpan.FromMilliseconds(_random.Next(0, 500));
                 s.Children.Add(opacityAnimation);
                 s.Children.Add(scaleXAnimation);
                 s.Children.Add(scaleYAnimation);

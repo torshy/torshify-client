@@ -8,6 +8,7 @@ using EchoNest.Artist;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+using Torshify.Client.Modules.EchoNest.Models;
 
 namespace Torshify.Client.Modules.EchoNest.Views.Discover
 {
@@ -67,13 +68,13 @@ namespace Torshify.Client.Modules.EchoNest.Views.Discover
                     if (styles.Status.Code == ResponseCode.Success)
                     {
                         Styles =
-                            new ListCollectionView(styles.Terms.Select(s => s.Name).ToArray());
+                            new ListCollectionView(styles.Terms.Select(s => new TermModel{Name = s.Name}).ToArray());
                     }
 
                     if (moods.Status.Code == ResponseCode.Success)
                     {
                         Moods =
-                            new ListCollectionView(moods.Terms.Select(s => s.Name).ToArray());
+                            new ListCollectionView(moods.Terms.Select(s => new TermModel{Name = s.Name}).ToArray());
                     }
                 }
             });
