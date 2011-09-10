@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using System.Windows.Threading;
 
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Client.Infrastructure;
@@ -12,7 +14,6 @@ using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Spotify.Services;
-using System.Linq;
 
 namespace Torshify.Client.Spotify.Views.Playlists
 {
@@ -20,28 +21,32 @@ namespace Torshify.Client.Spotify.Views.Playlists
     {
         #region Fields
 
-        private readonly IPlayerController _playerController;
         private readonly Dispatcher _dispatcher;
+        private readonly ILoggerFacade _logger;
+        private readonly IPlayerController _playerController;
         private readonly IPlaylistProvider _playlistProvider;
+        private readonly ISession _session;
 
         #endregion Fields
 
         #region Constructors
 
         public PlaylistNavigationViewModel(
+            ISession session,
             IPlaylistProvider playlistProvider,
             IRegionManager regionManager,
             IPlayerController playerController,
+            ILoggerFacade logger,
             Dispatcher dispatcher)
             : base(regionManager)
         {
+            _session = session;
+            _session.LoginComplete += OnSessionLoggedIn;
             _playlistProvider = playlistProvider;
             _playerController = playerController;
+            _logger = logger;
             _dispatcher = dispatcher;
             _playerController.Playlist.CurrentChanged += OnCurrentSongChanged;
-            _playlistProvider.PlaylistAdded += OnPlaylistAdded;
-            _playlistProvider.PlaylistMoved += OnPlaylistMoved;
-            _playlistProvider.PlaylistRemoved += OnPlaylistRemoved;
             Playlists = new ListCollectionView(NavigationItems);
             InitializeNavigationItems();
             MoveItemCommand = new AutomaticCommand<Tuple<int, int>>(ExecuteMoveItem, CanExecuteMoveItem);
@@ -128,49 +133,71 @@ namespace Torshify.Client.Spotify.Views.Playlists
             }
         }
 
+        private void ForEach(IEnumerable<PlaylistNavigationItem> list, Action<PlaylistNavigationItem> action)
+        {
+            foreach (var navigationItem in list)
+            {
+                action(navigationItem);
+
+                if (navigationItem is FolderPlaylistNavigationItem)
+                {
+                    ForEach(((FolderPlaylistNavigationItem)navigationItem).Children, action);
+                }
+            }
+        }
+
         private void InitializeNavigationItems()
         {
-            NavigationItems.Clear();
+            _logger.Log("InitializeNavigationItems", Category.Debug, Priority.Low); 
 
-            ObservableCollection<PlaylistNavigationItem> currentList = NavigationItems;
-
-            int index = 0;
-
-            foreach (var p in _playlistProvider.Playlists)
+            try
             {
-                Playlist playlist = p as Playlist;
+                NavigationItems.Clear();
 
-                if (playlist == null)
-                    continue;
+                ObservableCollection<PlaylistNavigationItem> currentList = NavigationItems;
 
-                var containerPlaylist = playlist.InternalPlaylist as IContainerPlaylist;
+                int index = 0;
 
-                if (containerPlaylist == null)
-                    continue;
-
-                switch (containerPlaylist.Type)
+                foreach (var p in _playlistProvider.Playlists)
                 {
-                    case PlaylistType.Playlist:
-                        currentList.Add(containerPlaylist.Name == "-"
-                                            ? new PlaylistSeparatorNavigationItem(p)
-                                            : new PlaylistNavigationItem(p));
-                        break;
-                    case PlaylistType.StartFolder:
-                        var folder = new FolderPlaylistNavigationItem(p);
-                        var children = new ObservableCollection<PlaylistNavigationItem>();
-                        folder.Children = children;
-                        currentList.Add(folder);
-                        currentList = children;
-                        break;
-                    case PlaylistType.EndFolder:
-                        currentList = NavigationItems;
-                        break;
-                    case PlaylistType.Placeholder:
-                        currentList.Add(new UnknownPlaylistNavigationItem(p));
-                        break;
-                }
+                    Playlist playlist = p as Playlist;
 
-                index++;
+                    if (playlist == null)
+                        continue;
+
+                    var containerPlaylist = playlist.InternalPlaylist as IContainerPlaylist;
+
+                    if (containerPlaylist == null)
+                        continue;
+
+                    switch (containerPlaylist.Type)
+                    {
+                        case PlaylistType.Playlist:
+                            currentList.Add(containerPlaylist.Name == "-"
+                                                ? new PlaylistSeparatorNavigationItem(p)
+                                                : new PlaylistNavigationItem(p));
+                            break;
+                        case PlaylistType.StartFolder:
+                            var folder = new FolderPlaylistNavigationItem(p);
+                            var children = new ObservableCollection<PlaylistNavigationItem>();
+                            folder.Children = children;
+                            currentList.Add(folder);
+                            currentList = children;
+                            break;
+                        case PlaylistType.EndFolder:
+                            currentList = NavigationItems;
+                            break;
+                        case PlaylistType.Placeholder:
+                            currentList.Add(new UnknownPlaylistNavigationItem(p));
+                            break;
+                    }
+
+                    index++;
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.Log(ex.ToString(), Category.Exception, Priority.High);
             }
         }
 
@@ -198,29 +225,47 @@ namespace Torshify.Client.Spotify.Views.Playlists
 
         private void OnPlaylistAdded(object sender, Infrastructure.Interfaces.PlaylistEventArgs e)
         {
+            _logger.Log("OnPlaylistAdded", Category.Debug, Priority.Low);
             _dispatcher.BeginInvoke((Action)InitializeNavigationItems);
+        }
+
+        private void OnPlaylistContainerLoaded(object sender, EventArgs e)
+        {
+            _logger.Log("OnPlaylistContainerLoaded", Category.Debug, Priority.Low);
+            _dispatcher.BeginInvoke((Action)InitializeNavigationItems);
+            _session.PlaylistContainer.Loaded -= OnPlaylistContainerLoaded;
         }
 
         private void OnPlaylistMoved(object sender, Infrastructure.Interfaces.PlaylistMovedEventArgs e)
         {
+            _logger.Log("OnPlaylistMoved", Category.Debug, Priority.Low);
             _dispatcher.BeginInvoke((Action)InitializeNavigationItems);
         }
 
         private void OnPlaylistRemoved(object sender, Infrastructure.Interfaces.PlaylistEventArgs e)
         {
+            _logger.Log("OnPlaylistRemoved", Category.Debug, Priority.Low);
             _dispatcher.BeginInvoke((Action)InitializeNavigationItems);
         }
 
-        private void ForEach(IEnumerable<PlaylistNavigationItem> list, Action<PlaylistNavigationItem> action)
+        private void OnSessionLoggedIn(object sender, SessionEventArgs e)
         {
-            foreach (var navigationItem in list)
+            if (e.Status == Error.OK)
             {
-                action(navigationItem);
+                _playlistProvider.PlaylistAdded += OnPlaylistAdded;
+                _playlistProvider.PlaylistMoved += OnPlaylistMoved;
+                _playlistProvider.PlaylistRemoved += OnPlaylistRemoved;
 
-                if (navigationItem is FolderPlaylistNavigationItem)
+                if (_session.PlaylistContainer.IsLoaded)
                 {
-                    ForEach(((FolderPlaylistNavigationItem)navigationItem).Children, action);
+                    _dispatcher.BeginInvoke((Action) InitializeNavigationItems);
                 }
+                else
+                {
+                    _session.PlaylistContainer.Loaded += OnPlaylistContainerLoaded;
+                }
+
+                _session.LoginComplete -= OnSessionLoggedIn;
             }
         }
 
