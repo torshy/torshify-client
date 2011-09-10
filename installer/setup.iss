@@ -1,5 +1,5 @@
 #define MyAppName "Torshify"
-#define MyAppVersion "0.5"
+#define MyAppVersion "0.6"
 #define MyAppPublisher "Torstein Auensen"
 #define MyAppURL "http://www.torsh.net/blog"
 #define MyAppExeName "Torshify.Client.exe"
