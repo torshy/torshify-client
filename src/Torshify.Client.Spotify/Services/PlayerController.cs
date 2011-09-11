@@ -163,7 +163,7 @@ namespace Torshify.Client.Spotify.Services
                 _player.Play();
                 _logger.Log("Playing", Category.Info, Priority.Low);
 
-                IsPlaying = true;
+                //IsPlaying = true;
             }
         }
 

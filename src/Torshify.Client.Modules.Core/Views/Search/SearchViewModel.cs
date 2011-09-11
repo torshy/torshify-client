@@ -6,10 +6,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
 
@@ -36,11 +38,15 @@ namespace Torshify.Client.Modules.Core.Views.Search
         public SearchViewModel(
             IEventAggregator eventAggregator, 
             ISearchProvider searchProvider,
+            IPlayerController playerController,
             Dispatcher dispatcher)
         {
             _eventAggregator = eventAggregator;
             _searchProvider = searchProvider;
             _searchResults = new ObservableCollection<ITrack>();
+
+            Player = playerController;
+            PlayTrackCommand = new StaticCommand<ITrack>(ExecutePlayTrack);
         }
 
         #endregion Constructors
@@ -58,6 +64,18 @@ namespace Torshify.Client.Modules.Core.Views.Search
                 _searchResultsIcv = value;
                 RaisePropertyChanged("SearchResults");
             }
+        }
+
+        public ICommand PlayTrackCommand
+        {
+            get;
+            private set;
+        }
+
+        public IPlayerController Player
+        {
+            get;
+            private set;
         }
 
         public string DidYouMean
@@ -130,6 +148,34 @@ namespace Torshify.Client.Modules.Core.Views.Search
             model.CommandBar
                 .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+        }
+
+        private void ExecutePlayTrack(ITrack track)
+        {
+            // Get the rest of the tracks from the album, including the one selected.
+            IEnumerable<ITrack> tracks = GetTracksToPlay(track);
+            CoreCommands.PlayTrackCommand.Execute(tracks);
+        }
+
+        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
+        {
+            List<ITrack> itemsToPlay = new List<ITrack>();
+            bool addItemToList = false;
+
+            foreach (ITrack searchResult in SearchResults)
+            {
+                if (searchResult == track)
+                {
+                    addItemToList = true;
+                }
+
+                if (addItemToList)
+                {
+                    itemsToPlay.Add(searchResult);
+                }
+            }
+
+            return itemsToPlay;
         }
 
         #endregion Methods

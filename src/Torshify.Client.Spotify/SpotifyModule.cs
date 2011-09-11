@@ -1,6 +1,8 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Navigation;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
@@ -10,6 +12,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Spotify.Services;
 using Torshify.Client.Spotify.Views.Login;
 using Torshify.Client.Spotify.Views.Playlists;
+using Torshify;
 
 namespace Torshify.Client.Spotify
 {
@@ -84,6 +87,7 @@ namespace Torshify.Client.Spotify
             _regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
             _regionManager.RegisterViewWithRegion("Navigation", typeof(PlaylistNavigationView));
             _container.Resolve<SpotifyLogging>().Initialize();
+            _container.Resolve<SpotifyLinkNavigator>().Initialize();
         }
 
         #endregion Public Methods

@@ -106,6 +106,7 @@
     <Compile Include="Services\SearchProvider.cs" />
     <Compile Include="Services\SessionObjectExtensions.cs" />
     <Compile Include="Services\Track.cs" />
+    <Compile Include="SpotifyLinkNavigator.cs" />
     <Compile Include="SpotifyLogging.cs" />
     <Compile Include="SpotifyModule.cs" />
     <Compile Include="Views\Login\LoginView.xaml.cs">
@@ -126,6 +127,10 @@
     <ProjectReference Include="..\Torshify.Client.Infrastructure\Torshify.Client.Infrastructure.csproj">
       <Project>{7134446D-B55C-4328-80E8-C72D05A7E4BC}</Project>
       <Name>Torshify.Client.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Torshify.Client.Modules.Core\Torshify.Client.Modules.Core.csproj">
+      <Project>{09AE80A9-E096-4D81-9086-A14C9898B34D}</Project>
+      <Name>Torshify.Client.Modules.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

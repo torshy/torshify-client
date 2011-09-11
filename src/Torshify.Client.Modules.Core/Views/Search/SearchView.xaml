@@ -42,6 +42,7 @@
             </TextBlock>
         </StackPanel>
         <DataGrid
+            Name="Dg"
             Grid.Row="1"
             ItemsSource="{Binding SearchResults}"
             IsReadOnly="True"
@@ -53,6 +54,9 @@
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <Interactivity:Interaction.Behaviors>
                 <Behaviors:DataGridTriStateSortingBehavior />
+                <Behaviors:DataGridRowActionBehavior
+                    Command="{Binding PlayTrackCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
             </Interactivity:Interaction.Behaviors>
             <DataGrid.ContextMenu>
                 <ContextMenu />

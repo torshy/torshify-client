@@ -214,7 +214,8 @@
 
         <StackPanel
             Grid.Row="0"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Visibility="Collapsed">
             <Controls:WatermarkTextBox
                 x:Name="ArtistNameTextBox"
                 x:FieldModifier="private"
