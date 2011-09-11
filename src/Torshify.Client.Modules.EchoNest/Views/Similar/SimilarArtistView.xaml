@@ -14,6 +14,8 @@
     <UserControl.Resources>
         <Similar:HotttnesssToBrushConverter
             x:Key="HotttnesssToBrushConverter" />
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
 
         <Style
             x:Key="SquareButtonStyle"
@@ -36,6 +38,167 @@
             </Setter>
         </Style>
 
+        <DataTemplate
+            x:Key="CenterNodeTemplate">
+            <DockPanel
+                Name="Panel"
+                UseLayoutRounding="True"
+                LastChildFill="True"
+                ToolTipService.PlacementTarget="{x:Reference _button}">
+                <DockPanel.Effect>
+                    <DropShadowEffect
+                        ShadowDepth="0"
+                        BlurRadius="40" />
+                </DockPanel.Effect>
+                <DockPanel.ToolTip>
+                    <StackPanel
+                        MaxWidth="200"
+                        Background="Black"
+                        Margin="2">
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            Text="{Binding Item.Name}"
+                            FontSize="20"
+                            Margin="2,2,2,2" />
+                        <ItemsControl
+                            FontSize="10"
+                            ItemsSource="{Binding Item.Terms}"
+                            Margin="2,0,2,4">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="2"
+                                        Foreground="White"
+                                        Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Image
+                            Source="{Binding Item.ImageUrl}" />
+                    </StackPanel>
+                </DockPanel.ToolTip>
+                <Button
+                    Width="Auto"
+                    x:Name="_button"
+                    Padding="10,1,1,1"
+                    Style="{StaticResource SquareButtonStyle}"
+                    Background="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}"
+                    RenderTransformOrigin="0.5,0.5"
+                    Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    CommandParameter="{Binding}">
+                    <Button.RenderTransform>
+                        <ScaleTransform
+                            ScaleX="{Binding Item.Familiarity}"
+                            ScaleY="{Binding Item.Familiarity}" />
+                    </Button.RenderTransform>
+                    <Label
+                        Foreground="White"
+                        FontSize="16"
+                        Content="{Binding Item.Name}" />
+                </Button>
+            </DockPanel>
+            <DataTemplate.Triggers>
+                <Trigger
+                    Property="IsMouseOver"
+                    Value="True"
+                    SourceName="Panel">
+                    <Setter
+                        Property="BorderBrush"
+                        Value="White"
+                        TargetName="_button" />
+                </Trigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="ChildNodeTempate">
+            <DockPanel
+                Name="Panel"
+                UseLayoutRounding="True"
+                LastChildFill="True"
+                RenderTransformOrigin="0.5,0.5"
+                ToolTipService.PlacementTarget="{x:Reference _button}">
+                <DockPanel.RenderTransform>
+                    <ScaleTransform
+                        ScaleX="{Binding Item.Familiarity}"
+                        ScaleY="{Binding Item.Familiarity}" />
+                </DockPanel.RenderTransform>
+                <DockPanel.Effect>
+                    <DropShadowEffect
+                        ShadowDepth="0"
+                        BlurRadius="40" />
+                </DockPanel.Effect>
+                <DockPanel.ToolTip>
+                    <StackPanel
+                        MaxWidth="200"
+                        Background="Black"
+                        Margin="2">
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            Text="{Binding Item.Name}"
+                            FontSize="20"
+                            Margin="2,2,2,2" />
+                        <ItemsControl
+                            FontSize="10"
+                            ItemsSource="{Binding Item.Terms}"
+                            Margin="2,0,2,4">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="2"
+                                        Foreground="White"
+                                        Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Image
+                            Source="{Binding Item.ImageUrl}" />
+                    </StackPanel>
+                </DockPanel.ToolTip>
+                <Button
+                    Style="{StaticResource SquareButtonStyle}"
+                    Width="Auto"
+                    x:Name="_button"
+                    Command="{Binding DataContext.ChangeCenterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    CommandParameter="{Binding}"
+                    Padding="0"
+                    Background="Black"
+                    BorderBrush="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}">
+                    <DockPanel
+                        LastChildFill="True">
+                        <Border
+                            DockPanel.Dock="Left"
+                            Width="10"
+                            Background="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}" />
+                        <Label
+                            DockPanel.Dock="Bottom"
+                            Foreground="White"
+                            FontSize="16"
+                            Content="{Binding Item.Name}" />
+                    </DockPanel>
+                </Button>
+            </DockPanel>
+            <DataTemplate.Triggers>
+                <Trigger
+                    Property="IsMouseOver"
+                    Value="True"
+                    SourceName="Panel">
+                    <Setter
+                        Property="BorderBrush"
+                        Value="White"
+                        TargetName="_button" />
+                </Trigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -70,61 +233,9 @@
                 NodesBindingPath="ChildNodes"
                 RenderTransformOrigin="0.5, 0.5"
                 Width="800"
-                Height="500">
-                <local:Graph.NodeTemplate>
-                    <DataTemplate>
-                        <DockPanel
-                            Name="Panel"
-                            UseLayoutRounding="True"
-                            LastChildFill="True"
-                            RenderTransformOrigin="0.5,0.5">
-                            <DockPanel.RenderTransform>
-                                <ScaleTransform
-                                    ScaleX="{Binding Item.Familiarity}"
-                                    ScaleY="{Binding Item.Familiarity}" />
-                            </DockPanel.RenderTransform>
-                            <DockPanel.Effect>
-                                <DropShadowEffect
-                                    ShadowDepth="0"
-                                    BlurRadius="40" />
-                            </DockPanel.Effect>
-                            <Button
-                                Style="{StaticResource SquareButtonStyle}"
-                                Width="Auto"
-                                x:Name="_button"
-                                Command="{Binding DataContext.ChangeCenterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}"
-                                Padding="0"
-                                Background="Black"
-                                BorderBrush="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}">
-                                <DockPanel
-                                    LastChildFill="True">
-                                    <Border
-                                        DockPanel.Dock="Left"
-                                        Width="10"
-                                        Background="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}" />
-                                    <Label
-                                        DockPanel.Dock="Bottom"
-                                        Foreground="White"
-                                        FontSize="16"
-                                        Content="{Binding Item.Name}" />
-                                </DockPanel>
-                            </Button>
-                        </DockPanel>
-                        <DataTemplate.Triggers>
-                            <Trigger
-                                Property="IsMouseOver"
-                                Value="True"
-                                SourceName="Panel">
-                                <Setter
-                                    Property="BorderBrush"
-                                    Value="White"
-                                    TargetName="_button" />
-                            </Trigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </local:Graph.NodeTemplate>
-            </local:Graph>
+                Height="500"
+                CenterNodeTemplate="{StaticResource CenterNodeTemplate}"
+                NodeTemplate="{StaticResource ChildNodeTempate}" />
         </Viewbox>
 
         <Grid
@@ -134,8 +245,8 @@
                 <RowDefinition
                     Height="Auto" />
                 <RowDefinition />
-                <RowDefinition 
-                    Height="Auto"/>
+                <RowDefinition
+                    Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock
                 Text="Hot"

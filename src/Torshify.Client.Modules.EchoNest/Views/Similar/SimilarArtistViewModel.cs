@@ -11,10 +11,12 @@ using EchoNest.Artist;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Microsoft.Practices.ServiceLocation;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Modules.Core;
 using Torshify.Client.Modules.EchoNest.Controls;
+using Microsoft.Practices.Prism;
 
 namespace Torshify.Client.Modules.EchoNest.Views.Similar
 {
@@ -37,6 +39,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
             StartTrailCommand = new StaticCommand<string>(ExecuteStartTrail);
             ChangeCenterCommand = new AutomaticCommand<Node<SimilarArtistModel>>(ExecuteChangeCenter, CanChangeCenter);
+            GoToArtistCommand = new AutomaticCommand<Node<SimilarArtistModel>>(ExecuteGoToArtist, CanGoToArtist);
         }
 
         #endregion Constructors
@@ -49,21 +52,27 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             private set;
         }
 
+        public AutomaticCommand<Node<SimilarArtistModel>> GoToArtistCommand
+        {
+            get;
+            private set;
+        }
+
         public Graph Graph
         {
             get;
             set;
         }
 
+        public string Header
+        {
+            get { return "Discover others"; }
+        }
+
         public StaticCommand<string> StartTrailCommand
         {
             get;
             private set;
-        }
-
-        public string Header
-        {
-            get { return "Discover others"; }
         }
 
         public Visibility Visibility
@@ -106,11 +115,38 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             return node != Graph.CenterObject;
         }
 
+        private bool CanGoToArtist(Node<SimilarArtistModel> artistNode)
+        {
+            return true;
+        }
+
         private void ExecuteChangeCenter(Node<SimilarArtistModel> node)
         {
             Graph.CenterObject = node;
 
             Task.Factory.StartNew(() => FindSimilarArtists(node));
+        }
+
+        private void ExecuteGoToArtist(Node<SimilarArtistModel> artistNode)
+        {
+            var searchProvider = ServiceLocator.Current.TryResolve<ISearchProvider>();
+
+            if (searchProvider != null)
+            {
+                var search = searchProvider.Search(artistNode.Item.Name, 0, int.MaxValue, 0, 10, 0, 10);
+                search.FinishedLoading += SearchFinished;
+            }
+        }
+
+        private void SearchFinished(object sender, EventArgs e)
+        {
+            ISearch search = (ISearch) sender;
+            search.FinishedLoading -= SearchFinished;
+
+            if (search.TotalArtists > 0)
+            {
+                CoreCommands.Views.GoToArtistCommand.Execute(search.Artists.FirstOrDefault());
+            }
         }
 
         private void ExecuteStartTrail(string artistName)
@@ -136,7 +172,8 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                                                         artistName,
                                                         ArtistBucket.Hotttnesss |
                                                         ArtistBucket.Familiarity |
-                                                        ArtistBucket.Images);
+                                                        ArtistBucket.Images |
+                                                        ArtistBucket.Terms);
 
                 if (result.Status.Code == ResponseCode.Success)
                 {
@@ -147,6 +184,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                         result.Artist.Images != null && result.Artist.Images.Count > 0
                         ? result.Artist.Images.FirstOrDefault().Url
                         : null;
+                    centerObject.Terms = result.Artist.Terms != null ? result.Artist.Terms.Take(3) : null;
                 }
                 else
                 {
@@ -167,7 +205,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                 SimilarArtistsArgument argument = new SimilarArtistsArgument();
                 argument.Name = node.Item.Name;
                 argument.Results = 9;
-                argument.Bucket = ArtistBucket.Images | ArtistBucket.Hotttnesss | ArtistBucket.Familiarity;
+                argument.Bucket = ArtistBucket.Images | ArtistBucket.Hotttnesss | ArtistBucket.Familiarity | ArtistBucket.Terms;
 
                 var result = session.Query<SimilarArtists>().Execute(argument);
 
@@ -182,6 +220,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                                              : null;
                         artistModel.Familiarity = artist.Familiarity;
                         artistModel.Hotttnesss = artist.Hotttnesss;
+                        artistModel.Terms = artist.Terms != null ? artist.Terms.Take(3) : null;
 
                         _dispatcher.BeginInvoke(new Action(() =>
                                                                {

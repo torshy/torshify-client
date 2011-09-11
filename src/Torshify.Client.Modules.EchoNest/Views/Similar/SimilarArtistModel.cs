@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using EchoNest.Artist;
 using Microsoft.Practices.Prism.ViewModel;
 
 namespace Torshify.Client.Modules.EchoNest.Views.Similar
@@ -25,6 +28,12 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
         public double Familiarity
         {
             get; set;
+        }
+
+        public IEnumerable<TermsItem> Terms
+        {
+            get; 
+            set;
         }
 
         #endregion Properties

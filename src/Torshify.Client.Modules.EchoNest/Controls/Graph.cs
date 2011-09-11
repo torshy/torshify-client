@@ -19,47 +19,53 @@ namespace Torshify.Client.Modules.EchoNest.Controls
     {
         #region Fields
 
-        public static readonly DependencyProperty AttractionProperty = 
+        public static readonly DependencyProperty AttractionProperty =
             DependencyProperty.Register(
                 "Attraction",
                 typeof(double),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(.4, null, CoerceAttractionPropertyCallback));
-        public static readonly DependencyProperty CenterObjectProperty = 
+        public static readonly DependencyProperty CenterObjectProperty =
             DependencyProperty.Register(
                 "CenterObject",
                 typeof(object),
                 typeof(Graph),
                 GetCenterObjectPropertyMetadata());
-        public static readonly DependencyProperty DampeningProperty = 
+        public static readonly DependencyProperty DampeningProperty =
             DependencyProperty.Register(
                 "Dampening",
                 typeof(double),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(.9, null, CoerceDampeningPropertyCallback));
         public static readonly DependencyProperty IsCenterProperty;
-        public static readonly DependencyProperty LinePenProperty = 
+        public static readonly DependencyProperty LinePenProperty =
             DependencyProperty.Register(
                 "LinePen",
                 typeof(Pen),
                 typeof(Graph),
                 new PropertyMetadata(GetPen()));
-        public static readonly DependencyProperty NodesBindingPathProperty = 
+        public static readonly DependencyProperty NodesBindingPathProperty =
             DependencyProperty.Register(
                 "NodesBindingPath",
                 typeof(string),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(new PropertyChangedCallback(NodesBindingPathPropertyChanged)));
-        public static readonly DependencyProperty NodeTemplateProperty = 
+        public static readonly DependencyProperty NodeTemplateProperty =
             DependencyProperty.Register(
                 "NodeTemplate",
                 typeof(DataTemplate),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(null));
-        public static readonly DependencyProperty NodeTemplateSelectorProperty = 
+        public static readonly DependencyProperty NodeTemplateSelectorProperty =
             DependencyProperty.Register(
                 "NodeTemplateSelector",
                 typeof(DataTemplateSelector),
+                typeof(Graph),
+                new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty CenterNodeTemplateProperty =
+            DependencyProperty.Register(
+                "CenterNodeTemplate",
+                typeof(DataTemplate),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(null));
 
@@ -67,13 +73,13 @@ namespace Torshify.Client.Modules.EchoNest.Controls
         private const double MinVelocity = .05;
         private const double TerminalVelocity = 150;
 
-        private static readonly DependencyPropertyKey IsCentersCenterPropertyKey = 
+        private static readonly DependencyPropertyKey IsCentersCenterPropertyKey =
             DependencyProperty.RegisterAttachedReadOnly(
                 "IsCenter",
                 typeof(bool),
                 typeof(Graph),
                 new FrameworkPropertyMetadata(false));
-        private static readonly DependencyProperty NodesProperty = 
+        private static readonly DependencyProperty NodesProperty =
             DependencyProperty.Register(
                 "Nodes",
                 typeof(IList),
@@ -101,6 +107,7 @@ namespace Torshify.Client.Modules.EchoNest.Controls
         private bool _nodesChanged;
         private IList _nodesInUse;
         private bool _stillMoving;
+        private Binding _centerNodeTemplateBinding;
 
         #endregion Fields
 
@@ -124,6 +131,9 @@ namespace Torshify.Client.Modules.EchoNest.Controls
             _nodeTemplateSelectorBinding = new Binding(NodeTemplateSelectorProperty.Name);
             _nodeTemplateSelectorBinding.Source = this;
 
+            _centerNodeTemplateBinding = new Binding(CenterNodeTemplateProperty.Name);
+            _centerNodeTemplateBinding.Source = this;
+
             _nodePresenters = new List<GraphContentPresenter>();
         }
 
@@ -134,10 +144,7 @@ namespace Torshify.Client.Modules.EchoNest.Controls
         public double Attraction
         {
             get { return (double)GetValue(AttractionProperty); }
-            set
-            {
-                SetValue(AttractionProperty, value);
-            }
+            set { SetValue(AttractionProperty, value); }
         }
 
         public object CenterObject
@@ -148,14 +155,8 @@ namespace Torshify.Client.Modules.EchoNest.Controls
 
         public double Dampening
         {
-            get
-            {
-                return (double)GetValue(DampeningProperty);
-            }
-            set
-            {
-                SetValue(DampeningProperty, value);
-            }
+            get { return (double)GetValue(DampeningProperty); }
+            set { SetValue(DampeningProperty, value); }
         }
 
         public Pen LinePen
@@ -166,38 +167,26 @@ namespace Torshify.Client.Modules.EchoNest.Controls
 
         public string NodesBindingPath
         {
-            get
-            {
-                return (string)GetValue(NodesBindingPathProperty);
-            }
-            set
-            {
-                SetValue(NodesBindingPathProperty, value);
-            }
+            get { return (string)GetValue(NodesBindingPathProperty); }
+            set { SetValue(NodesBindingPathProperty, value); }
         }
 
         public DataTemplate NodeTemplate
         {
-            get
-            {
-                return (DataTemplate)GetValue(NodeTemplateProperty);
-            }
-            set
-            {
-                SetValue(NodeTemplateProperty, value);
-            }
+            get { return (DataTemplate)GetValue(NodeTemplateProperty); }
+            set { SetValue(NodeTemplateProperty, value); }
         }
 
         public DataTemplateSelector NodeTemplateSelector
         {
-            get
-            {
-                return (DataTemplateSelector)GetValue(NodeTemplateSelectorProperty);
-            }
-            set
-            {
-                SetValue(NodeTemplateSelectorProperty, value);
-            }
+            get { return (DataTemplateSelector)GetValue(NodeTemplateSelectorProperty); }
+            set { SetValue(NodeTemplateSelectorProperty, value); }
+        }
+
+        public DataTemplate CenterNodeTemplate
+        {
+            get { return (DataTemplate)GetValue(CenterNodeTemplateProperty); }
+            set { SetValue(CenterNodeTemplateProperty, value); }
         }
 
         protected override int VisualChildrenCount
@@ -388,11 +377,11 @@ namespace Torshify.Client.Modules.EchoNest.Controls
             return GetSCurve((x + 100) / 200);
         }
 
-        private static GraphContentPresenter GetGraphContentPresenter(object content, BindingBase nodeTemplateBinding,
+        private static GraphContentPresenter GetGraphContentPresenter(object content, BindingBase cenderNodeTemplateBinding, BindingBase nodeTemplateBinding,
             BindingBase nodeTemplateSelectorBinding, bool offsetCenter)
         {
             GraphContentPresenter gcp =
-                new GraphContentPresenter(content, nodeTemplateBinding, nodeTemplateSelectorBinding, offsetCenter);
+                new GraphContentPresenter(content, cenderNodeTemplateBinding, nodeTemplateBinding, nodeTemplateSelectorBinding, offsetCenter);
             return gcp;
         }
 
@@ -661,6 +650,8 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                 _centerGraphContentPresenter != null
                 )
             {
+                _centerGraphContentPresenter.SetBinding(ContentPresenter.ContentTemplateProperty, _nodeTemplateBinding);
+
                 Debug.Assert(!CenterObject.Equals(_centerDataInUse));
                 Debug.Assert(_centerGraphContentPresenter.Content == null || _centerGraphContentPresenter.Content.Equals(_centerDataInUse));
 
@@ -736,6 +727,7 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                     {
                         _centerGraphContentPresenter = GetGraphContentPresenter(
                             CenterObject,
+                            _centerNodeTemplateBinding,
                             _nodeTemplateBinding,
                             _nodeTemplateSelectorBinding,
                             false
@@ -762,6 +754,8 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                     }
                 }
 
+                _centerGraphContentPresenter.SetBinding(ContentPresenter.ContentTemplateProperty, _centerNodeTemplateBinding);
+
                 //go through all of the old CPs that are not being used and remove them
                 _nodePresenters
                   .Where(gcp => gcp != null)
@@ -773,7 +767,7 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                     if (newChildren[i] == null)
                     {
                         GraphContentPresenter gcp = GetGraphContentPresenter(_nodesInUse[i],
-                            _nodeTemplateBinding, _nodeTemplateSelectorBinding, true);
+                            _centerNodeTemplateBinding, _nodeTemplateBinding, _nodeTemplateSelectorBinding, true);
                         this.AddVisualChild(gcp);
                         newChildren[i] = gcp;
                     }
@@ -813,26 +807,31 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                 }
             }
 
-            #if DEBUG
-              if (CenterObject != null) {
-            CenterObject.Equals(_centerDataInUse);
-            Debug.Assert(_centerGraphContentPresenter != null);
-              }
-              else {
-            Debug.Assert(_centerDataInUse == null);
-              }
-              if (Nodes != null) {
-            Debug.Assert(_nodePresenters != null);
-            Debug.Assert(Nodes.Count == _nodePresenters.Count);
-            Debug.Assert(_nodesInUse == Nodes);
-              }
-              else {
-            Debug.Assert(_nodesInUse == null);
-            if (_nodePresenters != null) {
-              Debug.Assert(_nodePresenters.Count == 0);
+#if DEBUG
+            if (CenterObject != null)
+            {
+                CenterObject.Equals(_centerDataInUse);
+                Debug.Assert(_centerGraphContentPresenter != null);
             }
-              }
-            #endif
+            else
+            {
+                Debug.Assert(_centerDataInUse == null);
+            }
+            if (Nodes != null)
+            {
+                Debug.Assert(_nodePresenters != null);
+                Debug.Assert(Nodes.Count == _nodePresenters.Count);
+                Debug.Assert(_nodesInUse == Nodes);
+            }
+            else
+            {
+                Debug.Assert(_nodesInUse == null);
+                if (_nodePresenters != null)
+                {
+                    Debug.Assert(_nodePresenters.Count == 0);
+                }
+            }
+#endif
 
             Children.ForEach(gcp => SetIsCenter(gcp, gcp == _centerGraphContentPresenter));
         }
@@ -895,18 +894,21 @@ namespace Torshify.Client.Modules.EchoNest.Controls
         {
             Debug.Assert(_centerGraphContentPresenter == null);
 
-            _centerGraphContentPresenter = GetGraphContentPresenter(newCenter, _nodeTemplateBinding, _nodeTemplateSelectorBinding, false);
+            _centerGraphContentPresenter = GetGraphContentPresenter(newCenter, _centerNodeTemplateBinding, _nodeTemplateBinding, _nodeTemplateSelectorBinding, false);
+            _centerGraphContentPresenter.SetBinding(ContentPresenter.ContentTemplateProperty, _centerNodeTemplateBinding);
+
             this.AddVisualChild(_centerGraphContentPresenter);
         }
 
         private void SetupNodes(IList nodes)
         {
-            #if DEBUG
-              for (int i = 0; i < _nodePresenters.Count; i++) {
-            Debug.Assert(_nodePresenters[i] != null);
-            Debug.Assert(VisualTreeHelper.GetParent(_nodePresenters[i]) == this);
-              }
-            #endif
+#if DEBUG
+            for (int i = 0; i < _nodePresenters.Count; i++)
+            {
+                Debug.Assert(_nodePresenters[i] != null);
+                Debug.Assert(VisualTreeHelper.GetParent(_nodePresenters[i]) == this);
+            }
+#endif
 
             int nodesCount = (nodes == null) ? 0 : nodes.Count;
 
@@ -941,19 +943,21 @@ namespace Torshify.Client.Modules.EchoNest.Controls
                 if (newNodes[i] == null)
                 {
                     newNodes[i] = GetGraphContentPresenter(nodes[i],
+                        _centerNodeTemplateBinding,
                         _nodeTemplateBinding, _nodeTemplateSelectorBinding, true);
                     this.AddVisualChild(newNodes[i]);
                 }
             }
 
-            #if DEBUG
-              _nodePresenters.ForEach(item => Debug.Assert(item == null));
-              newNodes.CountForEach((item, i) => {
-            Debug.Assert(item != null);
-            Debug.Assert(VisualTreeHelper.GetParent(item) == this);
-            Debug.Assert(item.Content == nodes[i]);
-              });
-            #endif
+#if DEBUG
+            _nodePresenters.ForEach(item => Debug.Assert(item == null));
+            newNodes.CountForEach((item, i) =>
+            {
+                Debug.Assert(item != null);
+                Debug.Assert(VisualTreeHelper.GetParent(item) == this);
+                Debug.Assert(item.Content == nodes[i]);
+            });
+#endif
 
             _nodePresenters.Clear();
             _nodePresenters.AddRange(newNodes);
@@ -982,7 +986,7 @@ namespace Torshify.Client.Modules.EchoNest.Controls
 
             #region Constructors
 
-            public GraphContentPresenter(object content,
+            public GraphContentPresenter(object content, BindingBase centerNodeTemplateBinding,
                 BindingBase nodeTemplateBinding, BindingBase nodeTemplateSelectorBinding, bool offsetCenter)
                 : base()
             {
