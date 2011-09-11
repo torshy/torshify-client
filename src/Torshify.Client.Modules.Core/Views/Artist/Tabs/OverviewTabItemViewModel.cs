@@ -75,7 +75,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
         {
             get
             {
-                return "Overview";
+                return Artist.Name;
             }
         }
 
@@ -136,6 +136,8 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             {
                 PrepareData();
             }
+
+            RaisePropertyChanged("Header");
         }
 
         private void ExecutePlayArtistTrack(ITrack track)

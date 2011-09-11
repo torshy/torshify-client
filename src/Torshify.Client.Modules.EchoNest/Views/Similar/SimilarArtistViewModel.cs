@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 using EchoNest;
@@ -11,24 +13,27 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Client.Infrastructure.Commands;
+using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.EchoNest.Controls;
 
 namespace Torshify.Client.Modules.EchoNest.Views.Similar
 {
-    public class SimilarArtistViewModel : NotificationObject, INavigationAware
+    [Export(typeof(SimilarArtistViewModel))]
+    public class SimilarArtistViewModel : NotificationObject, INavigationAware, ITabViewModel<IArtist>
     {
         #region Fields
 
         private readonly Dispatcher _dispatcher;
+
         private NodeCollection<SimilarArtistModel> _nodes;
 
         #endregion Fields
 
         #region Constructors
 
-        public SimilarArtistViewModel(Dispatcher dispatcher)
+        public SimilarArtistViewModel()
         {
-            _dispatcher = dispatcher;
+            _dispatcher = Application.Current.Dispatcher;
 
             StartTrailCommand = new StaticCommand<string>(ExecuteStartTrail);
             ChangeCenterCommand = new AutomaticCommand<Node<SimilarArtistModel>>(ExecuteChangeCenter, CanChangeCenter);
@@ -56,6 +61,16 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             private set;
         }
 
+        public string Header
+        {
+            get { return "Discover others"; }
+        }
+
+        public Visibility Visibility
+        {
+            get { return Visibility.Visible; }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -71,7 +86,19 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            StartTrailCommand.Execute("NOFX");
+        }
+
+        void ITabViewModel<IArtist>.Deinitialize(NavigationContext navContext)
+        {
+        }
+
+        void ITabViewModel<IArtist>.Initialize(NavigationContext navContext)
+        {
+        }
+
+        void ITabViewModel<IArtist>.SetModel(IArtist model)
+        {
+            ExecuteStartTrail(model.Name);
         }
 
         private bool CanChangeCenter(Node<SimilarArtistModel> node)
@@ -83,8 +110,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
         {
             Graph.CenterObject = node;
 
-            Task.Factory
-                .StartNew(() => FindSimilarArtists(node));
+            Task.Factory.StartNew(() => FindSimilarArtists(node));
         }
 
         private void ExecuteStartTrail(string artistName)
@@ -108,10 +134,9 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             {
                 var result = session.Query<Profile>().Execute(
                                                         artistName,
-                                                        ArtistBucket.Hotttnesss | 
+                                                        ArtistBucket.Hotttnesss |
                                                         ArtistBucket.Familiarity |
                                                         ArtistBucket.Images);
-
 
                 if (result.Status.Code == ResponseCode.Success)
                 {

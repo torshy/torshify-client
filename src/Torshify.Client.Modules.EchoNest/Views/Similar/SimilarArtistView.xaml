@@ -101,7 +101,7 @@
                                     LastChildFill="True">
                                     <Border
                                         DockPanel.Dock="Left"
-                                        Width="20"
+                                        Width="10"
                                         Background="{Binding Item.Hotttnesss, Converter={StaticResource HotttnesssToBrushConverter}}" />
                                     <Label
                                         DockPanel.Dock="Bottom"

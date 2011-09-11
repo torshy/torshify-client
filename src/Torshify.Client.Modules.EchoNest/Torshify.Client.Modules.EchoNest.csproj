@@ -45,6 +45,7 @@
       <HintPath>..\..\lib\Unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
@@ -93,6 +94,9 @@
       <DependentUpon>EchoNestNavigationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EchoNestNavigationViewModel.cs" />
+    <Compile Include="Views\Similar\ColorExtensions.xaml.cs" />
+    <Compile Include="Views\Similar\HotttnesssToBrushConverter.xaml.cs" />
+    <Compile Include="Views\Similar\HslColor.cs" />
     <Compile Include="Views\Similar\SimilarArtistModel.cs" />
     <Compile Include="Views\Similar\SimilarArtistView.xaml.cs">
       <DependentUpon>SimilarArtistView.xaml</DependentUpon>

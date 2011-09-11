@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Windows;
@@ -187,6 +188,8 @@ namespace Torshify.Client
             AggregateCatalog aggregateCatalog = new AggregateCatalog();
             aggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.*.dll"));
             CompositionContainer container = new CompositionContainer(aggregateCatalog);
+            container.ComposeExportedValue(Container);
+            container.ComposeExportedValue(Application.Current.Dispatcher);
             Container.RegisterInstance(container);
         }
 
