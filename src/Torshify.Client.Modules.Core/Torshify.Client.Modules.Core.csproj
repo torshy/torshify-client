@@ -121,6 +121,10 @@
       <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Album\AlbumViewModel.cs" />
+    <Compile Include="Views\Album\Tabs\AlbumTabItemView.xaml.cs">
+      <DependentUpon>AlbumTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Album\Tabs\AlbumTabItemViewModel.cs" />
     <Compile Include="Views\Artist\ArtistView.xaml.cs">
       <DependentUpon>ArtistView.xaml</DependentUpon>
     </Compile>
@@ -219,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Album\AlbumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Album\Tabs\AlbumTabItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

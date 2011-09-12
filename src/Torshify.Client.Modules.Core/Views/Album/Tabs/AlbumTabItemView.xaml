@@ -1,0 +1,181 @@
+﻿<UserControl
+    x:Class="Torshify.Client.Modules.Core.Views.Album.Tabs.AlbumTabItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    BorderThickness="1">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="..\..\..\Resources\SharedDataGridResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="140" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DockPanel
+                Grid.Row="0"
+                Grid.Column="0">
+                <Border
+                    Margin="8"
+                    Padding="4"
+                    Background="{DynamicResource ControlTextBrush}"
+                    VerticalAlignment="Top">
+                    <ContentControl
+                        Content="{Binding Album.CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="125"
+                                    Height="125"
+                                    Source="{Binding Bitmap}" />
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
+                </Border>
+            </DockPanel>
+
+            <DockPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                LastChildFill="True">
+                <StackPanel
+                    DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Text="{Binding Album.Name}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="24"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource ControlTextBrush}" />
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="{Binding Album.Year, StringFormat={}({0})}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="24"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource DisabledControlTextBrush}" />
+                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid
+                        Name="Dg"
+                        Style="{DynamicResource DataGrid_MinimalStyle}"
+                        ItemsSource="{Binding Album.Info.Tracks}"
+                        IsReadOnly="True"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        AutoGenerateColumns="False"
+                        ContextMenuOpening="DataGridContextMenuOpening"
+                        EnableRowVirtualization="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"
+                        HeadersVisibility="None"
+                        RowStyle="{StaticResource DataGrid_HighlightCurrentlyPlayingRowStyle}">
+                        <Interactivity:Interaction.Behaviors>
+                            <Behaviors:DataGridTriStateSortingBehavior />
+                            <Behaviors:IgnoreMouseWheelBehavior />
+                            <Behaviors:DataGridRowActionBehavior
+                                Command="{Binding PlayAlbumTrackCommand}"
+                                CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
+                        </Interactivity:Interaction.Behaviors>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu />
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn
+                                Width="Auto"
+                                CellTemplate="{StaticResource DataGrid_Track_StarredTemplate}" />
+                            <DataGridTemplateColumn
+                                Header="Index"
+                                Width="Auto"
+                                CellTemplate="{StaticResource DataGrid_Track_TrackIndexTemplate}" />
+                            <DataGridTemplateColumn
+                                Header="Track"
+                                Width="400"
+                                CellTemplate="{StaticResource DataGrid_Track_TrackTemplate}" />
+                            <DataGridTemplateColumn
+                                Header="Time"
+                                Width="75"
+                                HeaderStyle="{StaticResource DataGrid_RightAlignedHeaderStyle}"
+                                CellTemplate="{StaticResource DataGrid_Track_DurationTemplate}" />
+                            <DataGridTemplateColumn
+                                Width="50"
+                                CellTemplate="{StaticResource DataGrid_Track_PopularityTemplate}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <ItemsControl
+                        Grid.Row="1"
+                        Foreground="{DynamicResource DisabledControlTextBrush}"
+                        FontSize="12"
+                        ItemsSource="{Binding Album.Info.Copyrights}"
+                        Margin="0,4,0,24" />
+                </Grid>
+            </DockPanel>
+
+            <Border
+                Name="BiographyBorder"
+                Visibility="{Binding Album.Info.Review, Converter={StaticResource StringEmptyToVisibilityConverter}}"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                Background="Black"
+                CornerRadius="4">
+                <DockPanel
+                    LastChildFill="True">
+                    <Interactivity:Interaction.Behaviors>
+                        <Behaviors:IgnoreMouseWheelBehavior />
+                    </Interactivity:Interaction.Behaviors>
+                    <TextBlock
+                        DockPanel.Dock="Top"
+                        Text="Review"
+                        Foreground="{DynamicResource ControlTextBrush}"
+                        FontSize="16"
+                        Margin="5" />
+                    <FlowDocumentScrollViewer
+                        HorizontalAlignment="Stretch"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Disabled"
+                        IsToolBarVisible="True"
+                        Document="{Binding Album.Info.Review, Converter={StaticResource htmlToXamlConverter}}">
+                    </FlowDocumentScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <Controls:SprocketControl
+                Grid.ColumnSpan="2"
+                Grid.RowSpan="2"
+                Visibility="{Binding Album.Info.IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsBusy="{Binding Album.Info.IsLoading}"
+                Width="48"
+                Height="48"
+                Interval="70" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>

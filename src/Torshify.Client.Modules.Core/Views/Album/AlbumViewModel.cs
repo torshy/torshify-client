@@ -1,125 +1,91 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.Windows.Data;
 
-using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 
-using Torshify.Client.Infrastructure;
-using Torshify.Client.Infrastructure.Commands;
-using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Modules.Core.Views.Album.Tabs;
 
 namespace Torshify.Client.Modules.Core.Views.Album
 {
-    public class AlbumViewModel : NotificationObject, INavigationAware
+    public class AlbumViewModel : NotificationObject, INavigationAware, IPartImportsSatisfiedNotification
     {
         #region Fields
 
-        private readonly IEventAggregator _eventAggregator;
-
-        private IAlbum _album;
-        private SubscriptionToken _trackMenuBarToken;
-        private SubscriptionToken _tracksMenuBarToken;
+        [ImportMany]
+        private IEnumerable<Lazy<ITab<IAlbum>>> _tabImports = null;
+        private readonly ObservableCollection<ITab<IAlbum>> _tabs;
+        private readonly ICollectionView _tabsIcv;
 
         #endregion Fields
 
         #region Constructors
 
-        public AlbumViewModel(IEventAggregator eventAggregator, IPlayerController player)
+        public AlbumViewModel(CompositionContainer mefContainer)
         {
-            _eventAggregator = eventAggregator;
+            _tabs = new ObservableCollection<ITab<IAlbum>>();
+            _tabs.Add(ServiceLocator.Current.TryResolve<AlbumTabItemView>());
+            _tabsIcv = new ListCollectionView(_tabs);
 
-            Player = player;
-            PlayAlbumTrackCommand = new StaticCommand<ITrack>(ExecutePlayAlbumTrack);
+            mefContainer.SatisfyImportsOnce(this);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public IAlbum Album
+        public ICollectionView Tabs
         {
             get
             {
-                return _album;
+                return _tabsIcv;
             }
-            set
-            {
-                if (_album != value)
-                {
-                    _album = value;
-                    RaisePropertyChanged("Album");
-                }
-            }
-        }
-
-        public ICommand PlayAlbumTrackCommand
-        {
-            get;
-            private set;
-        }
-
-        public IPlayerController Player
-        {
-            get; private set;
         }
 
         #endregion Properties
 
         #region Methods
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
+        bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
         }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
+        void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
-            _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
-            _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
+            foreach (var tabItem in _tabs)
+            {
+                tabItem.ViewModel.Deinitialize(navigationContext);
+            }
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            _trackMenuBarToken = _eventAggregator.GetEvent<TrackCommandBarEvent>().Subscribe(OnTrackMenuBarEvent, true);
-            _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
+            var artist = navigationContext.Tag as IAlbum;
 
-            Album = navigationContext.Tag as IAlbum;
+            foreach (var tabItem in _tabs)
+            {
+                tabItem.ViewModel.SetModel(artist);
+                tabItem.ViewModel.Initialize(navigationContext);
+            }
+
+            Tabs.MoveCurrentToFirst();
         }
 
-        private void ExecutePlayAlbumTrack(ITrack track)
+        void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
-            // Get the rest of the tracks from the album, including the one selected.
-            IEnumerable<ITrack> tracks = GetTracksToPlay(track);
-            CoreCommands.PlayTrackCommand.Execute(tracks);
-        }
-
-        private IEnumerable<ITrack> GetTracksToPlay(ITrack track)
-        {
-            var tracks = Album.Info.Tracks;
-            int index = tracks.IndexOf(track);
-            tracks = tracks.Skip(index);
-            return tracks;
-        }
-
-        private void OnTrackMenuBarEvent(TrackCommandBarModel model)
-        {
-            // Get the rest of the tracks from the album, including the one selected.
-            IEnumerable<ITrack> tracks = GetTracksToPlay(model.Track);
-
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, tracks)
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Track);
-        }
-
-        private void OnTracksMenuBarEvent(TracksCommandBarModel model)
-        {
-            model.CommandBar
-                .AddCommand("Play", CoreCommands.PlayTrackCommand, model.Tracks.LastOrDefault())
-                .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
+            foreach (var tabImport in _tabImports)
+            {
+                _tabs.Add(tabImport.Value);
+            }
         }
 
         #endregion Methods
