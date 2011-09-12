@@ -7,6 +7,7 @@
     xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
     xmlns:Controls="clr-namespace:Torshify.Client.Infrastructure.Controls;assembly=Torshify.Client.Infrastructure"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -26,6 +27,7 @@
             BorderThickness="0"
             Background="{x:Null}"
             VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
             ScrollViewer.CanContentScroll="False">
             <TreeView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -67,15 +69,13 @@
                                 Background="{DynamicResource ControlTextBrush}"
                                 VerticalAlignment="Top">
                                 <ContentControl
-                                    Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}}">
+                                    Content="{Binding CoverArt, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}, Mode=OneTime}">
                                     <ContentControl.ContentTemplate>
                                         <DataTemplate>
-                                            <Controls:LayeredPanel
+                                            <Image
+                                                Source="{Binding Bitmap}"
                                                 Width="125"
-                                                Height="125">
-                                                <Image
-                                                    Source="{Binding Bitmap}" />
-                                            </Controls:LayeredPanel>
+                                                Height="125" />
                                         </DataTemplate>
                                     </ContentControl.ContentTemplate>
                                 </ContentControl>
@@ -87,12 +87,18 @@
                             <StackPanel
                                 DockPanel.Dock="Top"
                                 Orientation="Horizontal">
-                                <TextBlock
-                                    Text="{Binding Name}"
-                                    TextTrimming="CharacterEllipsis"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="{DynamicResource ControlTextBrush}" />
+                                <TextBlock>
+                                    <Hyperlink
+                                        Foreground="{DynamicResource ControlTextBrush}"
+                                        Command="{x:Static Core:CoreCommands+Views.GoToAlbumCommand}"
+                                        CommandParameter="{Binding}">
+                                        <TextBlock
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis"
+                                            FontSize="24"
+                                            FontWeight="Light" />
+                                        </Hyperlink>
+                                </TextBlock>
                                 <TextBlock
                                     Margin="4,0,0,0"
                                     Text="{Binding Year, StringFormat={}({0})}"
@@ -105,7 +111,7 @@
                             <DataGrid
                                 Name="Dg"
                                 Style="{DynamicResource DataGrid_MinimalStyle}"
-                                ItemsSource="{Binding Info.Tracks, IsAsync=True}"
+                                ItemsSource="{Binding Info.Tracks}"
                                 IsReadOnly="True"
                                 CanUserAddRows="False"
                                 CanUserDeleteRows="False"

@@ -111,6 +111,9 @@ namespace Torshify.Client.Spotify.Services
         {
             IImage image = (IImage)sender;
             image.Loaded -= OnImageLoaded;
+            
+            // Just access the data property as it lazy loaded.
+            image.Data.Length.ToString();
             IsLoaded = true;
             RaisePropertyChanged("Raw");
             RaiseFinishedLoading();

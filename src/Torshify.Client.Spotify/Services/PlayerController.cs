@@ -162,8 +162,6 @@ namespace Torshify.Client.Spotify.Services
                 _session.PlayerPlay();
                 _player.Play();
                 _logger.Log("Playing", Category.Info, Priority.Low);
-
-                //IsPlaying = true;
             }
         }
 
@@ -208,6 +206,10 @@ namespace Torshify.Client.Spotify.Services
 
         private void OnCurrentChanged(object sender, EventArgs e)
         {
+            var wasPlaying = IsPlaying;
+
+            IsPlaying = false;
+
             if (Playlist.Current != null)
             {
                 var track = Playlist.Current.Track as Track;
@@ -217,16 +219,19 @@ namespace Torshify.Client.Spotify.Services
                     _session.PlayerUnload();
                     _player.ClearBuffers();
 
-                    track.InternalTrack.Load();
+                    _logger.Log("Changing track to " + track.Name, Category.Info, Priority.Low);
+                    _lastLoadStatus = track.InternalTrack.Load();
 
-                    if (IsPlaying)
+                    if (wasPlaying && _lastLoadStatus.GetValueOrDefault() == Error.OK)
                     {
                         track.InternalTrack.Play();
+                    }else
+                    {
+                        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationMessage(_lastLoadStatus.Value.GetMessage()));
+                        _logger.Log(_lastLoadStatus.Value.GetMessage(), Category.Warn, Priority.Medium);
                     }
 
                     _playLocation = TimeSpan.Zero;
-
-                    _logger.Log("Changing track to " + track.Name, Category.Info, Priority.Low);
                 }
             }
             else
