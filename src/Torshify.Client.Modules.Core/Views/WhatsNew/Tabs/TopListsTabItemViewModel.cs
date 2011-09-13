@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 
 using Microsoft.Practices.Prism.Regions;
@@ -34,6 +35,14 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         }
 
         public void SetModel(object model)
+        {
+        }
+
+        public void NavigatedTo()
+        {
+        }
+
+        public void NavigatedFrom()
         {
         }
 

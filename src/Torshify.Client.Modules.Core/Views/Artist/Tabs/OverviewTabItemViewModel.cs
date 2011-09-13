@@ -140,6 +140,16 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             RaisePropertyChanged("Header");
         }
 
+        public void NavigatedTo()
+        {
+
+        }
+
+        public void NavigatedFrom()
+        {
+
+        }
+
         private void ExecutePlayArtistTrack(ITrack track)
         {
             IEnumerable<ITrack> tracksToPlay = GetTracksToPlay(track);

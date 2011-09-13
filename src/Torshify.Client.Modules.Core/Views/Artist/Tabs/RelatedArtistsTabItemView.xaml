@@ -1,0 +1,48 @@
+﻿<UserControl
+    x:Class="Torshify.Client.Modules.Core.Views.Artist.Tabs.RelatedArtistsTabItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Converters="clr-namespace:Torshify.Client.Infrastructure.Converters;assembly=Torshify.Client.Infrastructure"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:ImageCacheConverter
+            x:Key="ThumbnailCoverArtImageCacheConverter"
+            DecodeHeight="125"
+            DecodeWidth="125" />
+    </UserControl.Resources>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl
+            ItemsSource="{Binding SimilarArtists}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Margin="1"
+                        Padding="2"
+                        Background="{DynamicResource ControlTextBrush}">
+                        <ContentControl
+                            Content="{Binding Info.FirstPortrait, Converter={StaticResource ThumbnailCoverArtImageCacheConverter}, Mode=OneWay}">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate>
+                                    <Image
+                                        Source="{Binding Bitmap, Mode=OneWay}"
+                                        Width="125"
+                                        Height="125" />
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

@@ -7,11 +7,14 @@ using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Interfaces;
 
+using ITorshifyImage = Torshify.Client.Infrastructure.Interfaces.IImage;
+
 using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
+using System.Linq;
 
 namespace Torshify.Client.Spotify.Services
 {
@@ -26,9 +29,10 @@ namespace Torshify.Client.Spotify.Services
         private string _biography;
         private IArtistBrowse _browse;
         private bool _isLoading;
-        private NotifyCollection<BitmapSource> _portraits;
+        private NotifyCollection<Image> _portraits;
         private NotifyCollection<Artist> _similarArtists;
         private NotifyCollection<Track> _tracks;
+        private ITorshifyImage _firstPortait;
 
         #endregion Fields
 
@@ -36,7 +40,7 @@ namespace Torshify.Client.Spotify.Services
 
         public ArtistInformation(IArtist artist, Dispatcher dispatcher)
         {
-            _portraits = new NotifyCollection<BitmapSource>();
+            _portraits = new NotifyCollection<Image>();
             _tracks = new NotifyCollection<Track>();
             _albums = new NotifyCollection<Album>();
             _similarArtists = new NotifyCollection<Artist>();
@@ -94,7 +98,17 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        public INotifyEnumerable<BitmapSource> Portraits
+        public ITorshifyImage FirstPortrait
+        {
+            get { return _firstPortait; }
+            private set
+            {
+                _firstPortait = value;
+                RaisePropertyChanged("FirstPortait");
+            }
+        }
+
+        public INotifyEnumerable<ITorshifyImage> Portraits
         {
             get
             {
@@ -149,8 +163,19 @@ namespace Torshify.Client.Spotify.Services
                 {
                     _similarArtists.Add(new Artist(spotifyArtist, _dispatcher));
                 }
+
+                foreach (var spotifyPortrait in browse.Portraits)
+                {
+                    using (spotifyPortrait)
+                    {
+                        _portraits.Add(new Image(_artist.Session, spotifyPortrait.ImageId));
+                    }
+                }
+
+                FirstPortrait = _portraits.FirstOrDefault();
             }
-            
+
+            RaisePropertyChanged("Portraits");
             IsLoading = false;
             RaiseFinishedLoading();
         }

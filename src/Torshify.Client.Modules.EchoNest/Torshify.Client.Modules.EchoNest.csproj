@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,6 +88,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Views\Artist\Tabs\LatestNewsTabItemView.xaml.cs">
+      <DependentUpon>LatestNewsTabItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Artist\Tabs\LatestNewsTabItemViewModel.cs" />
     <Compile Include="Views\Discover\DiscoverView.xaml.cs">
       <DependentUpon>DiscoverView.xaml</DependentUpon>
     </Compile>
@@ -125,6 +130,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Artist\Tabs\LatestNewsTabItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Discover\DiscoverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

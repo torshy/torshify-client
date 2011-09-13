@@ -100,6 +100,14 @@ namespace Torshify.Client.Modules.Core.Views.Album.Tabs
             RaisePropertyChanged("Header");
         }
 
+        public void NavigatedTo()
+        {
+        }
+
+        public void NavigatedFrom()
+        {
+        }
+
         private void ExecutePlayAlbumTrack(ITrack track)
         {
             // Get the rest of the tracks from the album, including the one selected.

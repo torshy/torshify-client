@@ -1,29 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Windows.Data;
-
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
-using Microsoft.Practices.Prism.ViewModel;
 using Microsoft.Practices.ServiceLocation;
-
 using Torshify.Client.Infrastructure.Interfaces;
+using Torshify.Client.Infrastructure.Models;
 using Torshify.Client.Modules.Core.Views.Album.Tabs;
 
 namespace Torshify.Client.Modules.Core.Views.Album
 {
-    public class AlbumViewModel : NotificationObject, INavigationAware, IPartImportsSatisfiedNotification
+    public class AlbumViewModel : TabViewModel<IAlbum>, IPartImportsSatisfiedNotification
     {
         #region Fields
 
         [ImportMany]
         private IEnumerable<Lazy<ITab<IAlbum>>> _tabImports = null;
-        private readonly ObservableCollection<ITab<IAlbum>> _tabs;
-        private readonly ICollectionView _tabsIcv;
 
         #endregion Fields
 
@@ -31,60 +24,25 @@ namespace Torshify.Client.Modules.Core.Views.Album
 
         public AlbumViewModel(CompositionContainer mefContainer)
         {
-            _tabs = new ObservableCollection<ITab<IAlbum>>();
-            _tabs.Add(ServiceLocator.Current.TryResolve<AlbumTabItemView>());
-            _tabsIcv = new ListCollectionView(_tabs);
+            AddTab(ServiceLocator.Current.TryResolve<AlbumTabItemView>());
 
             mefContainer.SatisfyImportsOnce(this);
         }
 
         #endregion Constructors
 
-        #region Properties
-
-        public ICollectionView Tabs
-        {
-            get
-            {
-                return _tabsIcv;
-            }
-        }
-
-        #endregion Properties
-
         #region Methods
 
-        bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
+        protected override IAlbum GetModel(NavigationContext navigationContext)
         {
-            return true;
-        }
-
-        void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            foreach (var tabItem in _tabs)
-            {
-                tabItem.ViewModel.Deinitialize(navigationContext);
-            }
-        }
-
-        void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
-        {
-            var artist = navigationContext.Tag as IAlbum;
-
-            foreach (var tabItem in _tabs)
-            {
-                tabItem.ViewModel.SetModel(artist);
-                tabItem.ViewModel.Initialize(navigationContext);
-            }
-
-            Tabs.MoveCurrentToFirst();
+            return navigationContext.Tag as IAlbum;
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
             foreach (var tabImport in _tabImports)
             {
-                _tabs.Add(tabImport.Value);
+                AddTab(tabImport.Value);
             }
         }
 

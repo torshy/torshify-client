@@ -75,6 +75,16 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             }
         }
 
+        public void NavigatedTo()
+        {
+            
+        }
+
+        public void NavigatedFrom()
+        {
+
+        }
+
         private void OnFinishedLoading(object sender, EventArgs e)
         {
             IArtistInformation info = (IArtistInformation)sender;

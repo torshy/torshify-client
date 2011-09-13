@@ -28,6 +28,8 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
         private readonly Dispatcher _dispatcher;
 
         private NodeCollection<SimilarArtistModel> _nodes;
+        private object _nodesLock = new object();
+        private Lazy<bool> _loadSimilar;
 
         #endregion Fields
 
@@ -66,7 +68,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         public string Header
         {
-            get { return "Discover others"; }
+            get { return "Discover Others"; }
         }
 
         public StaticCommand<string> StartTrailCommand
@@ -107,7 +109,20 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         void ITabViewModel<IArtist>.SetModel(IArtist model)
         {
-            ExecuteStartTrail(model.Name);
+            _loadSimilar = new Lazy<bool>(() =>
+                                              {
+                                                  ExecuteStartTrail(model.Name);
+                                                  return true;
+                                              });
+        }
+
+        public void NavigatedTo()
+        {
+            _loadSimilar.Value.ToString();
+        }
+
+        public void NavigatedFrom()
+        {
         }
 
         private bool CanChangeCenter(Node<SimilarArtistModel> node)
@@ -140,7 +155,7 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         private void SearchFinished(object sender, EventArgs e)
         {
-            ISearch search = (ISearch) sender;
+            ISearch search = (ISearch)sender;
             search.FinishedLoading -= SearchFinished;
 
             if (search.TotalArtists > 0)
@@ -151,6 +166,14 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         private void ExecuteStartTrail(string artistName)
         {
+            if (Graph.CenterObject != null)
+            {
+                if (((Node<SimilarArtistModel>)Graph.CenterObject).Item.Name == artistName)
+                {
+                    return;
+                }
+            }
+
             _nodes = new NodeCollection<SimilarArtistModel>(new List<SimilarArtistModel>());
 
             Task<Node<SimilarArtistModel>>
@@ -211,6 +234,8 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
                 if (result.Status.Code == ResponseCode.Success)
                 {
+                    var list = new List<SimilarArtistModel>();
+
                     foreach (var artist in result.Artists)
                     {
                         var artistModel = new SimilarArtistModel();
@@ -221,21 +246,28 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                         artistModel.Familiarity = artist.Familiarity;
                         artistModel.Hotttnesss = artist.Hotttnesss;
                         artistModel.Terms = artist.Terms != null ? artist.Terms.Take(3) : null;
-
-                        _dispatcher.BeginInvoke(new Action(() =>
-                                                               {
-                                                                   if (!_nodes.HasNode(artistModel))
-                                                                   {
-                                                                       _nodes.Add(artistModel);
-                                                                   }
-
-                                                                   Node<SimilarArtistModel> other = _nodes[artistModel];
-                                                                   if (!node.ChildNodes.Contains(other))
-                                                                   {
-                                                                       _nodes.AddEdge(artistModel, node.Item);
-                                                                   }
-                                                               }));
+                        list.Add(artistModel);
                     }
+
+                    _dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        lock (_nodesLock)
+                        {
+                            foreach (var artistModel in list)
+                            {
+                                if (!_nodes.HasNode(artistModel))
+                                {
+                                    _nodes.Add(artistModel);
+                                }
+
+                                Node<SimilarArtistModel> other = _nodes[artistModel];
+                                if (!node.ChildNodes.Contains(other) && _nodes.HasNode(node.Item))
+                                {
+                                    _nodes.AddEdge(artistModel, node.Item);
+                                }
+                            }
+                        }
+                    }));
                 }
             }
 

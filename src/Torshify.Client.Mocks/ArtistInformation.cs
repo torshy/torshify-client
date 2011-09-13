@@ -11,8 +11,11 @@ namespace Torshify.Client.Mocks
         public INotifyEnumerable<ITrack> Tracks { get; set; }
         public string Biography { get; set; }
         public INotifyEnumerable<IArtist> SimilarArtists { get; set; }
-        public INotifyEnumerable<BitmapSource> Portraits { get; set; }
+        public INotifyEnumerable<IImage> Portraits { get; set; }
         public bool IsLoading { get; set; }
+
+        public IImage FirstPortrait { get; set; }
+
         public event EventHandler FinishedLoading;
         
         public void RaiseFinishedLoading()

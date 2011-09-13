@@ -25,7 +25,7 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        INotifyEnumerable<BitmapSource> Portraits
+        INotifyEnumerable<IImage> Portraits
         {
             get;
         }
@@ -34,6 +34,8 @@ namespace Torshify.Client.Infrastructure.Interfaces
         {
             get;
         }
+
+        IImage FirstPortrait { get; }
 
         event EventHandler FinishedLoading;
     }

@@ -146,6 +146,14 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         {
         }
 
+        public void NavigatedTo()
+        {
+        }
+
+        public void NavigatedFrom()
+        {
+        }
+
         private void GetMoreRandomAlbums()
         {
             if (!IsLoading)

@@ -20,5 +20,9 @@ namespace Torshify.Client.Infrastructure.Interfaces
         void Deinitialize(NavigationContext navContext);
 
         void SetModel(TModel model);
+
+        void NavigatedTo();
+
+        void NavigatedFrom();
     }
 }

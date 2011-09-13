@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="Torshify.Client.Modules.EchoNest.Views.Artist.Tabs.LatestNewsTabItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:conv="clr-namespace:Torshify.Client.Infrastructure.Controls.Html2Flow;assembly=Torshify.Client.Infrastructure"
+    xmlns:Interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Client.Infrastructure.Behaviors;assembly=Torshify.Client.Infrastructure"
+    xmlns:Core="clr-namespace:Torshify.Client.Modules.Core;assembly=Torshify.Client.Modules.Core"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <conv:HtmlToFlowDocumentConverter
+            x:Key="htmlToXamlConverter" />
+    </UserControl.Resources>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl
+            ItemsSource="{Binding News}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander
+                        Foreground="{DynamicResource ControlTextBrush}">
+                        <Expander.Header>
+                            <TextBlock
+                                Foreground="{DynamicResource ControlTextBrush}"
+                                Text="{Binding Name}"
+                                TextWrapping="Wrap" />
+                        </Expander.Header>
+                        <Border
+                            Background="Black"
+                            CornerRadius="4">
+                            <Interactivity:Interaction.Behaviors>
+                                <Behaviors:IgnoreMouseWheelBehavior />
+                            </Interactivity:Interaction.Behaviors>
+                            <DockPanel
+                                LastChildFill="True">
+                                <TextBlock
+                                    DockPanel.Dock="Bottom"
+                                    Margin="4">
+                                    <Hyperlink
+                                        Foreground="{DynamicResource ControlTextBrush}"
+                                        Command="{Binding DataContext.OpenBrowserWithUrlCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}">
+                                        <TextBlock
+                                            Text="Open in browser"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </Hyperlink>
+                                </TextBlock>
+                                <FlowDocumentScrollViewer
+                                    Foreground="{DynamicResource ControlTextBrush}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalScrollBarVisibility="Disabled"
+                                    VerticalScrollBarVisibility="Disabled"
+                                    IsToolBarVisible="True"
+                                    Document="{Binding Summary, Converter={StaticResource htmlToXamlConverter}}">
+                                </FlowDocumentScrollViewer>
+                            </DockPanel>
+                        </Border>
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

@@ -176,7 +176,7 @@ namespace Torshify.Client.Infrastructure.Services
                         SetBitmap(coverArtSource);
 
                         IsLoaded = true;
-                    }), LazyThreadSafetyMode.ExecutionAndPublication);
+                    }), LazyThreadSafetyMode.PublicationOnly);
             }
 
             #endregion Constructors
