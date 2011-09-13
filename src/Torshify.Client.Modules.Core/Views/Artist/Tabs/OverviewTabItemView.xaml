@@ -28,7 +28,8 @@
             Background="{x:Null}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
-            ScrollViewer.CanContentScroll="False">
+            ScrollViewer.CanContentScroll="False"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible">
             <TreeView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
@@ -123,7 +124,6 @@
                                 HeadersVisibility="None"
                                 RowStyle="{StaticResource DataGrid_HighlightCurrentlyPlayingRowStyle}">
                                 <Interactivity:Interaction.Behaviors>
-                                    <Behaviors:DataGridTriStateSortingBehavior />
                                     <Behaviors:IgnoreMouseWheelBehavior />
                                     <Behaviors:DataGridRowActionBehavior
                                         Command="{Binding DataContext.PlayArtistTrackCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneTime}"

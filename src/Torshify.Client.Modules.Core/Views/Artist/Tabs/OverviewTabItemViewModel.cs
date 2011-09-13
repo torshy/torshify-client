@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -26,6 +27,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
         private ICollectionView _albumsIcv;
         private IArtist _artist;
         private IEventAggregator _eventAggregator;
+        private readonly Dispatcher _dispatcher;
         private SubscriptionToken _trackMenuBarToken;
         private SubscriptionToken _tracksMenuBarToken;
 
@@ -33,9 +35,10 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 
         #region Constructors
 
-        public OverviewTabItemViewModel(IEventAggregator eventAggregator, IPlayerController player)
+        public OverviewTabItemViewModel(IEventAggregator eventAggregator, IPlayerController player, Dispatcher dispatcher)
         {
             _eventAggregator = eventAggregator;
+            _dispatcher = dispatcher;
 
             Player = player;
             PlayArtistTrackCommand = new StaticCommand<ITrack>(ExecutePlayArtistTrack);
@@ -134,7 +137,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             }
             else
             {
-                PrepareData();
+                _dispatcher.BeginInvoke(new Action(PrepareData), DispatcherPriority.Background);
             }
 
             RaisePropertyChanged("Header");
@@ -185,7 +188,9 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 
         private void OnInfoFinishedLoading(object sender, EventArgs e)
         {
-            PrepareData();
+            ((IArtistInformation)sender).FinishedLoading -= OnInfoFinishedLoading;
+
+            _dispatcher.BeginInvoke(new Action(PrepareData), DispatcherPriority.Background);
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
@@ -206,20 +211,21 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
 
         private void PrepareData()
         {
-            _albums = new SortedObservableCollection<IAlbum>(new AlbumComparer());
+            var albums = new ObservableCollection<IAlbum>();
 
             Albums = CollectionViewSource.GetDefaultView(_albums);
 
-            lock (_artist.Info.Albums.SyncRoot)
+            foreach (var album in _artist.Info.Albums)
             {
-                foreach (var album in _artist.Info.Albums)
+                if (album.IsAvailable)
                 {
-                    if (album.IsAvailable)
-                    {
-                        _albums.Add(album);
-                    }
+                    albums.Add(album);
                 }
             }
+
+            var sortedAlbums = albums.OrderBy(a => a.Type).ThenByDescending(a => a.Year);
+
+            Albums = CollectionViewSource.GetDefaultView(sortedAlbums);
         }
 
         #endregion Methods

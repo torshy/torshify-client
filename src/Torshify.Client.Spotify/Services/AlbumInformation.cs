@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Client.Infrastructure.Collections;
+using Torshify.Client.Infrastructure.Interfaces;
 using ITorshifyAlbumInformation = Torshify.Client.Infrastructure.Interfaces.IAlbumInformation;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
@@ -16,9 +17,9 @@ namespace Torshify.Client.Spotify.Services
         #region Fields
 
         private readonly IAlbum _album;
-        private readonly ObservableCollection<string> _copyrights;
+        private readonly NotifyCollection<string> _copyrights;
         private readonly Dispatcher _dispatcher;
-        private readonly ObservableCollection<Track> _tracks;
+        private readonly NotifyCollection<Track> _tracks;
         
         private bool _isLoading;
         private string _review;
@@ -30,8 +31,8 @@ namespace Torshify.Client.Spotify.Services
 
         public AlbumInformation(IAlbum album, Dispatcher dispatcher)
         {
-            _tracks = new ObservableCollection<Track>();
-            _copyrights = new ObservableCollection<string>();
+            _tracks = new NotifyCollection<Track>();
+            _copyrights = new NotifyCollection<string>();
             _dispatcher = dispatcher;
             _album = album;
             _browse = _album.Browse();
@@ -43,7 +44,7 @@ namespace Torshify.Client.Spotify.Services
 
         #region Properties
 
-        public IEnumerable<string> Copyrights
+        public INotifyEnumerable<string> Copyrights
         {
             get
             {
@@ -80,7 +81,7 @@ namespace Torshify.Client.Spotify.Services
             }
         }
 
-        public IEnumerable<ITorshifyTrack> Tracks
+        public INotifyEnumerable<ITorshifyTrack> Tracks
         {
             get
             {
@@ -95,11 +96,10 @@ namespace Torshify.Client.Spotify.Services
         private void AlbumBrowseCompleted(object sender, UserDataEventArgs e)
         {
             var browse = (IAlbumBrowse)sender;
+            browse.Completed -= AlbumBrowseCompleted;
 
             Review = browse.Review;
-
             _dispatcher.BeginInvoke(new Action<IAlbumBrowse>(LoadDataFromBrowse), DispatcherPriority.Background, browse);
-            browse.Completed -= AlbumBrowseCompleted;
         }
 
         private void LoadDataFromBrowse(IAlbumBrowse browse)

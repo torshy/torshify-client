@@ -4,12 +4,12 @@ namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface IAlbumInformation
     {
-        IEnumerable<ITrack> Tracks
+        INotifyEnumerable<ITrack> Tracks
         {
             get;
         }
 
-        IEnumerable<string> Copyrights
+        INotifyEnumerable<string> Copyrights
         {
             get;
         }

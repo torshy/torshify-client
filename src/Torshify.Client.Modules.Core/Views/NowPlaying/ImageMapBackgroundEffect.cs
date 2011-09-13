@@ -11,6 +11,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         #region Fields
 
         private readonly IRegionManager _regionManager;
+        private ImageMapFrame _map;
 
         #endregion Fields
 
@@ -19,6 +20,7 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         public ImageMapBackgroundEffect(IRegionManager regionManager)
         {
             _regionManager = regionManager;
+            _map = new ImageMapFrame();
         }
 
         #endregion Constructors
@@ -28,12 +30,8 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
         public void NavigatedFrom()
         {
             IRegion region = _regionManager.Regions[RegionNames.BackgroundRegion];
-            var mapView = region.GetView("ImageMap");
-
-            if (mapView != null)
-            {
-                region.Remove(mapView);
-            }
+            region.Remove(_map);
+            _map.MapCanvas.Children.Clear();
         }
 
         public void NavigatedTo()
@@ -43,9 +41,8 @@ namespace Torshify.Client.Modules.Core.Views.NowPlaying
 
             if (mapView == null)
             {
-                var map = new ImageMapFrame();
-                map.Initialize(AppConstants.CoverArtCacheFolder);
-                region.Add(map, "ImageMap");
+                _map.Initialize(AppConstants.CoverArtCacheFolder);
+                region.Add(_map, "ImageMap");
             }
         }
 

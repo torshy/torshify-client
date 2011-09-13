@@ -39,25 +39,5 @@ namespace Torshify.Client.Infrastructure.Collections
         }
 
         #endregion Properties
-
-        #region Methods
-
-        protected override void InsertItem(int index, T item)
-        {
-            lock (_lockObject)
-            {
-                base.InsertItem(index, item);
-            }
-        }
-
-        protected override void RemoveItem(int index)
-        {
-            lock (_lockObject)
-            {
-                base.RemoveItem(index);
-            }
-        }
-
-        #endregion Methods
     }
 }

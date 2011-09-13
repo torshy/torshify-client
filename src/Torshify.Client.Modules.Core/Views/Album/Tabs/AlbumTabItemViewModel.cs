@@ -119,8 +119,8 @@ namespace Torshify.Client.Modules.Core.Views.Album.Tabs
         {
             var tracks = Album.Info.Tracks;
             int index = tracks.IndexOf(track);
-            tracks = tracks.Skip(index);
-            return tracks;
+            var tracksLeft = tracks.Skip(index);
+            return tracksLeft;
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)

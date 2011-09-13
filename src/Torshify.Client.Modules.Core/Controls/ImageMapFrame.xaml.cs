@@ -41,6 +41,11 @@ namespace Torshify.Client.Modules.Core.Controls
 
         #endregion Constructors
 
+        public Canvas MapCanvas
+        {
+            get { return _canvas; }
+        }
+
         #region Methods
 
         public void Initialize(string imageFolder)

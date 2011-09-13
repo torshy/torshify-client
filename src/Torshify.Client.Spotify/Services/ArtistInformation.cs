@@ -175,7 +175,6 @@ namespace Torshify.Client.Spotify.Services
                 FirstPortrait = _portraits.FirstOrDefault();
             }
 
-            RaisePropertyChanged("Portraits");
             IsLoading = false;
             RaiseFinishedLoading();
         }

@@ -24,7 +24,7 @@ namespace Torshify.Client.Infrastructure.Controls
                 internalChild.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
             }
 
-            return base.ArrangeOverride(finalSize);
+            return finalSize;
         }
 
         #endregion Protected Methods

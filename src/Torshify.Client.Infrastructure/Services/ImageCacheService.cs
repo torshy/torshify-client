@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Runtime.Caching;
@@ -94,8 +95,9 @@ namespace Torshify.Client.Infrastructure.Services
 
             private static readonly ActionPump _instance = new ActionPump();
 
-            private BlockingCollection<Action> _queue;
+            private ConcurrentQueue<Action> _queue;
             private Thread _worker;
+            private object _lock = new object();
 
             #endregion Fields
 
@@ -103,7 +105,7 @@ namespace Torshify.Client.Infrastructure.Services
 
             public ActionPump()
             {
-                _queue = new BlockingCollection<Action>();
+                _queue = new ConcurrentQueue<Action>();
                 _worker = new Thread(Run);
                 _worker.IsBackground = true;
                 _worker.Start();
@@ -127,23 +129,39 @@ namespace Torshify.Client.Infrastructure.Services
 
             public void Enqueue(Action action)
             {
-                _queue.TryAdd(action);
+                _queue.Enqueue(action);
+
+                lock (_lock)
+                {
+                    Monitor.Pulse(_lock);
+                }
             }
 
             private void Run()
             {
                 while (true)
                 {
-                    Action action = _queue.Take();
+                    Action action;
 
-                    try
+                    if (_queue.TryDequeue(out action))
                     {
-                        action();
+                        try
+                        {
+                            action();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine(ex);
+                        lock (_lock)
+                        {
+                            Monitor.Wait(_lock);
+                        }
                     }
+
                 }
             }
 

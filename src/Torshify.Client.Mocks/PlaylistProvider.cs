@@ -169,28 +169,32 @@ namespace Torshify.Client.Mocks
                 .Build());
         }
 
-        private IEnumerable<ITrack> GetTracks(IAlbum album)
+        private INotifyEnumerable<ITrack> GetTracks(IAlbum album)
         {
-            return Builder<Track>
-                .CreateListOfSize(_random.Next(6, 35))
-                .WhereAll()
-                .Has(t => t.Name = _trackNames[_random.Next(0, _trackNames.Length - 1)])
-                .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
-                .Has(t => t.Album = album)
-                .Has(t => t.Artists = GetArtists())
-                .WhereRandom(6)
-                .Has(t => ((Album)t.Album).IsAvailable = false)
-                .Has(t => t.IsAvailable = false)
-                .Build();
+            return new NotifyCollection<Track>(Builder<Track>
+                                                   .CreateListOfSize(_random.Next(6, 35))
+                                                   .WhereAll()
+                                                   .Has(
+                                                       t =>
+                                                       t.Name = _trackNames[_random.Next(0, _trackNames.Length - 1)])
+                                                   .Has(t => t.Duration = TimeSpan.FromSeconds(_random.Next(60, 600)))
+                                                   .Has(t => t.Album = album)
+                                                   .Has(t => t.Artists = GetArtists())
+                                                   .WhereRandom(6)
+                                                   .Has(t => ((Album)t.Album).IsAvailable = false)
+                                                   .Has(t => t.IsAvailable = false)
+                                                   .Build());
         }
 
-        private IEnumerable<IArtist> GetArtists()
+        private INotifyEnumerable<IArtist> GetArtists()
         {
-            return Builder<Artist>
-                .CreateListOfSize(_random.Next(10, 20))
-                .WhereAll()
-                .Has(a => a.Name = _artistNames[_random.Next(0, _artistNames.Length - 1)])
-                .Build();
+            return new NotifyCollection<Artist>(Builder<Artist>
+                                                    .CreateListOfSize(_random.Next(10, 20))
+                                                    .WhereAll()
+                                                    .Has(
+                                                        a =>
+                                                        a.Name = _artistNames[_random.Next(0, _artistNames.Length - 1)])
+                                                    .Build());
         }
 
         private Artist GetArtist()
@@ -246,10 +250,12 @@ namespace Torshify.Client.Mocks
                 .Build();
         }
 
-        private IEnumerable<string> GetCopyrights()
+        private INotifyEnumerable<string> GetCopyrights()
         {
-            yield return "2011 Torshify Records";
-            yield return "2010 Mock Records";
+            NotifyCollection<string> copyrights = new NotifyCollection<string>();
+            copyrights.Add("2011 Torshify Records");
+            copyrights.Add("2010 Mock Records");
+            return copyrights;
         }
 
         #endregion Private Methods
