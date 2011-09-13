@@ -191,6 +191,8 @@ namespace Torshify.Client.Spotify.Views.Login
             }
             else
             {
+                _session.LoginComplete -= OnLoginComplete;
+
                 HasLoginError = false;
                 LoginError = string.Empty;
 
