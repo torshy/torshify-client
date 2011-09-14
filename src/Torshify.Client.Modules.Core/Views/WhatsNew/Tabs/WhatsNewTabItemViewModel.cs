@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,17 +8,15 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-using Torshify.Client.Infrastructure;
+
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
-using System.Linq;
 
 namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 {
-    public class WhatsNewTabItemViewModel : NotificationObject, ITabViewModel<object>
+    public class WhatsNewTabItemViewModel : NotificationObject, ITabViewModel<WhatsNewViewModel>
     {
         #region Fields
 
@@ -79,7 +78,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         public int NumberToFetchPerBatch
         {
-            get; 
+            get;
             set;
         }
 
@@ -99,9 +98,18 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         #region Methods
 
+        public void Initialize(NavigationContext navContext)
+        {
+            _albums = new ObservableCollection<IAlbum>();
+            Albums = new ListCollectionView(_albums);
+
+            GetMoreRandomAlbums();
+        }
+
         public void Deinitialize(NavigationContext navContext)
         {
             Albums = null;
+            _albums = null;
 
             var deadSearches = new List<ISearch>();
 
@@ -122,27 +130,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
             }
         }
 
-        public void Initialize(NavigationContext navContext)
-        {
-            if (string.IsNullOrEmpty(navContext.Parameters["WhatsNewTag"]))
-            {
-                UriQuery query = new UriQuery();
-                query.Add("WhatsNewTag", DateTime.Now.ToLongTimeString());
-                navContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(MusicRegionViewNames.WhatsNew + query,
-                                                                                UriKind.Relative);
-                
-                _albums = new ObservableCollection<IAlbum>();
-                Albums = new ListCollectionView(_albums);
-
-                GetMoreRandomAlbums();
-            }
-            else
-            {
-                Albums = new ListCollectionView(_albums);
-            }
-        }
-
-        public void SetModel(object model)
+        public void SetModel(WhatsNewViewModel model)
         {
         }
 
@@ -169,7 +157,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         private void OnSearchFinishedLoading(object sender, EventArgs e)
         {
-            ISearch search = (ISearch) sender;
+            ISearch search = (ISearch)sender;
             search.FinishedLoading -= OnSearchFinishedLoading;
 
             int maxValue = search.Albums.Count;
@@ -196,7 +184,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
                 foreach (var album in toAdd)
                 {
                     _dispatcher.BeginInvoke(
-                        (Action<IAlbum>) _albums.Add,
+                        (Action<IAlbum>)_albums.Add,
                         DispatcherPriority.Background,
                         album);
                 }

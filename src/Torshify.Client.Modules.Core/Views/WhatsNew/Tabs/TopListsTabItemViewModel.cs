@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 
 using Microsoft.Practices.Prism.Regions;
@@ -8,7 +7,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 {
-    public class TopListsTabItemViewModel : NotificationObject, ITabViewModel<object>
+    public class TopListsTabItemViewModel : NotificationObject, ITabViewModel<WhatsNewViewModel>
     {
         #region Properties
 
@@ -26,15 +25,15 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         #region Methods
 
-        public void Deinitialize(NavigationContext navContext)
-        {
-        }
-
         public void Initialize(NavigationContext navContext)
         {
         }
 
-        public void SetModel(object model)
+        public void Deinitialize(NavigationContext navContext)
+        {
+        }
+
+        public void SetModel(WhatsNewViewModel model)
         {
         }
 

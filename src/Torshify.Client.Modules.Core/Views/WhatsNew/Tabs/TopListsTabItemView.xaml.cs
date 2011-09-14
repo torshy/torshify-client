@@ -4,7 +4,7 @@ using Torshify.Client.Infrastructure.Interfaces;
 
 namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 {
-    public partial class TopListsTabItemView : UserControl, ITab<object>
+    public partial class TopListsTabItemView : UserControl, ITab<WhatsNewViewModel>
     {
         #region Constructors
 
@@ -18,7 +18,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
 
         #region Properties
 
-        public ITabViewModel<object> ViewModel
+        public ITabViewModel<WhatsNewViewModel> ViewModel
         {
             get { return DataContext as TopListsTabItemViewModel; }
             set { DataContext = value; }
