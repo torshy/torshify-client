@@ -111,6 +111,9 @@ namespace Torshify.Client.Modules.Core.Views.Search
             {
                 _currentSearch.FinishedLoading -= SearchFinishedLoading;
             }
+
+            SearchResults = null;
+            _searchResults = null;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

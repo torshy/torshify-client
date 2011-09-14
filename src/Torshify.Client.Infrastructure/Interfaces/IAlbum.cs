@@ -3,8 +3,8 @@
     public enum AlbumType
     {
         Album,
-        Compilation,
         Single,
+        Compilation,
         Unknown
     }
 

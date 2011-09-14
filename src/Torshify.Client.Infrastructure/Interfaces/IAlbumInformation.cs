@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace Torshify.Client.Infrastructure.Interfaces
 {
     public interface IAlbumInformation
     {
-        INotifyEnumerable<ITrack> Tracks
+        #region Events
+
+        event EventHandler<AlbumInformationEventArgs> Loaded;
+
+        #endregion Events
+
+        #region Properties
+
+        INotifyEnumerable<string> Copyrights
         {
             get;
         }
 
-        INotifyEnumerable<string> Copyrights
+        bool IsLoading
         {
             get;
         }
@@ -19,9 +27,32 @@ namespace Torshify.Client.Infrastructure.Interfaces
             get;
         }
 
-        bool IsLoading
+        INotifyEnumerable<ITrack> Tracks
         {
             get;
         }
+
+        #endregion Properties
+    }
+
+    public class AlbumInformationEventArgs : EventArgs
+    {
+        #region Constructors
+
+        public AlbumInformationEventArgs(IAlbum album)
+        {
+            Album = album;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public IAlbum Album
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

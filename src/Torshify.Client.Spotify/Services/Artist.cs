@@ -38,7 +38,7 @@ namespace Torshify.Client.Spotify.Services
 
                 if (artistInfo == null)
                 {
-                    artistInfo = new Lazy<ArtistInformation>(() => new ArtistInformation(InternalArtist, _dispatcher));
+                    artistInfo = new Lazy<ArtistInformation>(() => new ArtistInformation(this, _dispatcher));
 
                     MemoryCache.Default.Add(
                         "Torshify_ArtistInfo_" + InternalArtist.GetHashCode(),

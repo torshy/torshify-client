@@ -28,6 +28,7 @@ namespace Torshify.Client.Spotify.Services
         private Lazy<int> _year;
         private object _lockObject = new object();
         private Image _image;
+        private Artist _originalArtist;
 
         #endregion Fields
 
@@ -42,6 +43,12 @@ namespace Torshify.Client.Spotify.Services
             _albumType = new Lazy<TorshifyAlbumType>(GetAlbumType);
             _name = new Lazy<string>(() => InternalAlbum.Name);
             _year = new Lazy<int>(() => InternalAlbum.Year);
+        }
+
+        public Album(Artist originalArtist, IAlbum album, Dispatcher dispatcher)
+            : this(album, dispatcher)
+        {
+            _originalArtist = originalArtist;
         }
 
         #endregion Constructors
@@ -94,7 +101,7 @@ namespace Torshify.Client.Spotify.Services
                 {
                     if (albumInfo == null)
                     {
-                        albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(InternalAlbum, _dispatcher));
+                        albumInfo = new Lazy<AlbumInformation>(() => new AlbumInformation(_originalArtist, this, _dispatcher));
 
                         MemoryCache.Default.Add(
                             "Torshify_AlbumInfo_" + InternalAlbum.GetHashCode(),
@@ -168,6 +175,12 @@ namespace Torshify.Client.Spotify.Services
         #endregion Properties
 
         #region Methods
+
+        internal void ChangeAlbumType(TorshifyAlbumType type)
+        {
+            _albumType = new Lazy<TorshifyAlbumType>(() => type);
+            RaisePropertyChanged("Type");
+        }
 
         private TorshifyAlbumType GetAlbumType()
         {

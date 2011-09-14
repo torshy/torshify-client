@@ -1,5 +1,5 @@
 using System;
-using System.Windows.Media.Imaging;
+using System.Linq;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
@@ -14,7 +14,6 @@ using ITorshifyAlbum = Torshify.Client.Infrastructure.Interfaces.IAlbum;
 using ITorshifyArtist = Torshify.Client.Infrastructure.Interfaces.IArtist;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
-using System.Linq;
 
 namespace Torshify.Client.Spotify.Services
 {
@@ -22,7 +21,7 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
-        private readonly IArtist _artist;
+        private readonly Artist _artist;
         private readonly Dispatcher _dispatcher;
 
         private NotifyCollection<Album> _albums;
@@ -38,7 +37,7 @@ namespace Torshify.Client.Spotify.Services
 
         #region Constructors
 
-        public ArtistInformation(IArtist artist, Dispatcher dispatcher)
+        public ArtistInformation(Artist artist, Dispatcher dispatcher)
         {
             _portraits = new NotifyCollection<Image>();
             _tracks = new NotifyCollection<Track>();
@@ -46,7 +45,7 @@ namespace Torshify.Client.Spotify.Services
             _similarArtists = new NotifyCollection<Artist>();
             _dispatcher = dispatcher;
             _artist = artist;
-            _browse = _artist.Browse();
+            _browse = _artist.InternalArtist.Browse();
             _isLoading = !_browse.IsComplete;
             _browse.Completed += ArtistBrowseCompleted;
         }
@@ -151,7 +150,7 @@ namespace Torshify.Client.Spotify.Services
 
                 foreach (var spotifyAlbum in browse.Albums)
                 {
-                    _albums.Add(new Album(spotifyAlbum, _dispatcher));
+                    _albums.Add(new Album(_artist, spotifyAlbum, _dispatcher));
                 }
 
                 foreach (var spotifyTrack in browse.Tracks)
@@ -168,7 +167,7 @@ namespace Torshify.Client.Spotify.Services
                 {
                     using (spotifyPortrait)
                     {
-                        _portraits.Add(new Image(_artist.Session, spotifyPortrait.ImageId));
+                        _portraits.Add(new Image(_artist.InternalArtist.Session, spotifyPortrait.ImageId));
                     }
                 }
 

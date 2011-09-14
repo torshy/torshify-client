@@ -10,5 +10,6 @@ namespace Torshify.Client.Mocks
         public INotifyEnumerable<string> Copyrights { get; set; }
         public string Review { get; set; }
         public bool IsLoading { get; set; }
+        public event EventHandler<AlbumInformationEventArgs> Loaded;
     }
 }

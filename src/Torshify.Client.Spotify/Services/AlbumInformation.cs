@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Interfaces;
+
 using ITorshifyAlbumInformation = Torshify.Client.Infrastructure.Interfaces.IAlbumInformation;
 
 using ITorshifyTrack = Torshify.Client.Infrastructure.Interfaces.ITrack;
@@ -16,31 +16,47 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
-        private readonly IAlbum _album;
+        private readonly Album _album;
         private readonly NotifyCollection<string> _copyrights;
         private readonly Dispatcher _dispatcher;
         private readonly NotifyCollection<Track> _tracks;
-        
-        private bool _isLoading;
-        private string _review;
+
         private IAlbumBrowse _browse;
+        private bool _isLoading;
+        private Artist _orginalArtist;
+        private string _review;
 
         #endregion Fields
 
         #region Constructors
 
-        public AlbumInformation(IAlbum album, Dispatcher dispatcher)
+        public AlbumInformation(Artist originalArtist, Album album, Dispatcher dispatcher)
         {
+            _orginalArtist = originalArtist;
             _tracks = new NotifyCollection<Track>();
             _copyrights = new NotifyCollection<string>();
             _dispatcher = dispatcher;
             _album = album;
-            _browse = _album.Browse();
+            _browse = _album.InternalAlbum.Browse();
             _isLoading = !_browse.IsComplete;
-            _browse.Completed += AlbumBrowseCompleted;
+
+            if (IsLoading)
+            {
+                _browse.Completed += AlbumBrowseCompleted;
+            }
+            else
+            {
+                AlbumBrowseCompleted(_browse, null);
+            }
         }
 
         #endregion Constructors
+
+        #region Events
+
+        public event EventHandler<AlbumInformationEventArgs> Loaded;
+
+        #endregion Events
 
         #region Properties
 
@@ -49,6 +65,19 @@ namespace Torshify.Client.Spotify.Services
             get
             {
                 return _copyrights;
+            }
+        }
+
+        public bool IsLoading
+        {
+            get
+            {
+                return _isLoading;
+            }
+            private set
+            {
+                _isLoading = value;
+                RaisePropertyChanged("IsLoading");
             }
         }
 
@@ -65,19 +94,6 @@ namespace Torshify.Client.Spotify.Services
                     _review = value;
                     RaisePropertyChanged("Review");
                 }
-            }
-        }
-
-        public bool IsLoading
-        {
-            get
-            {
-                return _isLoading;
-            }
-            private set
-            {
-                _isLoading = value;
-                RaisePropertyChanged("IsLoading");
             }
         }
 
@@ -113,11 +129,28 @@ namespace Torshify.Client.Spotify.Services
 
                 foreach (var spotifyTrack in browse.Tracks)
                 {
+                    if (_orginalArtist != null && _orginalArtist.Name != spotifyTrack.Album.Artist.Name)
+                    {
+                        _album.ChangeAlbumType(Infrastructure.Interfaces.AlbumType.Compilation);
+                    }
+
                     _tracks.Add(new Track(spotifyTrack, _dispatcher));
                 }
             }
 
             IsLoading = false;
+
+            OnLoaded();
+        }
+
+        private void OnLoaded()
+        {
+            var handler = Loaded;
+            
+            if (handler != null)
+            {
+                handler(this, new AlbumInformationEventArgs(_album));
+            }
         }
 
         #endregion Methods

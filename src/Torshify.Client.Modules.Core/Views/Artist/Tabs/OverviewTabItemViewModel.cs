@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,12 +8,11 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
 using Torshify.Client.Infrastructure;
-using Torshify.Client.Infrastructure.Collections;
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Events;
 using Torshify.Client.Infrastructure.Interfaces;
@@ -23,11 +23,12 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
     {
         #region Fields
 
-        private SortedObservableCollection<IAlbum> _albums;
+        private readonly Dispatcher _dispatcher;
+
+        private ObservableCollection<IAlbum> _albums = new ObservableCollection<IAlbum>();
         private ICollectionView _albumsIcv;
         private IArtist _artist;
         private IEventAggregator _eventAggregator;
-        private readonly Dispatcher _dispatcher;
         private SubscriptionToken _trackMenuBarToken;
         private SubscriptionToken _tracksMenuBarToken;
 
@@ -127,6 +128,14 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             _tracksMenuBarToken = _eventAggregator.GetEvent<TracksCommandBarEvent>().Subscribe(OnTracksMenuBarEvent, true);
         }
 
+        public void NavigatedFrom()
+        {
+        }
+
+        public void NavigatedTo()
+        {
+        }
+
         public void SetModel(IArtist model)
         {
             Artist = model;
@@ -137,20 +146,10 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             }
             else
             {
-                _dispatcher.BeginInvoke(new Action(PrepareData), DispatcherPriority.Background);
+                _dispatcher.BeginInvoke(new Action<IEnumerable<IAlbum>>(PrepareData), DispatcherPriority.Background, model.Info.Albums);
             }
 
             RaisePropertyChanged("Header");
-        }
-
-        public void NavigatedTo()
-        {
-
-        }
-
-        public void NavigatedFrom()
-        {
-
         }
 
         private void ExecutePlayArtistTrack(ITrack track)
@@ -186,11 +185,23 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             return tracksToPlay;
         }
 
+        private void OnAlbumInfoLoaded(object sender, AlbumInformationEventArgs e)
+        {
+            IAlbumInformation info = (IAlbumInformation) sender;
+            info.Loaded -= OnAlbumInfoLoaded;
+
+            if (Albums != null)
+            {
+                _dispatcher.BeginInvoke(new Action<IAlbum>(_albums.Add), DispatcherPriority.Background, e.Album);
+            }
+        }
+
         private void OnInfoFinishedLoading(object sender, EventArgs e)
         {
-            ((IArtistInformation)sender).FinishedLoading -= OnInfoFinishedLoading;
+            IArtistInformation info = (IArtistInformation) sender;
+            info.FinishedLoading -= OnInfoFinishedLoading;
 
-            _dispatcher.BeginInvoke(new Action(PrepareData), DispatcherPriority.Background);
+            _dispatcher.BeginInvoke(new Action<IEnumerable<IAlbum>>(PrepareData), DispatcherPriority.Background, info.Albums);
         }
 
         private void OnTrackMenuBarEvent(TrackCommandBarModel model)
@@ -209,73 +220,53 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
                 .AddCommand("Queue", CoreCommands.QueueTrackCommand, model.Tracks);
         }
 
-        private void PrepareData()
+        private void PrepareData(IEnumerable<IAlbum> albums)
         {
-            var albums = new ObservableCollection<IAlbum>();
+            _albums = new ObservableCollection<IAlbum>();
 
-            Albums = CollectionViewSource.GetDefaultView(_albums);
-
-            foreach (var album in _artist.Info.Albums)
+            foreach (var album in albums)
             {
                 if (album.IsAvailable)
                 {
-                    albums.Add(album);
+                    if (album.Info.IsLoading)
+                    {
+                        album.Info.Loaded += OnAlbumInfoLoaded;
+                    }
+                    else
+                    {
+                        _albums.Add(album);
+                    }
                 }
             }
 
-            var sortedAlbums = albums.OrderBy(a => a.Type).ThenByDescending(a => a.Year);
-
-            Albums = CollectionViewSource.GetDefaultView(sortedAlbums);
+            var icv = new ListCollectionView(_albums);
+            icv.CustomSort = new AlbumComparer();
+            Albums = icv;
         }
 
         #endregion Methods
 
         #region Nested Types
 
-        private class AlbumComparer : IComparer<IAlbum>
+        private class AlbumComparer : IComparer<IAlbum>, IComparer
         {
             #region Methods
 
             public int Compare(IAlbum x, IAlbum y)
             {
-                var xType = x.Type;
-                var yType = y.Type;
+                int result = x.Type.CompareTo(y.Type);
 
-                if (xType == yType)
+                if (result == 0)
                 {
-                    //return x.Year.CompareTo(y.Year) * -1;
-                    return 0;
+                    result = y.Year.CompareTo(x.Year);
                 }
 
-                if (xType == AlbumType.Album)
-                {
-                    if (yType != AlbumType.Album)
-                    {
-                        return -1;
-                    }
-                }
+                return result;
+            }
 
-                if (xType == AlbumType.Compilation)
-                {
-                    if (yType == AlbumType.Album || yType == AlbumType.Single)
-                    {
-                        return 1;
-                    }
-
-                    return -1;
-                }
-
-                if (xType == AlbumType.Single)
-                {
-                    if (yType != AlbumType.Album)
-                    {
-                        return -1;
-                    }
-
-                    return 1;
-                }
-
-                return 0;
+            public int Compare(object x, object y)
+            {
+                return Compare(x as IAlbum, y as IAlbum);
             }
 
             #endregion Methods
