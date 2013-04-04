@@ -110,6 +110,7 @@ namespace Torshify.Client.Modules.Core.Views.Search
             if (_currentSearch != null)
             {
                 _currentSearch.FinishedLoading -= SearchFinishedLoading;
+                _currentSearch = null;
             }
 
             SearchResults = null;

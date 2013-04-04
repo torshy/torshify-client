@@ -9,14 +9,15 @@ using System.Windows.Threading;
 using EchoNest;
 using EchoNest.Artist;
 
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 using Microsoft.Practices.ServiceLocation;
+
 using Torshify.Client.Infrastructure.Commands;
 using Torshify.Client.Infrastructure.Interfaces;
 using Torshify.Client.Modules.Core;
 using Torshify.Client.Modules.EchoNest.Controls;
-using Microsoft.Practices.Prism;
 
 namespace Torshify.Client.Modules.EchoNest.Views.Similar
 {
@@ -27,9 +28,10 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         private readonly Dispatcher _dispatcher;
 
+        private IArtist _currentArtist;
+        private Lazy<bool> _loadSimilar;
         private NodeCollection<SimilarArtistModel> _nodes;
         private object _nodesLock = new object();
-        private Lazy<bool> _loadSimilar;
 
         #endregion Fields
 
@@ -101,6 +103,10 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         void ITabViewModel<IArtist>.Deinitialize(NavigationContext navContext)
         {
+            Graph.CenterObject = null;
+            _nodes = new NodeCollection<SimilarArtistModel>(new List<SimilarArtistModel>());
+            _currentArtist = null;
+            _loadSimilar = null;
         }
 
         void ITabViewModel<IArtist>.Initialize(NavigationContext navContext)
@@ -109,20 +115,21 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
 
         void ITabViewModel<IArtist>.SetModel(IArtist model)
         {
+            _currentArtist = model;
             _loadSimilar = new Lazy<bool>(() =>
                                               {
-                                                  ExecuteStartTrail(model.Name);
+                                                  ExecuteStartTrail(_currentArtist.Name);
                                                   return true;
                                               });
+        }
+
+        public void NavigatedFrom()
+        {
         }
 
         public void NavigatedTo()
         {
             _loadSimilar.Value.ToString();
-        }
-
-        public void NavigatedFrom()
-        {
         }
 
         private bool CanChangeCenter(Node<SimilarArtistModel> node)
@@ -150,17 +157,6 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             {
                 var search = searchProvider.Search(artistNode.Item.Name, 0, int.MaxValue, 0, 10, 0, 10);
                 search.FinishedLoading += SearchFinished;
-            }
-        }
-
-        private void SearchFinished(object sender, EventArgs e)
-        {
-            ISearch search = (ISearch)sender;
-            search.FinishedLoading -= SearchFinished;
-
-            if (search.TotalArtists > 0)
-            {
-                CoreCommands.Views.GoToArtistCommand.Execute(search.Artists.FirstOrDefault());
             }
         }
 
@@ -272,6 +268,17 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
             }
 
             return node;
+        }
+
+        private void SearchFinished(object sender, EventArgs e)
+        {
+            ISearch search = (ISearch)sender;
+            search.FinishedLoading -= SearchFinished;
+
+            if (search.TotalArtists > 0)
+            {
+                CoreCommands.Views.GoToArtistCommand.Execute(search.Artists.FirstOrDefault());
+            }
         }
 
         #endregion Methods

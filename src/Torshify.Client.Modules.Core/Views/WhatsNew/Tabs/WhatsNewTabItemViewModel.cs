@@ -109,7 +109,7 @@ namespace Torshify.Client.Modules.Core.Views.WhatsNew.Tabs
         public void Deinitialize(NavigationContext navContext)
         {
             Albums = null;
-            _albums = null;
+            _albums = new ObservableCollection<IAlbum>();
 
             var deadSearches = new List<ISearch>();
 

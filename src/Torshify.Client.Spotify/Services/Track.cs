@@ -17,6 +17,8 @@ namespace Torshify.Client.Spotify.Services
     {
         #region Fields
 
+        private readonly Dispatcher _dispatcher;
+
         private Lazy<Album> _album;
         private Lazy<IEnumerable<Artist>> _artists;
         private Lazy<TimeSpan> _duration;
@@ -27,10 +29,11 @@ namespace Torshify.Client.Spotify.Services
 
         public Track(ITrack track, Dispatcher dispatcher)
         {
+            _dispatcher = dispatcher;
             InternalTrack = track;
 
-            _album = new Lazy<Album>(() => new Album(InternalTrack.Album, dispatcher));
-            _artists = new Lazy<IEnumerable<Artist>>(() => InternalTrack.Artists.Select(artist => new Artist(artist, dispatcher)));
+            _album = new Lazy<Album>(() => new Album(InternalTrack.Album, _dispatcher));
+            _artists = new Lazy<IEnumerable<Artist>>(GetArtists);
             _duration = new Lazy<TimeSpan>(() => InternalTrack.Duration);
         }
 
@@ -100,7 +103,7 @@ namespace Torshify.Client.Spotify.Services
 
         public bool IsAvailable
         {
-            get { return InternalTrack.IsAvailable; }
+            get { return InternalTrack.Availability == TrackAvailablity.Available; }
         }
 
         public bool IsStarred
@@ -142,6 +145,11 @@ namespace Torshify.Client.Spotify.Services
                 "Duration",
                 "IsAvailable",
                 "IsStarred");
+        }
+
+        private IEnumerable<Artist> GetArtists()
+        {
+            return InternalTrack.Artists.Select(artist => new Artist(artist, _dispatcher)).ToList();
         }
 
         #endregion Methods

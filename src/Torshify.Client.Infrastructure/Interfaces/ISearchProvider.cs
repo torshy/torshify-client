@@ -11,11 +11,5 @@ namespace Torshify.Client.Infrastructure.Interfaces
             int artistOffset,
             int artistCount, 
             object userData = null);
-
-        ISearch Search(
-            int fromYear, 
-            int toYear, 
-            Genre genre, 
-            object userData = null);
     }
 }

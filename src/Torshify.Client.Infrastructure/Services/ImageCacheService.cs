@@ -95,9 +95,9 @@ namespace Torshify.Client.Infrastructure.Services
 
             private static readonly ActionPump _instance = new ActionPump();
 
+            private object _lock = new object();
             private ConcurrentQueue<Action> _queue;
             private Thread _worker;
-            private object _lock = new object();
 
             #endregion Fields
 
@@ -129,12 +129,13 @@ namespace Torshify.Client.Infrastructure.Services
 
             public void Enqueue(Action action)
             {
-                _queue.Enqueue(action);
+                action();
+                //_queue.Enqueue(action);
 
-                lock (_lock)
-                {
-                    Monitor.Pulse(_lock);
-                }
+                //lock (_lock)
+                //{
+                //    Monitor.Pulse(_lock);
+                //}
             }
 
             private void Run()
@@ -172,6 +173,10 @@ namespace Torshify.Client.Infrastructure.Services
         {
             #region Fields
 
+            private readonly int _decodeHeight;
+            private readonly int _decodeWidth;
+
+            private Action _action;
             private BitmapSource _bitmap;
             private string _id;
             private bool _isLoaded;
@@ -186,15 +191,10 @@ namespace Torshify.Client.Infrastructure.Services
             {
                 _id = id;
                 _path = path;
-
-                _lazyLoad = new Lazy<Action>(
-                    () => () => ActionPump.Instance.Enqueue(() =>
-                    {
-                        BitmapImage coverArtSource = GetCoverArtSource(Path, decodeHeight, decodeWidth);
-                        SetBitmap(coverArtSource);
-
-                        IsLoaded = true;
-                    }), LazyThreadSafetyMode.PublicationOnly);
+                _decodeWidth = decodeWidth;
+                _decodeHeight = decodeHeight;
+                _action = new Action(LoadCoverArt);
+                _lazyLoad = new Lazy<Action>(() => () => ActionPump.Instance.Enqueue(_action), LazyThreadSafetyMode.PublicationOnly);
             }
 
             #endregion Constructors
@@ -254,11 +254,6 @@ namespace Torshify.Client.Infrastructure.Services
                 return coverArtSource;
             }
 
-            public override int GetHashCode()
-            {
-                return ID.GetHashCode() ^ Path.GetHashCode();
-            }
-
             public override bool Equals(object obj)
             {
                 IImageCacheEntry cacheCacheEntry = obj as IImageCacheEntry;
@@ -269,10 +264,22 @@ namespace Torshify.Client.Infrastructure.Services
                 return base.Equals(obj);
             }
 
+            public override int GetHashCode()
+            {
+                return ID.GetHashCode() ^ Path.GetHashCode();
+            }
+
             public void SetBitmap(BitmapSource bitmapSource)
             {
                 _bitmap = bitmapSource;
                 RaisePropertyChanged("Bitmap");
+            }
+
+            private void LoadCoverArt()
+            {
+                BitmapImage coverArtSource = GetCoverArtSource(_path, _decodeHeight, _decodeWidth);
+                SetBitmap(coverArtSource);
+                IsLoaded = true;
             }
 
             #endregion Methods

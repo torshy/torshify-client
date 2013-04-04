@@ -28,6 +28,7 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
         private ObservableCollection<IAlbum> _albums = new ObservableCollection<IAlbum>();
         private ICollectionView _albumsIcv;
         private IArtist _artist;
+        private IArtistInformation _artistInformation;
         private IEventAggregator _eventAggregator;
         private SubscriptionToken _trackMenuBarToken;
         private SubscriptionToken _tracksMenuBarToken;
@@ -108,18 +109,17 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
             _eventAggregator.GetEvent<TrackCommandBarEvent>().Unsubscribe(_trackMenuBarToken);
             _eventAggregator.GetEvent<TracksCommandBarEvent>().Unsubscribe(_tracksMenuBarToken);
 
-            Albums = null;
+            _albums = null;
+            _albumsIcv = null;
+            _artist = null;
 
-            if (Artist != null)
+            if (_artistInformation != null)
             {
-                Artist.Info.FinishedLoading -= OnInfoFinishedLoading;
-                Artist = null;
+                _artistInformation.FinishedLoading -= OnInfoFinishedLoading;
+                _artistInformation = null;
             }
 
-            if (_albums != null)
-            {
-                _albums.Clear();
-            }
+            RaisePropertyChanged(String.Empty);
         }
 
         public void Initialize(NavigationContext navContext)
@@ -140,13 +140,15 @@ namespace Torshify.Client.Modules.Core.Views.Artist.Tabs
         {
             Artist = model;
 
-            if (model.Info.IsLoading)
+            _artistInformation = model.Info;
+
+            if (_artistInformation.IsLoading)
             {
-                model.Info.FinishedLoading += OnInfoFinishedLoading;
+                _artistInformation.FinishedLoading += OnInfoFinishedLoading;
             }
             else
             {
-                _dispatcher.BeginInvoke(new Action<IEnumerable<IAlbum>>(PrepareData), DispatcherPriority.Background, model.Info.Albums);
+                _dispatcher.BeginInvoke(new Action<IEnumerable<IAlbum>>(PrepareData), DispatcherPriority.Background, _artistInformation.Albums);
             }
 
             RaisePropertyChanged("Header");
