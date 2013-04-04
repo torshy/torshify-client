@@ -197,8 +197,8 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                 if (result.Status.Code == ResponseCode.Success)
                 {
                     centerObject.Name = result.Artist.Name;
-                    centerObject.Familiarity = result.Artist.Familiarity;
-                    centerObject.Hotttnesss = result.Artist.Hotttnesss;
+                    centerObject.Familiarity = result.Artist.Familiarity.GetValueOrDefault();
+                    centerObject.Hotttnesss = result.Artist.Hotttnesss.GetValueOrDefault();
                     centerObject.ImageUrl =
                         result.Artist.Images != null && result.Artist.Images.Count > 0
                         ? result.Artist.Images.FirstOrDefault().Url
@@ -239,8 +239,8 @@ namespace Torshify.Client.Modules.EchoNest.Views.Similar
                         artistModel.ImageUrl = artist.Images != null && artist.Images.Count > 0
                                              ? artist.Images.FirstOrDefault().Url
                                              : null;
-                        artistModel.Familiarity = artist.Familiarity;
-                        artistModel.Hotttnesss = artist.Hotttnesss;
+                        artistModel.Familiarity = artist.Familiarity.GetValueOrDefault();
+                        artistModel.Hotttnesss = artist.Hotttnesss.GetValueOrDefault();
                         artistModel.Terms = artist.Terms != null ? artist.Terms.Take(3) : null;
                         list.Add(artistModel);
                     }
